@@ -1,0 +1,92 @@
+{
+  "home": {
+    "heroTitle": "The Art of",
+    "heroTitleAccent": "Fragrance",
+    "heroSubtitle": "Discover the world's most coveted perfumes, curated for those who appreciate the extraordinary.",
+    "featuredTitle": "Featured Fragrances",
+    "featuredSubtitle": "Editor's Selection",
+    "categoryTitle": "Shop by Collection",
+    "categorySubtitle": "Discover Your Scent",
+    "womenCollection": "Women's Collection",
+    "menCollection": "Men's Collection",
+    "unisexCollection": "Unisex Collection",
+    "storyTitle": "Our Story",
+    "storySubtitle": "About Luxe Essence",
+    "storyText": "We believe that a perfect fragrance is more than a scent — it is an experience, a memory, a statement. Luxe Essence was founded on the principle that everyone deserves access to the world's finest perfumes.",
+    "newsletterTitle": "Join Our World",
+    "newsletterSubtitle": "Subscribe for exclusive offers and new arrivals",
+    "newsletterPlaceholder": "Your email address"
+  },
+  "about": {
+    "heroTitle": "Our Story",
+    "missionTitle": "Our Mission",
+    "missionText": "At Luxe Essence, we are passionate about connecting people with extraordinary fragrances from the world's most prestigious houses. Every bottle we sell is 100% authentic, sourced directly from authorized distributors.",
+    "valuesTitle": "Our Values",
+    "value1Title": "Authenticity",
+    "value1Text": "Every fragrance is guaranteed 100% original from certified sources.",
+    "value2Title": "Excellence",
+    "value2Text": "We curate only the finest fragrances from the world's most prestigious houses.",
+    "value3Title": "Service",
+    "value3Text": "Your satisfaction is our priority. We provide expert guidance and seamless shopping."
+  },
+  "contact": {
+    "heroTitle": "Get In Touch",
+    "subtitle": "We'd love to hear from you",
+    "name": "Your Name",
+    "email": "Email Address",
+    "subject": "Subject",
+    "message": "Your Message",
+    "messagePlaceholder": "How can we help you?",
+    "infoTitle": "Contact Information",
+    "addressLabel": "Address",
+    "addressValue": "Dubai, United Arab Emirates",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "hoursLabel": "Hours",
+    "hoursValue": "Mon – Sat: 9AM – 9PM"
+  },
+  "shop": {
+    "title": "All Fragrances",
+    "subtitle": "Shop Collection",
+    "filters": "Filters",
+    "sortBy": "Sort By",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "sortPopular": "Most Popular",
+    "noResults": "No fragrances found matching your filters.",
+    "clearFilters": "Clear Filters",
+    "priceRange": "Price Range",
+    "results": "results"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shippingInfo": "Shipping Information",
+    "paymentInfo": "Payment Information",
+    "orderSummary": "Order Summary",
+    "fullName": "Full Name",
+    "address": "Street Address",
+    "city": "City",
+    "country": "Country",
+    "phone": "Phone Number",
+    "cardDetails": "Card Details",
+    "secure": "Secured by Stripe"
+  },
+  "orders": {
+    "title": "My Orders",
+    "subtitle": "Order History",
+    "orderId": "Order ID",
+    "date": "Date",
+    "items": "Items",
+    "total": "Total",
+    "status": "Status",
+    "noOrders": "You haven't placed any orders yet.",
+    "startShopping": "Start Shopping"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Page Not Found",
+    "text": "The page you're looking for doesn't exist.",
+    "back": "Back to Home"
+  }
+}

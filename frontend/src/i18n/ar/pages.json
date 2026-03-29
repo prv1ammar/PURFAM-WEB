@@ -1,0 +1,92 @@
+{
+  "home": {
+    "heroTitle": "فن",
+    "heroTitleAccent": "العطور",
+    "heroSubtitle": "اكتشف أرقى العطور العالمية، مختارة بعناية لمن يقدر الاستثنائي.",
+    "featuredTitle": "العطور المميزة",
+    "featuredSubtitle": "اختيارات المحرر",
+    "categoryTitle": "تسوق حسب الفئة",
+    "categorySubtitle": "اكتشف عطرك",
+    "womenCollection": "مجموعة النساء",
+    "menCollection": "مجموعة الرجال",
+    "unisexCollection": "مجموعة للجنسين",
+    "storyTitle": "قصتنا",
+    "storySubtitle": "عن لوكس إيسنس",
+    "storyText": "نؤمن بأن العطر المثالي أكثر من مجرد رائحة — إنه تجربة، وذكرى، وبيان. أُسست لوكس إيسنس على مبدأ أن الجميع يستحق الوصول إلى أرقى عطور العالم.",
+    "newsletterTitle": "انضم إلى عالمنا",
+    "newsletterSubtitle": "اشترك للحصول على عروض حصرية وأحدث الوصولات",
+    "newsletterPlaceholder": "بريدك الإلكتروني"
+  },
+  "about": {
+    "heroTitle": "قصتنا",
+    "missionTitle": "مهمتنا",
+    "missionText": "في لوكس إيسنس، نحن متحمسون لربط الناس بعطور استثنائية من أرقى دور العطر العالمية. كل قارورة نبيعها أصلية 100%، مصدرها مباشرة من موزعين معتمدين.",
+    "valuesTitle": "قيمنا",
+    "value1Title": "الأصالة",
+    "value1Text": "كل عطر مضمون أصلي 100% من مصادر معتمدة.",
+    "value2Title": "التميز",
+    "value2Text": "نختار فقط أرقى العطور من أشهر دور العطر العالمية.",
+    "value3Title": "الخدمة",
+    "value3Text": "رضاك هو أولويتنا. نقدم إرشادات خبراء وتسوق سلس."
+  },
+  "contact": {
+    "heroTitle": "تواصل معنا",
+    "subtitle": "يسعدنا سماع رأيك",
+    "name": "اسمك",
+    "email": "البريد الإلكتروني",
+    "subject": "الموضوع",
+    "message": "رسالتك",
+    "messagePlaceholder": "كيف يمكننا مساعدتك؟",
+    "infoTitle": "معلومات التواصل",
+    "addressLabel": "العنوان",
+    "addressValue": "دبي، الإمارات العربية المتحدة",
+    "phoneLabel": "الهاتف",
+    "emailLabel": "البريد الإلكتروني",
+    "hoursLabel": "ساعات العمل",
+    "hoursValue": "الإثنين – السبت: 9 صباحاً – 9 مساءً"
+  },
+  "shop": {
+    "title": "جميع العطور",
+    "subtitle": "تسوق المجموعة",
+    "filters": "الفلاتر",
+    "sortBy": "ترتيب حسب",
+    "sortNewest": "الأحدث",
+    "sortPriceAsc": "السعر: من الأقل",
+    "sortPriceDesc": "السعر: من الأعلى",
+    "sortPopular": "الأكثر شعبية",
+    "noResults": "لا توجد عطور تطابق الفلاتر المختارة.",
+    "clearFilters": "مسح الفلاتر",
+    "priceRange": "نطاق السعر",
+    "results": "نتيجة"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "shippingInfo": "معلومات الشحن",
+    "paymentInfo": "معلومات الدفع",
+    "orderSummary": "ملخص الطلب",
+    "fullName": "الاسم الكامل",
+    "address": "عنوان الشارع",
+    "city": "المدينة",
+    "country": "الدولة",
+    "phone": "رقم الهاتف",
+    "cardDetails": "بيانات البطاقة",
+    "secure": "مؤمّن بواسطة Stripe"
+  },
+  "orders": {
+    "title": "طلباتي",
+    "subtitle": "سجل الطلبات",
+    "orderId": "رقم الطلب",
+    "date": "التاريخ",
+    "items": "المنتجات",
+    "total": "الإجمالي",
+    "status": "الحالة",
+    "noOrders": "لم تقم بأي طلبات بعد.",
+    "startShopping": "ابدأ التسوق"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "الصفحة غير موجودة",
+    "text": "الصفحة التي تبحث عنها غير موجودة.",
+    "back": "العودة للرئيسية"
+  }
+}

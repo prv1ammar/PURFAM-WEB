@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════
+   LUXE ESSENCE - Global Styles
+   CSS Custom Properties & Reset
+═══════════════════════════════════════ */
+
+:root {
+  --color-black: #0a0a0a;
+  --color-dark: #111111;
+  --color-charcoal: #1a1a1a;
+  --color-dark-gray: #2a2a2a;
+  --color-gray: #6b6b6b;
+  --color-light-gray: #a0a0a0;
+  --color-border: #2e2e2e;
+  --color-gold: #c9a84c;
+  --color-gold-light: #e2c16a;
+  --color-gold-dark: #a8893a;
+  --color-cream: #f5f0e8;
+  --color-white: #ffffff;
+  --color-off-white: #fafafa;
+
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.35s ease;
+  --transition-slow: 0.6s ease;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.7);
+  --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.3);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  --max-width: 1400px;
+  --navbar-height: 72px;
+}
+
+/* ─── Light Mode Overrides ─── */
+[data-theme="light"] {
+  --color-black: #faf8f4;
+  --color-dark: #f2ede5;
+  --color-charcoal: #e8e1d6;
+  --color-dark-gray: #ddd5c8;
+  --color-gray: #8a7f72;
+  --color-light-gray: #5a5248;
+  --color-border: #d8cfc3;
+  --color-off-white: #1a1510;
+  --color-white: #0a0a0a;
+  --color-cream: #0a0a0a;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.18);
+  --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.25);
+}
+
+[data-theme="light"] body {
+  background-color: var(--color-black);
+  color: var(--color-off-white);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--color-dark); }
+
+/* Ensure images/videos in hero still look right in light mode */
+[data-theme="light"] .section-title { color: var(--color-off-white); }
+[data-theme="light"] .skeleton {
+  background: linear-gradient(90deg, var(--color-charcoal) 25%, var(--color-dark-gray) 50%, var(--color-charcoal) 75%);
+}
+[data-theme="light"] ::selection { background: var(--color-gold); color: #fff; }
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Smooth theme color transitions — do not apply to transform/opacity so Framer Motion stays unaffected */
+body, header, nav, section, footer, div, span, p, h1, h2, h3, h4, h5, a, button, input, textarea, select, label {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.35s ease, box-shadow 0.3s ease;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-black);
+  color: var(--color-off-white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-sans);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 2rem); }
+h4 { font-size: 1.25rem; }
+
+/* ─── Utility ─── */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.gold-text { color: var(--color-gold); }
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: var(--color-off-white);
+}
+.section-subtitle {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 0.75rem;
+}
+
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 2rem 0;
+}
+
+/* ─── RTL Support ─── */
+[dir="rtl"] body {
+  direction: rtl;
+}
+[dir="rtl"] .container {
+  direction: rtl;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-dark); }
+::-webkit-scrollbar-thumb { background: var(--color-gold-dark); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+
+/* ─── Selection ─── */
+::selection { background: var(--color-gold); color: var(--color-black); }
+
+/* ─── Animations ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.fade-in { animation: fadeIn 0.6s ease forwards; }
+
+/* ─── Skeleton loading ─── */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-charcoal) 25%, var(--color-dark-gray) 50%, var(--color-charcoal) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Page transition wrapper ─── */
+.page-wrapper {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+}

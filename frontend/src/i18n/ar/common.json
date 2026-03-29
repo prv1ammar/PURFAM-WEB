@@ -1,0 +1,90 @@
+{
+  "brand": "لوكس إيسنس",
+  "tagline": "حيث تلتقي الرائحة بالفن",
+  "nav": {
+    "home": "الرئيسية",
+    "shop": "المتجر",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "cart": "السلة",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "myOrders": "طلباتي",
+    "admin": "الإدارة"
+  },
+  "btn": {
+    "shopNow": "تسوق الآن",
+    "discover": "اكتشف",
+    "addToCart": "أضف للسلة",
+    "addedToCart": "تمت الإضافة!",
+    "viewProduct": "عرض",
+    "checkout": "الدفع",
+    "placeOrder": "تأكيد الطلب",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "send": "إرسال الرسالة",
+    "subscribe": "اشترك",
+    "loadMore": "تحميل المزيد",
+    "viewAll": "عرض الكل"
+  },
+  "labels": {
+    "price": "السعر",
+    "from": "من",
+    "size": "الحجم",
+    "qty": "الكمية",
+    "stock": "متوفر",
+    "outOfStock": "غير متوفر",
+    "brand": "الماركة",
+    "gender": "الفئة",
+    "category": "النوع",
+    "total": "الإجمالي",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "free": "مجاني",
+    "tax": "الضريبة",
+    "freeShippingOver": "شحن مجاني للطلبات فوق 200$",
+    "currency": "$"
+  },
+  "gender": {
+    "all": "الكل",
+    "women": "نساء",
+    "men": "رجال",
+    "girls": "بنات",
+    "boys": "أولاد",
+    "unisex": "للجنسين"
+  },
+  "category": {
+    "all": "الكل",
+    "floral": "زهري",
+    "woody": "خشبي",
+    "oriental": "شرقي",
+    "fresh": "منعش",
+    "citrus": "حمضي",
+    "gourmand": "حلو"
+  },
+  "status": {
+    "pending": "قيد الانتظار",
+    "paid": "مدفوع",
+    "processing": "قيد المعالجة",
+    "shipped": "تم الشحن",
+    "delivered": "تم التسليم",
+    "cancelled": "ملغي"
+  },
+  "error": {
+    "general": "حدث خطأ ما. يرجى المحاولة مجدداً.",
+    "notFound": "الصفحة غير موجودة",
+    "unauthorized": "يرجى تسجيل الدخول للمتابعة",
+    "networkError": "خطأ في الاتصال. تحقق من الإنترنت."
+  },
+  "success": {
+    "addedToCart": "تمت الإضافة إلى السلة!",
+    "orderPlaced": "تم تأكيد الطلب بنجاح!",
+    "messageSent": "تم إرسال رسالتك بنجاح!",
+    "subscribed": "شكراً لاشتراكك!"
+  }
+}

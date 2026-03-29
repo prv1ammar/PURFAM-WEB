@@ -1,0 +1,125 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import api from '@/services/api';
+import ProductGrid from '@/components/products/ProductGrid';
+import ProductFilters from '@/components/products/ProductFilters';
+
+export default function ShopPage() {
+  const { t, i18n } = useTranslation('pages');
+  const isAr = i18n.language === 'ar';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const filters = {
+    gender: searchParams.get('gender') || '',
+    category: searchParams.get('category') || '',
+    sort: searchParams.get('sort') || '-createdAt',
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    const params = {};
+    if (filters.gender) params.gender = filters.gender;
+    if (filters.category) params.category = filters.category;
+    if (filters.sort) params.sort = filters.sort;
+    if (search) params.search = search;
+
+    api.get('/api/products', { params })
+      .then(res => { setProducts(res.data.products); setTotal(res.data.total); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [searchParams, search]);
+
+  const handleFilterChange = (newFilters) => {
+    const params = {};
+    if (newFilters.gender) params.gender = newFilters.gender;
+    if (newFilters.category) params.category = newFilters.category;
+    if (newFilters.sort) params.sort = newFilters.sort;
+    setSearchParams(params);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="page-wrapper" style={{ direction: isAr ? 'rtl' : 'ltr' }}>
+
+      {/* Hero Banner */}
+      <div style={{
+        height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: `linear-gradient(to bottom, rgba(10,10,10,0) 0%, var(--color-black) 100%),
+                     url(https://images.unsplash.com/photo-1619994121345-b61cd610c5a6?w=1600&q=80) center/cover`,
+        textAlign: 'center',
+      }}>
+        <div>
+          <p className="section-subtitle">{t('shop.subtitle')}</p>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            {t('shop.title')}
+          </h1>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '3rem 1.5rem' }}>
+        {/* Search Bar */}
+        <div style={{ marginBottom: '2rem' }}>
+          <input
+            type="text" value={search} onChange={e => setSearch(e.target.value)}
+            placeholder={isAr ? 'ابحث عن عطر...' : 'Search fragrances...'}
+            style={{
+              width: '100%', maxWidth: '400px', padding: '0.75rem 1.25rem',
+              background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',
+              color: 'var(--color-off-white)', borderRadius: 'var(--radius-sm)',
+              fontSize: '0.95rem', outline: 'none',
+            }}
+            onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
+            onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+          />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '2.5rem', alignItems: 'start' }}>
+          {/* Filters - desktop */}
+          <div className="desktop-filters">
+            <ProductFilters filters={filters} onChange={handleFilterChange} />
+          </div>
+
+          {/* Products */}
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem' }}>
+                {loading ? '...' : `${total} ${t('shop.results')}`}
+              </p>
+            </div>
+
+            {!loading && products.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-gray)' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1rem' }}>
+                  {t('shop.noResults')}
+                </p>
+                <button onClick={() => handleFilterChange({ gender: '', category: '', sort: '-createdAt' })}
+                  style={{ color: 'var(--color-gold)', textDecoration: 'underline', fontSize: '0.9rem' }}>
+                  {t('shop.clearFilters')}
+                </button>
+              </div>
+            ) : (
+              <ProductGrid products={products} loading={loading} />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .desktop-filters { display: none; }
+          div[style*="grid-template-columns: 240px"] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </motion.div>
+  );
+}
