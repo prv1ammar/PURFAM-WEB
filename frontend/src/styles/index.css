@@ -11,10 +11,10 @@
   --color-gray: #6b6b6b;
   --color-light-gray: #a0a0a0;
   --color-border: #2e2e2e;
-  --color-gold: #c9a84c;
-  --color-gold-light: #e2c16a;
-  --color-gold-dark: #a8893a;
-  --color-cream: #f5f0e8;
+  --color-gold: #ffffff;
+  --color-gold-light: #f0f0f0;
+  --color-gold-dark: #cccccc;
+  --color-cream: #f5f5f5;
   --color-white: #ffffff;
   --color-off-white: #fafafa;
 
@@ -28,7 +28,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.7);
-  --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.3);
+  --shadow-gold: 0 0 20px rgba(255, 255, 255, 0.15);
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -54,7 +54,10 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.18);
-  --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.25);
+  --color-gold: #111111;
+  --color-gold-light: #333333;
+  --color-gold-dark: #555555;
+  --shadow-gold: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="light"] body {
@@ -69,7 +72,7 @@
 [data-theme="light"] .skeleton {
   background: linear-gradient(90deg, var(--color-charcoal) 25%, var(--color-dark-gray) 50%, var(--color-charcoal) 75%);
 }
-[data-theme="light"] ::selection { background: var(--color-gold); color: #fff; }
+[data-theme="light"] ::selection { background: #111111; color: #fff; }
 
 /* ─── Reset ─── */
 *, *::before, *::after {

@@ -12,6 +12,8 @@ export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(1);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -30,17 +32,19 @@ export default function ShopPage() {
     if (filters.sort) params.sort = filters.sort;
     if (search) params.search = search;
 
+    params.page = page;
     api.get('/api/products', { params })
-      .then(res => { setProducts(res.data.products); setTotal(res.data.total); })
+      .then(res => { setProducts(res.data.products); setTotal(res.data.total); setPages(res.data.pages); })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [searchParams, search]);
+  }, [searchParams, search, page]);
 
   const handleFilterChange = (newFilters) => {
     const params = {};
     if (newFilters.gender) params.gender = newFilters.gender;
     if (newFilters.category) params.category = newFilters.category;
     if (newFilters.sort) params.sort = newFilters.sort;
+    setPage(1);
     setSearchParams(params);
   };
 
@@ -106,7 +110,86 @@ export default function ShopPage() {
                 </button>
               </div>
             ) : (
-              <ProductGrid products={products} loading={loading} />
+              <>
+                <ProductGrid products={products} loading={loading} />
+
+                {/* Pagination */}
+                {!loading && pages > 1 && (
+                  <div style={{
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    gap: '0.35rem', marginTop: '3rem', flexWrap: 'wrap',
+                  }}>
+                    {/* Prev */}
+                    <button
+                      onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      disabled={page === 1}
+                      style={{
+                        padding: '0.5rem 0.9rem', fontSize: '0.85rem',
+                        background: 'transparent', border: '1px solid var(--color-border)',
+                        color: page === 1 ? 'var(--color-gray)' : 'var(--color-off-white)',
+                        cursor: page === 1 ? 'not-allowed' : 'pointer',
+                        borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                      }}
+                      onMouseOver={e => { if (page !== 1) e.currentTarget.style.borderColor = 'var(--color-off-white)'; }}
+                      onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
+                    >
+                      ‹
+                    </button>
+
+                    {/* Page numbers */}
+                    {(() => {
+                      const buttons = [];
+                      let start = Math.max(1, page - 2);
+                      let end = Math.min(pages, page + 2);
+                      if (start > 1) {
+                        buttons.push(1);
+                        if (start > 2) buttons.push('...');
+                      }
+                      for (let i = start; i <= end; i++) buttons.push(i);
+                      if (end < pages) {
+                        if (end < pages - 1) buttons.push('...');
+                        buttons.push(pages);
+                      }
+                      return buttons.map((b, i) => b === '...' ? (
+                        <span key={`ellipsis-${i}`} style={{ padding: '0.5rem 0.4rem', color: 'var(--color-gray)', fontSize: '0.85rem' }}>…</span>
+                      ) : (
+                        <button key={b}
+                          onClick={() => { setPage(b); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          style={{
+                            minWidth: '36px', height: '36px', fontSize: '0.85rem',
+                            background: b === page ? 'var(--color-off-white)' : 'transparent',
+                            color: b === page ? 'var(--color-black)' : 'var(--color-off-white)',
+                            border: `1px solid ${b === page ? 'var(--color-off-white)' : 'var(--color-border)'}`,
+                            cursor: 'pointer', borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                            fontWeight: b === page ? 700 : 400,
+                          }}
+                          onMouseOver={e => { if (b !== page) { e.currentTarget.style.borderColor = 'var(--color-off-white)'; } }}
+                          onMouseOut={e => { if (b !== page) { e.currentTarget.style.borderColor = 'var(--color-border)'; } }}
+                        >
+                          {b}
+                        </button>
+                      ));
+                    })()}
+
+                    {/* Next */}
+                    <button
+                      onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      disabled={page === pages}
+                      style={{
+                        padding: '0.5rem 0.9rem', fontSize: '0.85rem',
+                        background: 'transparent', border: '1px solid var(--color-border)',
+                        color: page === pages ? 'var(--color-gray)' : 'var(--color-off-white)',
+                        cursor: page === pages ? 'not-allowed' : 'pointer',
+                        borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                      }}
+                      onMouseOver={e => { if (page !== pages) e.currentTarget.style.borderColor = 'var(--color-off-white)'; }}
+                      onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

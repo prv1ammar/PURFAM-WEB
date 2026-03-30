@@ -116,7 +116,7 @@ function CheckoutForm({ items, totalPrice }) {
                   base: {
                     fontSize: '16px', color: '#f5f0e8', fontFamily: 'Lato, sans-serif',
                     '::placeholder': { color: '#6b6b6b' },
-                    iconColor: '#c9a84c',
+                    iconColor: '#ffffff',
                   },
                 },
               }} />

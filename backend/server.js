@@ -3,6 +3,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 const connectDB = require('./config/db');
 
 dotenv.config();
@@ -13,6 +16,25 @@ const app = express();
 // Stripe webhook needs raw body — mount BEFORE json middleware
 const paymentRoutes = require('./routes/payment.routes');
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }), paymentRoutes);
+
+// Uploads folder
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
+app.use('/uploads', express.static(uploadsDir));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, '_')}`),
+});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+
+const { protect } = require('./middleware/auth');
+const { admin } = require('./middleware/admin');
+app.post('/api/admin/upload', protect, admin, upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+  const url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  res.json({ url });
+});
 
 // Global middleware
 app.use(helmet());

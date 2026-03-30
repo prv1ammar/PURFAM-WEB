@@ -93,7 +93,7 @@ export default function HeroSection() {
 
         .hero-scanline {
           position: absolute; left: 0; right: 0; height: 1px;
-          background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.6) 30%, rgba(255,220,100,0.9) 50%, rgba(201,168,76,0.6) 70%, transparent 100%);
+          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 70%, transparent 100%);
           animation: scanLine 8s ease-in-out infinite;
           pointer-events: none;
         }
@@ -102,7 +102,7 @@ export default function HeroSection() {
       <section ref={sectionRef} style={{
         position: 'relative', height: '100vh', minHeight: '640px',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        overflow: 'hidden', background: '#050403',
+        overflow: 'hidden', background: '#050505',
       }}>
 
         {/* ── Layer 1: Ken Burns poster (shows while video loads) ── */}
@@ -138,19 +138,19 @@ export default function HeroSection() {
           <div className="hero-blob" style={{
             width: '55vw', height: '55vw',
             top: '-15%', left: '-10%',
-            background: 'radial-gradient(circle, rgba(201,140,20,0.18) 0%, rgba(160,100,10,0.08) 60%, transparent 100%)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 60%, transparent 100%)',
             animation: 'blob1 18s ease-in-out infinite',
           }} />
           <div className="hero-blob" style={{
             width: '60vw', height: '60vw',
             bottom: '-20%', right: '-12%',
-            background: 'radial-gradient(circle, rgba(180,120,15,0.16) 0%, rgba(140,90,8,0.07) 60%, transparent 100%)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)',
             animation: 'blob2 22s ease-in-out infinite',
           }} />
           <div className="hero-blob" style={{
             width: '40vw', height: '40vw',
             top: '30%', left: '30%',
-            background: 'radial-gradient(circle, rgba(220,170,60,0.09) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)',
             animation: 'blob3 15s ease-in-out infinite',
           }} />
         </div>
@@ -172,9 +172,9 @@ export default function HeroSection() {
           <div key={i} className="hero-particle" style={{
             left: p.left,
             width: p.size + 'px', height: p.size + 'px',
-            background: `rgba(201, ${140 + i * 5}, 50, ${p.opacity})`,
+            background: `rgba(255, 255, 255, ${p.opacity})`,
             animationDelay: p.delay, animationDuration: p.dur,
-            boxShadow: `0 0 ${p.size * 3}px rgba(201,168,76,0.8)`,
+            boxShadow: `0 0 ${p.size * 3}px rgba(255,255,255,0.5)`,
           }} />
         ))}
 
@@ -208,7 +208,7 @@ export default function HeroSection() {
           transition={{ duration: 2, delay: 1.4, ease: [0.25, 0.1, 0.25, 1] }}
           style={{
             position: 'absolute', bottom: '32%', left: 0, right: 0, height: '1px',
-            background: 'linear-gradient(90deg, transparent 5%, rgba(201,168,76,0.22) 50%, transparent 95%)',
+            background: 'linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.12) 50%, transparent 95%)',
             pointerEvents: 'none',
           }}
         />
@@ -258,19 +258,19 @@ export default function HeroSection() {
                 color: '#0a0a0a', fontFamily: 'var(--font-sans)',
                 fontSize: '0.78rem', letterSpacing: '0.22em', textTransform: 'uppercase',
                 fontWeight: 700, transition: 'all 0.25s',
-                boxShadow: '0 4px 24px rgba(201,168,76,0.4)',
+                boxShadow: '0 4px 24px rgba(255,255,255,0.2)',
               }}
-                onMouseOver={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = '0 8px 32px rgba(201,168,76,0.6)'; }}
-                onMouseOut={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 4px 24px rgba(201,168,76,0.4)'; }}>
+                onMouseOver={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = '0 8px 32px rgba(255,255,255,0.35)'; }}
+                onMouseOut={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 4px 24px rgba(255,255,255,0.2)'; }}>
                 {t('btn.shopNow', { ns: 'common' })}
               </Link>
               <Link to="/about" style={{
-                padding: '1rem 2.8rem', border: '1px solid rgba(201,168,76,0.65)',
+                padding: '1rem 2.8rem', border: '1px solid rgba(255,255,255,0.65)',
                 color: 'var(--color-gold)', fontFamily: 'var(--font-sans)',
                 fontSize: '0.78rem', letterSpacing: '0.22em', textTransform: 'uppercase',
                 transition: 'all 0.25s', backdropFilter: 'blur(6px)',
               }}
-                onMouseOver={e => { e.target.style.background = 'rgba(201,168,76,0.12)'; e.target.style.transform = 'translateY(-2px)'; }}
+                onMouseOver={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.transform = 'translateY(-2px)'; }}
                 onMouseOut={e => { e.target.style.background = 'transparent'; e.target.style.transform = 'translateY(0)'; }}>
                 {t('btn.discover', { ns: 'common' })}
               </Link>
@@ -287,7 +287,7 @@ export default function HeroSection() {
           }}>
           <span style={{
             fontSize: '0.62rem', letterSpacing: '0.35em', textTransform: 'uppercase',
-            color: 'rgba(201,168,76,0.7)', fontFamily: 'var(--font-sans)',
+            color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-sans)',
           }}>
             {isAr ? 'مرر للأسفل' : 'SCROLL'}
           </span>

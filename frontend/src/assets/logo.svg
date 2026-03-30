@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" fill="none">
   <!-- Bottle mark -->
-  <circle cx="24" cy="40" r="20" stroke="#C9A84C" stroke-width="1"/>
-  <rect x="20" y="24" width="8" height="4" rx="1" fill="#C9A84C"/>
-  <rect x="18" y="28" width="12" height="3" rx="1" fill="#C9A84C"/>
-  <rect x="16" y="31" width="16" height="18" rx="3" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
-  <line x1="16" y1="38" x2="32" y2="38" stroke="#C9A84C" stroke-width="0.8" opacity="0.6"/>
+  <circle cx="24" cy="40" r="20" stroke="#ffffff" stroke-width="1"/>
+  <rect x="20" y="24" width="8" height="4" rx="1" fill="#ffffff"/>
+  <rect x="18" y="28" width="12" height="3" rx="1" fill="#ffffff"/>
+  <rect x="16" y="31" width="16" height="18" rx="3" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <line x1="16" y1="38" x2="32" y2="38" stroke="#ffffff" stroke-width="0.8" opacity="0.6"/>
   <!-- Crown points -->
-  <path d="M19 24 L24 20 L29 24" stroke="#C9A84C" stroke-width="1" fill="none" stroke-linejoin="round"/>
+  <path d="M19 24 L24 20 L29 24" stroke="#ffffff" stroke-width="1" fill="none" stroke-linejoin="round"/>
   <!-- Wordmark -->
-  <text x="52" y="37" font-family="Cormorant Garamond, Georgia, serif" font-size="16" font-weight="400" letter-spacing="4" fill="#C9A84C">LUXE</text>
-  <text x="52" y="56" font-family="Cormorant Garamond, Georgia, serif" font-size="16" font-weight="300" letter-spacing="4" fill="#F5F0E8">ESSENCE</text>
+  <text x="52" y="37" font-family="Cormorant Garamond, Georgia, serif" font-size="16" font-weight="400" letter-spacing="4" fill="#ffffff">LUXE</text>
+  <text x="52" y="56" font-family="Cormorant Garamond, Georgia, serif" font-size="16" font-weight="300" letter-spacing="4" fill="#cccccc">ESSENCE</text>
 </svg>
