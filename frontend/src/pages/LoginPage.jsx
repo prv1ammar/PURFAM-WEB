@@ -51,9 +51,11 @@ export default function LoginPage() {
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <img src={logoSrc} alt="Luxe Essence" style={{ height: 50, margin: '0 auto 1.5rem' }} />
           <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.8rem', marginBottom: '0.5rem' }}>
-            {t('login.title')}
+            {isAr ? 'تسجيل دخول الإدارة' : 'Administrator Login'}
           </h1>
-          <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem' }}>{t('login.subtitle')}</p>
+          <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem' }}>
+            {isAr ? 'ولوج آمن للموظفين المصرح لهم فقط' : 'Secure access for authorized personnel only'}
+          </p>
         </div>
 
         {error && (
@@ -98,10 +100,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--color-gray)', fontSize: '0.9rem' }}>
-          {t('login.noAccount')}{' '}
-          <Link to="/register" style={{ color: 'var(--color-gold)' }}>{t('login.register')}</Link>
-        </p>
+
       </motion.div>
     </div>
   );

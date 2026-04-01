@@ -160,7 +160,7 @@ export default function AdminPage() {
                     <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--color-gray)', marginBottom: '0.3rem' }}>Gender</label>
                     <select value={form.gender} onChange={e => setForm(v => ({ ...v, gender: e.target.value }))}
                       style={{ width: '100%', padding: '0.6rem', background: 'var(--color-dark)', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', borderRadius: 'var(--radius-sm)' }}>
-                      {['women', 'men', 'girls', 'boys', 'unisex'].map(g => <option key={g} value={g}>{g}</option>)}
+                      {['women', 'men'].map(g => <option key={g} value={g}>{g}</option>)}
                     </select>
                   </div>
                   <div>

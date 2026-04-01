@@ -22,6 +22,8 @@ export default function ShopPage() {
     gender: searchParams.get('gender') || '',
     category: searchParams.get('category') || '',
     sort: searchParams.get('sort') || '-createdAt',
+    size: searchParams.get('size') || '',
+    minSize: searchParams.get('minSize') || '',
   };
 
   useEffect(() => {
@@ -30,6 +32,8 @@ export default function ShopPage() {
     if (filters.gender) params.gender = filters.gender;
     if (filters.category) params.category = filters.category;
     if (filters.sort) params.sort = filters.sort;
+    if (filters.size) params.size = filters.size;
+    if (filters.minSize) params.minSize = filters.minSize;
     if (search) params.search = search;
 
     params.page = page;
@@ -44,6 +48,8 @@ export default function ShopPage() {
     if (newFilters.gender) params.gender = newFilters.gender;
     if (newFilters.category) params.category = newFilters.category;
     if (newFilters.sort) params.sort = newFilters.sort;
+    if (newFilters.size) params.size = newFilters.size;
+    if (newFilters.minSize) params.minSize = newFilters.minSize;
     setPage(1);
     setSearchParams(params);
   };
@@ -75,10 +81,11 @@ export default function ShopPage() {
             type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder={isAr ? 'ابحث عن عطر...' : 'Search fragrances...'}
             style={{
-              width: '100%', maxWidth: '400px', padding: '0.75rem 1.25rem',
+              width: '100%', maxWidth: '400px', padding: '0.8rem 1.5rem',
               background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',
-              color: 'var(--color-off-white)', borderRadius: 'var(--radius-sm)',
+              color: 'rgba(var(--text-rgb), 0.9)', borderRadius: 'var(--radius-full)',
               fontSize: '0.95rem', outline: 'none',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
             }}
             onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
             onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
@@ -94,17 +101,17 @@ export default function ShopPage() {
           {/* Products */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem' }}>
+              <p style={{ color: 'rgba(var(--text-rgb), 0.5)', fontSize: '0.9rem' }}>
                 {loading ? '...' : `${total} ${t('shop.results')}`}
               </p>
             </div>
 
             {!loading && products.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-gray)' }}>
+              <div style={{ textAlign: 'center', padding: '4rem', color: 'rgba(var(--text-rgb), 0.5)' }}>
                 <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1rem' }}>
                   {t('shop.noResults')}
                 </p>
-                <button onClick={() => handleFilterChange({ gender: '', category: '', sort: '-createdAt' })}
+                <button onClick={() => handleFilterChange({ gender: '', category: '', sort: '-createdAt', size: '', minSize: '' })}
                   style={{ color: 'var(--color-gold)', textDecoration: 'underline', fontSize: '0.9rem' }}>
                   {t('shop.clearFilters')}
                 </button>
@@ -124,13 +131,13 @@ export default function ShopPage() {
                       onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                       disabled={page === 1}
                       style={{
-                        padding: '0.5rem 0.9rem', fontSize: '0.85rem',
+                        padding: '0.5rem 1rem', fontSize: '0.85rem',
                         background: 'transparent', border: '1px solid var(--color-border)',
-                        color: page === 1 ? 'var(--color-gray)' : 'var(--color-off-white)',
+                        color: page === 1 ? 'rgba(var(--text-rgb), 0.3)' : 'rgba(var(--text-rgb), 0.9)',
                         cursor: page === 1 ? 'not-allowed' : 'pointer',
-                        borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                        borderRadius: 'var(--radius-full)', transition: 'all 0.2s',
                       }}
-                      onMouseOver={e => { if (page !== 1) e.currentTarget.style.borderColor = 'var(--color-off-white)'; }}
+                      onMouseOver={e => { if (page !== 1) e.currentTarget.style.borderColor = 'rgba(var(--text-rgb), 0.9)'; }}
                       onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                     >
                       ‹
@@ -151,19 +158,19 @@ export default function ShopPage() {
                         buttons.push(pages);
                       }
                       return buttons.map((b, i) => b === '...' ? (
-                        <span key={`ellipsis-${i}`} style={{ padding: '0.5rem 0.4rem', color: 'var(--color-gray)', fontSize: '0.85rem' }}>…</span>
+                        <span key={`ellipsis-${i}`} style={{ padding: '0.5rem 0.4rem', color: 'rgba(var(--text-rgb), 0.5)', fontSize: '0.85rem' }}>…</span>
                       ) : (
                         <button key={b}
                           onClick={() => { setPage(b); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                           style={{
                             minWidth: '36px', height: '36px', fontSize: '0.85rem',
-                            background: b === page ? 'var(--color-off-white)' : 'transparent',
-                            color: b === page ? 'var(--color-black)' : 'var(--color-off-white)',
-                            border: `1px solid ${b === page ? 'var(--color-off-white)' : 'var(--color-border)'}`,
-                            cursor: 'pointer', borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                            background: b === page ? 'rgba(var(--text-rgb), 1)' : 'transparent',
+                            color: b === page ? 'var(--color-black)' : 'rgba(var(--text-rgb), 0.9)',
+                            border: `1px solid ${b === page ? 'rgba(var(--text-rgb), 1)' : 'var(--color-border)'}`,
+                            cursor: 'pointer', borderRadius: 'var(--radius-full)', transition: 'all 0.2s',
                             fontWeight: b === page ? 700 : 400,
                           }}
-                          onMouseOver={e => { if (b !== page) { e.currentTarget.style.borderColor = 'var(--color-off-white)'; } }}
+                          onMouseOver={e => { if (b !== page) { e.currentTarget.style.borderColor = 'rgba(var(--text-rgb), 0.9)'; } }}
                           onMouseOut={e => { if (b !== page) { e.currentTarget.style.borderColor = 'var(--color-border)'; } }}
                         >
                           {b}
@@ -176,13 +183,13 @@ export default function ShopPage() {
                       onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                       disabled={page === pages}
                       style={{
-                        padding: '0.5rem 0.9rem', fontSize: '0.85rem',
+                        padding: '0.5rem 1rem', fontSize: '0.85rem',
                         background: 'transparent', border: '1px solid var(--color-border)',
-                        color: page === pages ? 'var(--color-gray)' : 'var(--color-off-white)',
+                        color: page === pages ? 'rgba(var(--text-rgb), 0.3)' : 'rgba(var(--text-rgb), 0.9)',
                         cursor: page === pages ? 'not-allowed' : 'pointer',
-                        borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
+                        borderRadius: 'var(--radius-full)', transition: 'all 0.2s',
                       }}
-                      onMouseOver={e => { if (page !== pages) e.currentTarget.style.borderColor = 'var(--color-off-white)'; }}
+                      onMouseOver={e => { if (page !== pages) e.currentTarget.style.borderColor = 'rgba(var(--text-rgb), 0.9)'; }}
                       onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                     >
                       ›

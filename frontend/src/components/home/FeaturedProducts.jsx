@@ -48,14 +48,7 @@ export default function FeaturedProducts() {
         )}
 
         <ScrollReveal direction="fade" delay={0.2} style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Link to="/shop" style={{
-            display: 'inline-block', padding: '0.8rem 2rem',
-            border: '1px solid var(--color-gold)', color: 'var(--color-gold)',
-            fontSize: '0.8rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-            transition: 'all 0.2s',
-          }}
-            onMouseOver={e => { e.target.style.background = 'var(--color-gold)'; e.target.style.color = 'var(--color-black)'; }}
-            onMouseOut={e => { e.target.style.background = 'transparent'; e.target.style.color = 'var(--color-gold)'; }}>
+          <Link to="/shop" className="btn-luxe mt-12 block mx-auto w-max shadow-lg">
             {t('btn.viewAll', { ns: 'common' })}
           </Link>
         </ScrollReveal>

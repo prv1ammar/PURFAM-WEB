@@ -25,88 +25,62 @@ export default function ProductCard({ product }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      style={{ position: 'relative', cursor: 'pointer' }}
+      className="group relative flex flex-col h-full overflow-hidden"
     >
-      <Link to={`/shop/${product._id}`}>
-        {/* Image container */}
-        <div style={{
-          position: 'relative', overflow: 'hidden',
-          aspectRatio: '3/4', background: 'var(--color-charcoal)',
-          borderRadius: 'var(--radius-sm)',
-        }}>
-          <motion.img
-            src={image} alt={name}
-            animate={{ scale: hovered ? 1.06 : 1 }}
-            transition={{ duration: 0.5 }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+      <Link to={`/shop/${product._id}`} className="block relative flex-grow overflow-hidden aspect-4-5 bg-black rounded-md">
+        <motion.img
+          src={image}
+          alt={name}
+          animate={{ scale: hovered ? 1.05 : 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full h-full object-cover transition-all duration-700"
+          style={{ filter: hovered ? 'brightness(1)' : 'brightness(0.9)' }}
+        />
+        
+        {/* Hover Overlay with Add Button */}
+        <motion.div
+          animate={{ opacity: hovered ? 1 : 0 }}
+          className="absolute inset-x-0 bottom-0 p-4 z-20 flex"
+          style={{ padding: '1rem' }}
+        >
+          <button
+            onClick={handleAdd}
+            className={`w-full py-3 text-xs uppercase tracking-widest font-bold transition-all duration-300 rounded-full shadow-lg ${added ? 'bg-theme text-theme' : 'bg-gold text-btn hover:bg-gold-light'}`}
+            style={{ width: '100%', padding: '0.75rem 0' }}
+          >
+            {added ? t('btn.addedToCart') : t('btn.addToCart')}
+          </button>
+        </motion.div>
 
-          {/* Hover overlay */}
-          <motion.div
-            animate={{ opacity: hovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: 'absolute', inset: 0,
-              background: 'rgba(10,10,10,0.5)',
-              display: 'flex', alignItems: 'flex-end',
-              padding: '1.5rem',
-            }}>
-            <button
-              onClick={handleAdd}
-              style={{
-                width: '100%', padding: '0.75rem',
-                background: added ? 'var(--color-gold-dark)' : 'var(--color-gold)',
-                color: 'var(--color-black)',
-                fontFamily: 'var(--font-sans)', fontSize: '0.75rem',
-                letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700,
-                transition: 'background 0.2s',
-              }}>
-              {added ? t('btn.addedToCart') : t('btn.addToCart')}
-            </button>
-          </motion.div>
-
-          {/* Badge */}
-          {product.featured && (
-            <div style={{
-              position: 'absolute', top: '1rem', left: isAr ? 'auto' : '1rem', right: isAr ? '1rem' : 'auto',
-              background: 'var(--color-gold)', color: 'var(--color-black)',
-              fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-              padding: '0.25rem 0.6rem', fontWeight: 700,
-            }}>
-              {isAr ? 'مميز' : 'Featured'}
-            </div>
-          )}
-        </div>
-
-        {/* Info */}
-        <div style={{ padding: '1rem 0.25rem', direction: isAr ? 'rtl' : 'ltr' }}>
-          <p style={{ fontSize: '0.75rem', color: 'var(--color-gray)', marginBottom: '0.25rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            {product.brand}
-          </p>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 400, marginBottom: '0.4rem', lineHeight: 1.3 }}>
-            {name}
-          </h3>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <p style={{ color: 'var(--color-gold)', fontFamily: 'var(--font-serif)', fontSize: '1.05rem' }}>
-              {t('labels.from')} {minPrice} dh
-            </p>
-            <div style={{ display: 'flex', gap: '2px' }}>
-              {[1, 2, 3, 4, 5].map(s => (
-                <span key={s} style={{
-                  fontSize: '0.6rem',
-                  color: s <= Math.round(product.ratings?.average || 0) ? 'var(--color-gold)' : 'var(--color-border)',
-                }}>★</span>
-              ))}
-            </div>
-          </div>
+        {/* Brand Tag */}
+        <div className="absolute z-10" style={{ top: '1rem', left: '1rem', right: '1rem' }}>
+            <span className="text-[10px] md:text-xs uppercase tracking-w-3 font-medium text-white drop-shadow-md" style={{ display: 'inline-block', background: 'rgba(0,0,0,0.4)', padding: '0.3rem 0.6rem', borderRadius: 'var(--radius-md)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}>
+                {product.brand}
+            </span>
         </div>
       </Link>
+
+      <div className={`py-6 flex flex-col gap-2 ${isAr ? 'text-right' : 'text-left'}`}>
+        <h3 className="text-xl font-serif text-theme-90 leading-tight hover:text-gold transition-all duration-300" style={{ transitionProperty: 'color' }}>
+           {name}
+        </h3>
+        <div className="flex items-center justify-between mt-1">
+            <p className="text-gold font-serif text-lg tracking-tight">
+                {t('labels.from')} {minPrice} dh
+            </p>
+            <div className="flex gap-[2px]">
+              {[1, 2, 3, 4, 5].map(s => (
+                <span key={s} className={`text-xs ${s <= Math.round(product.ratings?.average || 5) ? 'text-gold' : 'text-theme-40'}`}>★</span>
+              ))}
+            </div>
+        </div>
+      </div>
     </motion.div>
   );
 }

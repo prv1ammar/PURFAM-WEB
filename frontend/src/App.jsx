@@ -22,6 +22,7 @@ import OrderHistoryPage from '@/pages/OrderHistoryPage';
 import AboutPage from '@/pages/AboutPage';
 import ContactPage from '@/pages/ContactPage';
 import AdminPage from '@/pages/AdminPage';
+import DesignLessonPage from '@/pages/DesignLessonPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 
 function AppContent() {
@@ -45,6 +46,7 @@ function AppContent() {
           <Route path="shop/:id" element={<ProductDetailPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="design" element={<DesignLessonPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
 

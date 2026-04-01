@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const { gender, category, featured, search, minPrice, maxPrice, page = 1, limit = 12, sort = '-createdAt' } = req.query;
+    const { gender, category, featured, search, minPrice, maxPrice, page = 1, limit = 12, sort = '-createdAt', size, minSize } = req.query;
     const query = {};
 
     if (gender) query.gender = gender;
@@ -19,6 +19,11 @@ const getAllProducts = async (req, res, next) => {
       query['sizes.price'] = {};
       if (minPrice) query['sizes.price'].$gte = Number(minPrice);
       if (maxPrice) query['sizes.price'].$lte = Number(maxPrice);
+    }
+    if (size || minSize) {
+      query['sizes.ml'] = {};
+      if (size) query['sizes.ml'].$eq = Number(size);
+      if (minSize) query['sizes.ml'].$gte = Number(minSize);
     }
 
     const total = await Product.countDocuments(query);

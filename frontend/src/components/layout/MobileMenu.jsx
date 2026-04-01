@@ -16,6 +16,7 @@ export default function MobileMenu({ open, onClose }) {
     { to: '/shop', label: t('nav.shop') },
     { to: '/about', label: t('nav.about') },
     { to: '/contact', label: t('nav.contact') },
+    { to: '/design', label: t('nav.design') },
   ];
 
   return (
@@ -62,8 +63,8 @@ export default function MobileMenu({ open, onClose }) {
             <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {user ? (
                 <>
-                  <Link to="/orders" onClick={onClose} style={{ color: 'var(--color-gold)', fontSize: '0.9rem', textAlign: isAr ? 'right' : 'left' }}>
-                    {t('nav.myOrders')}
+                  <Link to="/admin" onClick={onClose} style={{ color: 'var(--color-gold)', fontSize: '0.9rem', textAlign: isAr ? 'right' : 'left' }}>
+                    {t('nav.admin')}
                   </Link>
                   <button onClick={() => { logout(); onClose(); }} style={{ color: '#e55', textAlign: isAr ? 'right' : 'left', fontSize: '0.9rem' }}>
                     {t('nav.logout')}
@@ -73,9 +74,6 @@ export default function MobileMenu({ open, onClose }) {
                 <>
                   <Link to="/login" onClick={onClose} style={{ color: 'var(--color-gold)', fontSize: '0.9rem', textAlign: isAr ? 'right' : 'left' }}>
                     {t('nav.login')}
-                  </Link>
-                  <Link to="/register" onClick={onClose} style={{ color: 'var(--color-off-white)', fontSize: '0.9rem', textAlign: isAr ? 'right' : 'left' }}>
-                    {t('nav.register')}
                   </Link>
                 </>
               )}

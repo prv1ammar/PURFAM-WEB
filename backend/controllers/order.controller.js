@@ -10,8 +10,7 @@ const createOrder = async (req, res, next) => {
     const shippingCost = subtotal > 200 ? 0 : 15;
     const total = subtotal + shippingCost;
 
-    const order = await Order.create({
-      user: req.user._id,
+    const orderData = {
       items,
       shippingAddress,
       paymentIntentId,
@@ -19,10 +18,17 @@ const createOrder = async (req, res, next) => {
       subtotal,
       shippingCost,
       total,
-    });
+    };
+    if (req.user) {
+      orderData.user = req.user._id;
+    }
 
-    // Clear the user's cart after order
-    await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
+    const order = await Order.create(orderData);
+
+    // Clear the user's cart after order if logged in
+    if (req.user) {
+      await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
+    }
 
     res.status(201).json({ order });
   } catch (err) { next(err); }

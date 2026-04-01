@@ -18,54 +18,34 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section style={{
-      padding: '6rem 1.5rem',
-      background: `linear-gradient(135deg, var(--color-dark) 0%, #1a150a 100%)`,
-      borderTop: '1px solid var(--color-border)',
-    }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', direction: isAr ? 'rtl' : 'ltr' }}>
+    <section className="section-padding bg-theme border-t border-theme-10">
+      <div className="container-luxe max-w-md text-center">
         <ScrollReveal direction="scale" duration={0.8}>
-          <div style={{
-            width: '40px', height: '1px', background: 'var(--color-gold)',
-            margin: '0 auto 1.5rem',
-          }} />
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '1rem' }}>
+          <div className="w-10 h-[1px] bg-gold mx-auto mb-6" />
+          <h2 className="text-3xl font-serif text-theme-90 mb-4 font-light">
             {t('home.newsletterTitle')}
           </h2>
-          <p style={{ color: 'var(--color-gray)', marginBottom: '2rem' }}>
+          <p className="text-theme-60 mb-8 font-light leading-relaxed">
             {t('home.newsletterSubtitle')}
           </p>
 
           {submitted ? (
             <motion.p
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              style={{ color: 'var(--color-gold)', fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>
+              className="text-gold font-serif text-xl">
               {t('success.subscribed', { ns: 'common' })}
             </motion.p>
           ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0', maxWidth: '400px', margin: '0 auto' }}>
+            <form onSubmit={handleSubmit} className="flex max-w-md mx-auto" style={{ gap: '0.5rem' }}>
               <input
                 type="email" value={email} onChange={e => setEmail(e.target.value)}
                 placeholder={t('home.newsletterPlaceholder')}
                 required
-                style={{
-                  flex: 1, padding: '0.9rem 1rem', background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid var(--color-border)', borderRight: 'none',
-                  color: 'var(--color-off-white)', fontSize: '0.9rem',
-                  outline: 'none',
-                  direction: isAr ? 'rtl' : 'ltr',
-                  borderRadius: isAr ? '0 var(--radius-sm) var(--radius-sm) 0' : 'var(--radius-sm) 0 0 var(--radius-sm)',
-                }}
-                onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
-                onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+                className={`text-theme-90 text-sm outline-none transition-all focus:border-gold`}
+                style={{ flex: 1, padding: '1rem 1.5rem', backgroundColor: 'rgba(var(--text-rgb), 0.05)', border: '1px solid rgba(var(--text-rgb), 0.1)', borderRadius: 'var(--radius-full)' }}
               />
-              <button type="submit" style={{
-                padding: '0.9rem 1.5rem', background: 'var(--color-gold)',
-                color: 'var(--color-black)', fontSize: '0.75rem',
-                letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700,
-                borderRadius: isAr ? 'var(--radius-sm) 0 0 var(--radius-sm)' : '0 var(--radius-sm) var(--radius-sm) 0',
-                whiteSpace: 'nowrap',
-              }}>
+              <button type="submit" className={`bg-gold text-black text-xs tracking-widest uppercase font-bold transition-all hover:bg-gold-light`}
+                style={{ padding: '1rem 2rem', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-full)', boxShadow: 'var(--shadow-luxe)' }}>
                 {t('btn.subscribe', { ns: 'common' })}
               </button>
             </form>

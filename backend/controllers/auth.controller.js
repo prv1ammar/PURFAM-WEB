@@ -2,18 +2,7 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
 const register = async (req, res, next) => {
-  try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-    const exists = await User.findOne({ email });
-    if (exists) return res.status(400).json({ message: 'Email already registered' });
-    const user = await User.create({ name, email, password });
-    res.status(201).json({ user, token: generateToken(user._id, user.role) });
-  } catch (err) {
-    next(err);
-  }
+  return res.status(403).json({ message: 'Registration is disabled. Only admins can log in.' });
 };
 
 const login = async (req, res, next) => {
@@ -22,6 +11,9 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Only administrators can log in.' });
     }
     const userObj = user.toJSON();
     res.json({ user: userObj, token: generateToken(user._id, user.role) });

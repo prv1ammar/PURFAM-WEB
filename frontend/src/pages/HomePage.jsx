@@ -6,9 +6,9 @@ import BrandStory from '@/components/home/BrandStory';
 import NewsletterSection from '@/components/home/NewsletterSection';
 
 const pageVariants = {
-  initial: { opacity: 0 },
-  in: { opacity: 1, transition: { duration: 0.4 } },
-  out: { opacity: 0, transition: { duration: 0.2 } },
+  initial: { opacity: 0, scale: 0.98 },
+  in: { opacity: 1, scale: 1, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
+  out: { opacity: 0, scale: 1.02, transition: { duration: 0.6, ease: "easeInOut" } },
 };
 
 export default function HomePage() {

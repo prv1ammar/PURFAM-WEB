@@ -49,7 +49,8 @@ function CheckoutForm({ items, totalPrice }) {
         paymentIntentId: data.paymentIntentId,
       });
       clearCart();
-      navigate('/orders');
+      alert(isAr ? 'تم استلام طلبك بنجاح! شكراً لتسوقك معنا.' : 'Order placed successfully! Thank you for shopping with us.');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || t('error.general', { ns: 'common' }));
     } finally {

@@ -4,7 +4,7 @@ export default function ProductFilters({ filters, onChange }) {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
 
-  const genders = ['', 'women', 'men', 'girls', 'boys', 'unisex'];
+  const genders = ['', 'women', 'men'];
   const categories = ['', 'floral', 'woody', 'oriental', 'fresh', 'citrus', 'gourmand'];
 
   const sectionStyle = {
@@ -19,10 +19,10 @@ export default function ProductFilters({ filters, onChange }) {
 
   const btnStyle = (active) => ({
     display: 'block', width: '100%', textAlign: isAr ? 'right' : 'left',
-    padding: '0.5rem 0.75rem', marginBottom: '0.25rem',
+    padding: '0.6rem 1rem', marginBottom: '0.4rem',
     background: active ? 'rgba(201,168,76,0.15)' : 'transparent',
-    color: active ? 'var(--color-gold)' : 'var(--color-light-gray)',
-    borderRadius: 'var(--radius-sm)', fontSize: '0.9rem',
+    color: active ? 'var(--color-gold)' : 'rgba(var(--text-rgb), 0.6)',
+    borderRadius: 'var(--radius-full)', fontSize: '0.9rem',
     border: active ? '1px solid rgba(201,168,76,0.3)' : '1px solid transparent',
     transition: 'all 0.2s', cursor: 'pointer',
   });
@@ -39,8 +39,8 @@ export default function ProductFilters({ filters, onChange }) {
         <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 400 }}>
           {t('shop.filters', { ns: 'pages' })}
         </h3>
-        {(filters.gender || filters.category) && (
-          <button onClick={() => onChange({ gender: '', category: '', sort: filters.sort })}
+        {(filters.gender || filters.category || filters.size || filters.minSize) && (
+          <button onClick={() => onChange({ gender: '', category: '', sort: filters.sort, size: '', minSize: '' })}
             style={{ color: 'var(--color-gold)', fontSize: '0.75rem', textDecoration: 'underline' }}>
             {t('shop.clearFilters', { ns: 'pages' })}
           </button>
