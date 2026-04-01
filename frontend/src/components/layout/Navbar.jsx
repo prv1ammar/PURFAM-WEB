@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
@@ -17,11 +17,14 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const location = useLocation();
   const isAr = i18n.language === 'ar';
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 100);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -37,9 +40,22 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-8 transition-all duration-500 ${scrolled ? 'h-20 bg-theme backdrop-blur-md border-b border-theme-10 shadow-luxe' : 'h-24 bg-transparent'}`}
+      initial={{ y: -120, opacity: 0 }}
+      animate={ (isHome && !scrolled) ? { y: -130, opacity: 0 } : { y: 0, opacity: 1 } }
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={`fixed top-0 left-0 right-0 z-9999 flex items-center justify-between px-8 ${
+        scrolled 
+          ? 'h-20 border-b border-theme-10 shadow-luxe' 
+          : 'h-24 border-b border-theme-10/5'
+      }`}
+      style={{
+        backgroundColor: scrolled ? 'rgba(var(--bg-rgb), 0.92)' : 'rgba(var(--bg-rgb), 0)',
+        backdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
+        pointerEvents: (isHome && !scrolled) ? 'none' : 'auto',
+        zIndex: 9999,
+        transition: 'height 0.4s ease, background-color 0.4s ease, backdrop-filter 0.4s ease'
+      }}
     >
       {/* Logo */}
       <Link to="/" className="flex items-center">
@@ -51,14 +67,20 @@ export default function Navbar() {
         {['/', '/shop', '/about', '/contact', '/design'].map((path, i) => {
           const keys = ['home', 'shop', 'about', 'contact', 'design'];
           return (
-            <li key={path}>
+            <li key={path} className="relative group">
               <NavLink 
                 to={path} 
                 end={path === '/'}
-                className={({ isActive }) => `text-xs uppercase tracking-w-2 transition-all duration-300 font-medium ${isActive ? 'text-gold' : (scrolled ? 'text-theme-60 hover:text-theme-90' : 'text-white-60 hover:text-white')}`}
+                className={({ isActive }) => `
+                  text-[0.7rem] uppercase tracking-[0.25em] transition-all duration-300 font-semibold
+                  ${isActive ? 'text-gold' : (scrolled || theme === 'light' ? 'text-theme-70 hover:text-theme-90' : 'text-white-70 hover:text-white')}
+                `}
               >
                 {t(`nav.${keys[i]}`)}
               </NavLink>
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-[1px] bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+              />
             </li>
           );
         })}
@@ -66,16 +88,16 @@ export default function Navbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-6">
-        <button onClick={toggleLang} className={`text-xs tracking-w-1 hover:text-gold transition-all font-bold uppercase ${scrolled ? 'text-theme-60' : 'text-white-60'}`}>
+        <button onClick={toggleLang} className={`text-[0.7rem] tracking-[0.1em] hover:text-gold transition-all font-bold uppercase ${scrolled || theme === 'light' ? 'text-theme-70' : 'text-white-70'}`}>
            {isAr ? 'EN' : 'عربي'}
         </button>
         
-        <button onClick={toggleTheme} className={`hover:text-gold transition-all ${scrolled ? 'text-theme-80' : 'text-white-80'}`} aria-label="Toggle Theme">
-           <ThemeIcon theme={theme} />
+        <button onClick={toggleTheme} className={`hover:text-gold transition-all ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`} aria-label="Toggle Theme">
+           <ThemeIcon theme={theme} color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
         </button>
 
-        <button onClick={() => setCartOpen(true)} className={`relative group ${scrolled ? 'text-theme-80' : 'text-white-80'}`}>
-           <CartIcon />
+        <button onClick={() => setCartOpen(true)} className={`relative group ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
+           <CartIcon color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
            {totalItems > 0 && (
              <span className="absolute -top-2 -right-2 bg-gold text-black text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center" style={{ borderRadius: '50%' }}>
                {totalItems}
@@ -84,8 +106,8 @@ export default function Navbar() {
         </button>
 
         <div className="relative">
-          <button onClick={() => (user ? setUserMenuOpen(!userMenuOpen) : navigate('/login'))} className={`hover:text-gold transition-all ${scrolled ? 'text-theme-80' : 'text-white-80'}`}>
-            <UserIcon />
+          <button onClick={() => (user ? setUserMenuOpen(!userMenuOpen) : navigate('/login'))} className={`hover:text-gold transition-all ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
+            <UserIcon color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
           </button>
           
           <AnimatePresence>
@@ -113,9 +135,9 @@ export default function Navbar() {
   );
 }
 
-function CartIcon() {
+function CartIcon({ color = 'currentColor' }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.2" className="group-hover:stroke-gold transition-all">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.2" className="group-hover:stroke-gold transition-all">
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
       <line x1="3" y1="6" x2="21" y2="6"/>
       <path d="M16 10a4 4 0 01-8 0"/>
@@ -123,25 +145,25 @@ function CartIcon() {
   );
 }
 
-function UserIcon() {
+function UserIcon({ color = 'currentColor' }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.2">
       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
     </svg>
   );
 }
 
-function ThemeIcon({ theme }) {
+function ThemeIcon({ theme, color = 'currentColor' }) {
   if (theme === 'light') {
     return (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4">
         <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
       </svg>
     );
   }
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4">
       <circle cx="12" cy="12" r="5"/>
       <line x1="12" y1="1" x2="12" y2="3"/>
       <line x1="12" y1="21" x2="12" y2="23"/>

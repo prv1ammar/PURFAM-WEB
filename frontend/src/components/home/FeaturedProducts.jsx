@@ -19,36 +19,38 @@ export default function FeaturedProducts() {
   }, []);
 
   return (
-    <section style={{ padding: '6rem 1.5rem', direction: isAr ? 'rtl' : 'ltr' }}>
-      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto' }}>
-        <ScrollReveal direction="up" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <p className="section-subtitle">{t('home.featuredSubtitle')}</p>
+    <section className="section-padding overflow-hidden" style={{ direction: isAr ? 'rtl' : 'ltr' }}>
+      <div className="container-luxe">
+        <ScrollReveal direction="up" style={{ textAlign: 'center', marginBottom: '5rem' }}>
+          <span className="section-subtitle">{t('home.featuredSubtitle')}</span>
           <h2 className="section-title">{t('home.featuredTitle')}</h2>
-          <div style={{ width: '40px', height: '1px', background: 'var(--color-gold)', margin: '1rem auto 0' }} />
+          <div className="mx-auto" style={{ width: '60px', height: '1px', background: 'linear-gradient(to right, transparent, var(--color-gold), transparent)' }} />
         </ScrollReveal>
 
         {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '2rem' }}>
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i}>
-                <div className="skeleton" style={{ aspectRatio: '3/4' }} />
-                <div className="skeleton" style={{ height: '14px', marginTop: '1rem', width: '60%' }} />
-                <div className="skeleton" style={{ height: '20px', marginTop: '0.5rem', width: '80%' }} />
+              <div key={i} style={{ background: 'rgba(var(--text-rgb),0.03)', border: '1px solid rgba(var(--text-rgb),0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div className="skeleton" style={{ aspectRatio: '4/5' }} />
+                <div style={{ padding: '1.25rem', display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+                  <div className="skeleton" style={{ height: '10px', width: '32%' }} />
+                  <div className="skeleton" style={{ height: '20px', width: '78%' }} />
+                  <div className="skeleton" style={{ height: '14px', width: '28px' }} />
+                  <div className="skeleton" style={{ height: '20px', width: '40%' }} />
+                </div>
               </div>
             ))}
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '2rem' }}>
             {products.map((p, i) => (
-              <ScrollReveal key={p._id} direction="up" delay={i * 0.08} amount={0.1}>
-                <ProductCard product={p} />
-              </ScrollReveal>
+              <ProductCard key={p._id} product={p} index={i} />
             ))}
           </div>
         )}
 
-        <ScrollReveal direction="fade" delay={0.2} style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Link to="/shop" className="btn-luxe mt-12 block mx-auto w-max shadow-lg">
+        <ScrollReveal direction="fade" delay={0.4} style={{ textAlign: 'center', marginTop: '6rem' }}>
+          <Link to="/shop" className="btn-luxe shadow-luxe">
             {t('btn.viewAll', { ns: 'common' })}
           </Link>
         </ScrollReveal>

@@ -101,6 +101,7 @@ a { text-decoration: none; color: inherit; }
 .z-50 { z-index: 50; }
 .z-100 { z-index: 100; }
 .z-1000 { z-index: 1000; }
+.z-9999 { z-index: 9999; }
 
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -239,6 +240,23 @@ h1 { font-size: clamp(3rem, 8vw, 6.5rem); text-transform: uppercase; }
 h2 { font-size: clamp(2rem, 5vw, 3.5rem); }
 
 p { font-size: 1.05rem; color: rgba(var(--color-off-white), 0.8); }
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-white);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.section-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 0.75rem;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: block;
+}
 
 /* ─── Layout Elements ─── */
 .section-cinematic {

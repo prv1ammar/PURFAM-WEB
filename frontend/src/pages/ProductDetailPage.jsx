@@ -92,19 +92,8 @@ export default function ProductDetailPage() {
             </p>
             <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, marginBottom: '1rem' }}>{name}</h1>
 
-            {/* Rating */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', gap: '2px' }}>
-                {[1, 2, 3, 4, 5].map(s => (
-                  <span key={s} style={{ color: s <= Math.round(product.ratings?.average || 0) ? 'var(--color-gold)' : 'var(--color-border)' }}>★</span>
-                ))}
-              </div>
-              <span style={{ color: 'var(--color-gray)', fontSize: '0.85rem' }}>
-                ({product.ratings?.count || 0} {t('reviews', { ns: 'products' })})
-              </span>
-            </div>
-
-            <div style={{ height: '1px', background: 'var(--color-border)', marginBottom: '1.5rem' }} />
+            {/* Divider */}
+            <div style={{ height: '1px', background: 'var(--color-border)', marginBottom: '2rem', marginTop: '1.5rem' }} />
 
             <p style={{ color: 'var(--color-light-gray)', lineHeight: 1.9, marginBottom: '2rem' }}>{description}</p>
 

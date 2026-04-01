@@ -73,14 +73,18 @@ export default function HeroSection() {
           {isAr ? 'جوهر الفخامة' : 'The Essence of Luxury'}
         </motion.span>
 
-        <h1 className="text-white mb-8" style={{ lineHeight: '0.95' }}>
-          <span className="block italic font-light opacity-90">{t('home.heroTitle')}</span>
-          <span className="text-gold font-bold block mt-2">{t('home.heroTitleAccent')}</span>
+        <h1 className="text-white mb-8" style={{ lineHeight: '1.1' }}>
+          <span className="block italic font-light opacity-80 text-2xl md:text-4xl tracking-widest mb-2" style={{ textTransform: 'capitalize' }}>
+            {t('home.heroTitle')}
+          </span>
+          <span className="text-gold font-bold block text-5xl md:text-8xl tracking-tight" style={{ textShadow: '0 0 30px rgba(212, 175, 55, 0.3)' }}>
+            {t('home.heroTitleAccent')}
+          </span>
         </h1>
 
-        <div className="w-16 h-[1px] mx-auto mb-10" style={{ background: 'linear-gradient(to right, transparent, var(--color-gold), transparent)' }} />
+        <div className="w-24 h-[1px] mx-auto mb-10" style={{ background: 'linear-gradient(to right, transparent, var(--color-gold), transparent)' }} />
 
-        <p className="text-white-60 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+        <p className="text-white-80 text-xl md:text-2xl max-w-3xl mx-auto mb-12 font-light leading-relaxed tracking-wide">
           {t('home.heroSubtitle')}
         </p>
 
