@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Order = require('../models/Order');
+const supabase = require('../config/supabase');
 
 const createPaymentIntent = async (req, res, next) => {
   try {
@@ -7,7 +7,7 @@ const createPaymentIntent = async (req, res, next) => {
     if (!amount || amount <= 0) return res.status(400).json({ message: 'Invalid amount' });
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
+      amount: Math.round(amount * 100),
       currency,
       automatic_payment_methods: { enabled: true },
     });
@@ -27,10 +27,10 @@ const handleWebhook = async (req, res, next) => {
 
   if (event.type === 'payment_intent.succeeded') {
     const paymentIntent = event.data.object;
-    await Order.findOneAndUpdate(
-      { paymentIntentId: paymentIntent.id },
-      { status: 'paid' }
-    );
+    await supabase
+      .from('orders')
+      .update({ status: 'paid' })
+      .eq('payment_intent_id', paymentIntent.id);
   }
 
   res.json({ received: true });

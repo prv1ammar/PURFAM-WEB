@@ -1,5 +1,4 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
+const supabase = require('../config/supabase');
 
 const createOrder = async (req, res, next) => {
   try {
@@ -12,22 +11,35 @@ const createOrder = async (req, res, next) => {
 
     const orderData = {
       items,
-      shippingAddress,
-      paymentIntentId,
+      shipping_address: shippingAddress,
+      payment_intent_id: paymentIntentId,
       status: 'paid',
       subtotal,
-      shippingCost,
+      shipping_cost: shippingCost,
       total,
     };
     if (req.user) {
-      orderData.user = req.user._id;
+      orderData.user_id = req.user.id;
     }
 
-    const order = await Order.create(orderData);
+    const { data: order, error } = await supabase
+      .from('orders')
+      .insert(orderData)
+      .select()
+      .single();
 
-    // Clear the user's cart after order if logged in
+    if (error) return next(error);
+
+    // Clear cart if logged in
     if (req.user) {
-      await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
+      const { data: cart } = await supabase
+        .from('carts')
+        .select('id')
+        .eq('user_id', req.user.id)
+        .single();
+      if (cart) {
+        await supabase.from('cart_items').delete().eq('cart_id', cart.id);
+      }
     }
 
     res.status(201).json({ order });
@@ -36,15 +48,27 @@ const createOrder = async (req, res, next) => {
 
 const getMyOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ user: req.user._id }).sort('-createdAt');
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) return next(error);
     res.json({ orders });
   } catch (err) { next(err); }
 };
 
 const getOrderById = async (req, res, next) => {
   try {
-    const order = await Order.findOne({ _id: req.params.id, user: req.user._id });
-    if (!order) return res.status(404).json({ message: 'Order not found' });
+    const { data: order, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', req.params.id)
+      .eq('user_id', req.user.id)
+      .single();
+
+    if (error || !order) return res.status(404).json({ message: 'Order not found' });
     res.json({ order });
   } catch (err) { next(err); }
 };

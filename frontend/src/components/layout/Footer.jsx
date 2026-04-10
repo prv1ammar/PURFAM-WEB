@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import logoSrc from '@/assets/logo.svg';
+import logoSrc from '@/assets/logo.png';
 
 export default function Footer() {
   const { t, i18n } = useTranslation();
@@ -20,7 +20,7 @@ export default function Footer() {
         }}>
           {/* Brand column */}
           <div>
-            <img src={logoSrc} alt="Luxe Essence" style={{ height: 50, marginBottom: '1rem' }} />
+            <img src={logoSrc} alt="Luxe Essence" style={{ width: '80px', height: '80px', objectFit: 'contain', marginBottom: '1rem' }} />
             <p style={{ color: 'var(--color-gray)', fontSize: '0.9rem', lineHeight: 1.8, maxWidth: '260px' }}>
               {t('tagline')}
             </p>
@@ -69,7 +69,7 @@ export default function Footer() {
               {isAr ? 'المجموعات' : 'Collections'}
             </h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {['women', 'men', 'girls', 'boys', 'unisex'].map(g => (
+              {['women', 'men'].map(g => (
                 <li key={g}>
                   <Link to={`/shop?gender=${g}`} style={{ color: 'var(--color-gray)', fontSize: '0.9rem', transition: 'color 0.2s' }}
                     onMouseOver={e => e.target.style.color = 'var(--color-gold)'}

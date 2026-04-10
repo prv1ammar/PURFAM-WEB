@@ -54,10 +54,7 @@
   "gender": {
     "all": "All",
     "women": "Women",
-    "men": "Men",
-    "girls": "Girls",
-    "boys": "Boys",
-    "unisex": "Unisex"
+    "men": "Men"
   },
   "category": {
     "all": "All",

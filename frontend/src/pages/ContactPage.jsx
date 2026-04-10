@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import contactBg from '@/assets/contact-bg.jpg';
 
 export default function ContactPage() {
   const { t, i18n } = useTranslation('pages');
@@ -24,9 +25,10 @@ export default function ContactPage() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="page-wrapper">
       {/* Hero */}
       <div style={{
-        height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
-        background: 'linear-gradient(to bottom, var(--color-charcoal), var(--color-black))',
-        borderBottom: '1px solid var(--color-border)',
+        height: '250px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', textAlign: 'center', paddingBottom: '2.5rem',
+        background: `linear-gradient(to bottom, rgba(10,10,10,0) 0%, var(--color-black) 100%), url(${contactBg}) center/cover no-repeat`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}>
         <div>
           <p className="section-subtitle">{isAr ? 'تواصل معنا' : 'GET IN TOUCH'}</p>
@@ -36,7 +38,7 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '4rem 1.5rem', direction: isAr ? 'rtl' : 'ltr' }}>
+      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '4rem 1.5rem 4rem 4rem', direction: isAr ? 'rtl' : 'ltr' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
           {/* Form */}
           <div>

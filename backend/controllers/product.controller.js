@@ -1,38 +1,43 @@
-const Product = require('../models/Product');
+const supabase = require('../config/supabase');
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const { gender, category, featured, search, minPrice, maxPrice, page = 1, limit = 12, sort = '-createdAt', size, minSize } = req.query;
-    const query = {};
+    const {
+      gender, category, featured, search,
+      minPrice, maxPrice, page = 1, limit = 12,
+      sort = 'created_at', order = 'desc',
+    } = req.query;
 
-    if (gender) query.gender = gender;
-    if (category) query.category = category;
-    if (featured === 'true') query.featured = true;
+    let query = supabase.from('products').select('*', { count: 'exact' });
+
+    if (gender) query = query.eq('gender', gender);
+    if (category) query = query.eq('category', category);
+    if (featured === 'true') query = query.eq('featured', true);
     if (search) {
-      query.$or = [
-        { 'name.en': { $regex: search, $options: 'i' } },
-        { 'name.ar': { $regex: search, $options: 'i' } },
-        { brand: { $regex: search, $options: 'i' } },
-      ];
-    }
-    if (minPrice || maxPrice) {
-      query['sizes.price'] = {};
-      if (minPrice) query['sizes.price'].$gte = Number(minPrice);
-      if (maxPrice) query['sizes.price'].$lte = Number(maxPrice);
-    }
-    if (size || minSize) {
-      query['sizes.ml'] = {};
-      if (size) query['sizes.ml'].$eq = Number(size);
-      if (minSize) query['sizes.ml'].$gte = Number(minSize);
+      query = query.or(
+        `name->>'en'.ilike.%${search}%,name->>'ar'.ilike.%${search}%,brand.ilike.%${search}%`
+      );
     }
 
-    const total = await Product.countDocuments(query);
-    const products = await Product.find(query)
-      .sort(sort)
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+    // Sort
+    const sortField = sort.startsWith('-') ? sort.slice(1) : sort;
+    const ascending = sort.startsWith('-') ? false : order !== 'desc';
+    query = query.order(sortField === 'createdAt' ? 'created_at' : sortField, { ascending });
 
-    res.json({ products, total, page: Number(page), pages: Math.ceil(total / limit) });
+    // Pagination
+    const from = (page - 1) * limit;
+    const to = from + Number(limit) - 1;
+    query = query.range(from, to);
+
+    const { data: products, error, count } = await query;
+    if (error) return next(error);
+
+    res.json({
+      products,
+      total: count,
+      page: Number(page),
+      pages: Math.ceil(count / limit),
+    });
   } catch (err) {
     next(err);
   }
@@ -40,8 +45,13 @@ const getAllProducts = async (req, res, next) => {
 
 const getProductById = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    const { data: product, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error || !product) return res.status(404).json({ message: 'Product not found' });
     res.json({ product });
   } catch (err) {
     next(err);
@@ -50,7 +60,13 @@ const getProductById = async (req, res, next) => {
 
 const getFeatured = async (req, res, next) => {
   try {
-    const products = await Product.find({ featured: true }).limit(8);
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('featured', true)
+      .limit(8);
+
+    if (error) return next(error);
     res.json({ products });
   } catch (err) {
     next(err);

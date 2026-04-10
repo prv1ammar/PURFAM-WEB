@@ -16,7 +16,6 @@ export default function MobileMenu({ open, onClose }) {
     { to: '/shop', label: t('nav.shop') },
     { to: '/about', label: t('nav.about') },
     { to: '/contact', label: t('nav.contact') },
-    { to: '/design', label: t('nav.design') },
   ];
 
   return (

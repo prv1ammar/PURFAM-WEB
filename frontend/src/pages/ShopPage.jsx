@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import shopBg from '@/assets/shop-bg.jpg';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -61,9 +62,9 @@ export default function ShopPage() {
 
       {/* Hero Banner */}
       <div style={{
-        height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        height: '250px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '2.5rem',
         background: `linear-gradient(to bottom, rgba(10,10,10,0) 0%, var(--color-black) 100%),
-                     url(https://images.unsplash.com/photo-1619994121345-b61cd610c5a6?w=1600&q=80) center/cover`,
+                     url(${shopBg}) center/cover`,
         textAlign: 'center',
       }}>
         <div>

@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
 import MobileMenu from './MobileMenu';
-import logoSrc from '@/assets/logo.svg';
+import logoSrc from '@/assets/logo.png';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -15,6 +15,7 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
@@ -22,11 +23,17 @@ export default function Navbar() {
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 100);
+    const onScroll = () => {
+      setScrollY(window.scrollY);
+      setScrolled(window.scrollY > 100);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Gradual opacity: starts at 0.35, reaches 0.92 at 200px scroll
+  const bgOpacity = Math.min(0.92, 0.35 + (scrollY / 200) * 0.57);
 
   const handleLogout = () => {
     logout();
@@ -44,28 +51,50 @@ export default function Navbar() {
       animate={ (isHome && !scrolled) ? { y: -130, opacity: 0 } : { y: 0, opacity: 1 } }
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 left-0 right-0 z-9999 flex items-center justify-between px-8 ${
-        scrolled 
-          ? 'h-20 border-b border-theme-10 shadow-luxe' 
-          : 'h-24 border-b border-theme-10/5'
+        scrolled
+          ? 'h-24 border-b border-theme-10 shadow-luxe'
+          : 'h-28 border-b border-theme-10/5'
       }`}
       style={{
-        backgroundColor: scrolled ? 'rgba(var(--bg-rgb), 0.92)' : 'rgba(var(--bg-rgb), 0)',
-        backdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(160%)' : 'none',
+        backgroundColor: isHome && !scrolled ? 'rgba(var(--bg-rgb), 0)' : `rgba(var(--bg-rgb), ${bgOpacity})`,
+        backdropFilter: isHome && !scrolled ? 'none' : 'blur(14px) saturate(160%)',
+        WebkitBackdropFilter: isHome && !scrolled ? 'none' : 'blur(14px) saturate(160%)',
         pointerEvents: (isHome && !scrolled) ? 'none' : 'auto',
         zIndex: 9999,
         transition: 'height 0.4s ease, background-color 0.4s ease, backdrop-filter 0.4s ease'
       }}
     >
       {/* Logo */}
-      <Link to="/" className="flex items-center">
-         <img src={logoSrc} alt="Luxe Essence" className={`h-10 transition-all duration-500 flex-shrink-0 ${scrolled ? 'scale-90 invert-0 dark:invert-0' : 'scale-100'} ${theme === 'light' && scrolled ? 'invert' : ''}`} style={theme === 'light' && scrolled ? { filter: 'invert(1)' } : {}} />
+      <Link to="/" className="flex items-center gap-3">
+        <img
+          src={logoSrc}
+          alt="Luxe Essence"
+          className="flex-shrink-0 object-contain transition-all duration-500"
+          style={{
+            width: scrolled ? '52px' : '58px',
+            height: scrolled ? '52px' : '58px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
+        />
+        <span
+          className={`block transition-all duration-500 leading-none`}
+          style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontWeight: 400,
+            fontSize: scrolled ? '1.4rem' : '1.6rem',
+            letterSpacing: '0.08em',
+            color: 'var(--color-gold)',
+          }}
+        >
+          Luxe Essence
+        </span>
       </Link>
 
       {/* Navigation Links */}
       <ul className="hidden md:flex items-center gap-10">
-        {['/', '/shop', '/about', '/contact', '/design'].map((path, i) => {
-          const keys = ['home', 'shop', 'about', 'contact', 'design'];
+        {['/', '/shop', '/about', '/contact'].map((path, i) => {
+          const keys = ['home', 'shop', 'about', 'contact'];
           return (
             <li key={path} className="relative group">
               <NavLink 
@@ -73,7 +102,7 @@ export default function Navbar() {
                 end={path === '/'}
                 className={({ isActive }) => `
                   text-[0.7rem] uppercase tracking-[0.25em] transition-all duration-300 font-semibold
-                  ${isActive ? 'text-gold' : (scrolled || theme === 'light' ? 'text-theme-70 hover:text-theme-90' : 'text-white-70 hover:text-white')}
+                  ${isActive ? 'text-gold' : (scrolled || !isHome || theme === 'light' ? 'text-theme-70 hover:text-theme-90' : 'text-white-70 hover:text-white')}
                 `}
               >
                 {t(`nav.${keys[i]}`)}
@@ -88,16 +117,16 @@ export default function Navbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-6">
-        <button onClick={toggleLang} className={`text-[0.7rem] tracking-[0.1em] hover:text-gold transition-all font-bold uppercase ${scrolled || theme === 'light' ? 'text-theme-70' : 'text-white-70'}`}>
+        <button onClick={toggleLang} className={`text-[0.7rem] tracking-[0.1em] hover:text-gold transition-all font-bold uppercase ${scrolled || !isHome || theme === 'light' ? 'text-theme-70' : 'text-white-70'}`}>
            {isAr ? 'EN' : 'عربي'}
         </button>
         
-        <button onClick={toggleTheme} className={`hover:text-gold transition-all ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`} aria-label="Toggle Theme">
-           <ThemeIcon theme={theme} color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
+        <button onClick={toggleTheme} className={`hover:text-gold transition-all ${scrolled || !isHome || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`} aria-label="Toggle Theme">
+           <ThemeIcon theme={theme} color={(scrolled || !isHome || theme === 'light') ? 'currentColor' : 'white'} />
         </button>
 
-        <button onClick={() => setCartOpen(true)} className={`relative group ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
-           <CartIcon color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
+        <button onClick={() => setCartOpen(true)} className={`relative group ${scrolled || !isHome || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
+           <CartIcon color={(scrolled || !isHome || theme === 'light') ? 'currentColor' : 'white'} />
            {totalItems > 0 && (
              <span className="absolute -top-2 -right-2 bg-gold text-black text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center" style={{ borderRadius: '50%' }}>
                {totalItems}
@@ -106,8 +135,8 @@ export default function Navbar() {
         </button>
 
         <div className="relative">
-          <button onClick={() => (user ? setUserMenuOpen(!userMenuOpen) : navigate('/login'))} className={`hover:text-gold transition-all ${scrolled || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
-            <UserIcon color={(scrolled || theme === 'light') ? 'currentColor' : 'white'} />
+          <button onClick={() => (user ? setUserMenuOpen(!userMenuOpen) : navigate('/login'))} className={`hover:text-gold transition-all ${scrolled || !isHome || theme === 'light' ? 'text-theme-80' : 'text-white-80'}`}>
+            <UserIcon color={(scrolled || !isHome || theme === 'light') ? 'currentColor' : 'white'} />
           </button>
           
           <AnimatePresence>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import aboutBg from '@/assets/about-bg.jpg';
 
 export default function AboutPage() {
   const { t, i18n } = useTranslation('pages');
@@ -11,7 +12,7 @@ export default function AboutPage() {
       <div style={{
         height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: `linear-gradient(to bottom, rgba(10,10,10,0.3), var(--color-black)),
-                     url(https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1600&q=80) center/cover`,
+                     url(${aboutBg}) center/cover`,
         textAlign: 'center',
       }}>
         <div>
