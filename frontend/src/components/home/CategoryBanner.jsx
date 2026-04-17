@@ -17,7 +17,7 @@ function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
       transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onHoverStart={onEnter}
       onHoverEnd={onLeave}
-      style={{ position: 'relative', width: '220px', height: '300px', overflow: 'hidden', borderRadius: '12px', cursor: 'pointer', flexShrink: 0 }}
+      style={{ position: 'relative', width: '340px', height: '420px', overflow: 'hidden', borderRadius: '12px', cursor: 'pointer', flexShrink: 0 }}
     >
       <Link to={link} style={{ display: 'block', width: '100%', height: '100%' }}>
 
