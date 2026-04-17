@@ -1,57 +1,72 @@
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import ScrollReveal from '@/components/ui/ScrollReveal';
+
+const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
 
 export default function BrandStory() {
-  const { t, i18n } = useTranslation('pages');
+  const { i18n } = useTranslation('pages');
   const isAr = i18n.language === 'ar';
 
   return (
-    <section className="section-padding bg-theme border-t border-b border-theme-10">
-      <div className="container-luxe grid-responsive-2 items-center gap-10">
-        <ScrollReveal direction={isAr ? 'right' : 'left'} duration={0.8}>
-          <p className="section-subtitle text-gold uppercase tracking-w-2 text-xs mb-4">{t('home.storySubtitle')}</p>
-          <h2 className="section-title mb-6 text-theme-90">{t('home.storyTitle')}</h2>
-          <div className="h-[1px] bg-gold w-16 mb-6" />
-          <p className="text-theme-60 text-lg font-light leading-relaxed mb-8">
-            {t('home.storyText')}
-          </p>
-          <div className="flex gap-8 mt-10">
-            {[
-              { num: '20+', label: isAr ? 'ماركة عالمية' : 'Global Brands' },
-              { num: '100%', label: isAr ? 'أصلي' : 'Authentic' },
-              { num: '5★', label: isAr ? 'تقييم' : 'Rated' },
-            ].map(stat => (
-              <div key={stat.num}>
-                <p className="text-4xl font-serif text-gold leading-none mb-2">{stat.num}</p>
-                <p className="text-xs tracking-widest uppercase text-theme-40">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
+    <section style={{ background: 'var(--charcoal)', color: 'var(--cream)', padding: '9rem 0', direction: isAr ? 'rtl' : 'ltr' }}>
+      <div className="container-luxe">
 
-        <ScrollReveal direction={isAr ? 'left' : 'right'} duration={0.8} delay={0.15} className="relative">
-          <div className="aspect-4-5 overflow-hidden" style={{ borderRadius: 'var(--radius-lg)' }}>
+        {/* Top label */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          style={{ marginBottom: '3rem' }}
+        >
+          <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)' }}>
+            {isAr ? '— الدار / الدار البيضاء · 2024' : '— La Maison / Casablanca · 2024'}
+          </span>
+        </motion.div>
+
+        {/* Quote */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '6rem', alignItems: 'center' }}
+        >
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 4rem)', lineHeight: 1.1, fontWeight: 300, letterSpacing: '-0.03em', color: 'var(--cream)', margin: 0 }}>
+            {isAr ? (
+              <>«العطر ليس شيئًا.<br /><span style={{ fontStyle: 'italic', color: 'var(--sand)' }}>إنه ذكرى تسبق الجسد.»</span></>
+            ) : (
+              <>«&nbsp;Le parfum n'est pas un objet.<br /><span style={{ fontStyle: 'italic', color: 'var(--sand)' }}>C'est un souvenir qui précède le corps.&nbsp;»</span></>
+            )}
+          </h2>
+          <div>
             <img
-                src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&q=80"
-                alt="Our Story"
-                className="w-full h-full object-cover transition-all duration-700"
-                style={{ filter: 'grayscale(0.2)' }}
-                onMouseOver={e => e.target.style.filter = 'grayscale(0)'}
-                onMouseOut={e => e.target.style.filter = 'grayscale(0.2)'}
+              src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&q=80"
+              alt={isAr ? 'الدار' : 'Atelier'}
+              style={{ width: '100%', aspectRatio: '4/5', objectFit: 'cover', filter: 'brightness(0.75) saturate(0.8)' }}
             />
           </div>
-          <div className="absolute bg-gold" style={{ 
-            bottom: '-1.5rem', 
-            ...(isAr ? { right: '-1.5rem' } : { left: '-1.5rem' }),
-            padding: '1.5rem',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-luxe)'
-           }}>
-            <p className="text-3xl font-serif text-black leading-none">
-              {isAr ? 'منذ ٢٠٢٤' : 'Since 2024'}
-            </p>
-          </div>
-        </ScrollReveal>
+        </motion.div>
+
+        {/* 3 pillars */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          style={{ marginTop: '6rem', paddingTop: '4rem', borderTop: '1px solid rgba(245,240,232,0.14)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}
+        >
+          {[
+            { n: '01', t: isAr ? 'في المتناول' : 'Accessible',   b: isAr ? 'من 40 درهمًا، دون التنازل عن الجودة.' : 'Dès 40 dirhams, sans renoncer à la tenue.' },
+            { n: '02', t: isAr ? 'للتنقل'     : 'Nomade',        b: isAr ? '10 مل يغير المزاج كتغيير الجاكيت.' : 'Le 10 ml change d\'humeur comme on change de veste.' },
+            { n: '03', t: isAr ? 'مختار بعناية': 'Curé',         b: isAr ? '130 عطرًا بعناية. فقط قطع المفضلة.' : '130 parfums à la main. Que des coups de cœur.' },
+          ].map(item => (
+            <div key={item.n}>
+              <div style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', marginBottom: '1rem' }}>{item.n} · {item.t}</div>
+              <p style={{ fontSize: '0.9rem', lineHeight: 1.75, color: 'rgba(245,240,232,0.7)', fontFamily: 'var(--font-sans)' }}>{item.b}</p>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

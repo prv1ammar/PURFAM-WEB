@@ -1,57 +1,97 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import ScrollReveal from '@/components/ui/ScrollReveal';
+
+const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
 
 export default function NewsletterSection() {
-  const { t, i18n } = useTranslation('pages');
+  const { i18n } = useTranslation('pages');
   const isAr = i18n.language === 'ar';
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email) {
-      setSubmitted(true);
-      setEmail('');
-    }
+    if (email) { setSubmitted(true); setEmail(''); }
   };
 
   return (
-    <section className="section-padding bg-theme border-t border-theme-10">
-      <div className="container-luxe max-w-md text-center">
-        <ScrollReveal direction="scale" duration={0.8}>
-          <div className="w-10 h-[1px] bg-gold mx-auto mb-6" />
-          <h2 className="text-3xl font-serif text-theme-90 mb-4 font-light">
-            {t('home.newsletterTitle')}
-          </h2>
-          <p className="text-theme-60 mb-8 font-light leading-relaxed">
-            {t('home.newsletterSubtitle')}
-          </p>
+    <section style={{ background: 'var(--terracotta)', color: 'var(--paper)', padding: '8rem 0', direction: isAr ? 'rtl' : 'ltr' }}>
+      <div className="container-luxe">
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '6rem', alignItems: 'center' }}>
 
-          {submitted ? (
-            <motion.p
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="text-gold font-serif text-xl">
-              {t('success.subscribed', { ns: 'common' })}
-            </motion.p>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex max-w-md mx-auto" style={{ gap: '0.5rem' }}>
-              <input
-                type="email" value={email} onChange={e => setEmail(e.target.value)}
-                placeholder={t('home.newsletterPlaceholder')}
-                required
-                className={`text-theme-90 text-sm outline-none transition-all focus:border-gold`}
-                style={{ flex: 1, padding: '1rem 1.5rem', backgroundColor: 'rgba(var(--text-rgb), 0.05)', border: '1px solid rgba(var(--text-rgb), 0.1)', borderRadius: 'var(--radius-full)' }}
-              />
-              <button type="submit" className={`bg-gold text-black text-xs tracking-widest uppercase font-bold transition-all hover:bg-gold-light`}
-                style={{ padding: '1rem 2rem', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-full)', boxShadow: 'var(--shadow-luxe)' }}>
-                {t('btn.subscribe', { ns: 'common' })}
-              </button>
-            </form>
-          )}
-        </ScrollReveal>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span style={{ ...MONO, fontSize: '0.65rem', opacity: 0.75, display: 'block', marginBottom: '1.5rem' }}>
+              {isAr ? '— النشرة البريدية' : '— Le Cercle'}
+            </span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', fontWeight: 300, lineHeight: 0.98, letterSpacing: '-0.03em', margin: 0, color: 'var(--paper)' }}>
+              {isAr ? (
+                <>ثلاثة <span style={{ fontStyle: 'italic' }}>عينات.</span><br />فلكون مجانًا.</>
+              ) : (
+                <>Trois <span style={{ fontStyle: 'italic' }}>essais</span>.<br />Un flacon offert.</>
+              )}
+            </h2>
+            <p style={{ marginTop: '1.5rem', fontSize: '1rem', lineHeight: 1.7, opacity: 0.9, fontFamily: 'var(--font-sans)', maxWidth: '420px' }}>
+              {isAr
+                ? 'احصل على ثلاثة عينات مختارة بحسب ملفك الشمي. إذا أعجبك أحدها، الفلكون 10 مل مجاني.'
+                : 'Recevez trois échantillons choisis selon votre profil olfactif. Si l\'un vous plaît, le flacon 10 ml est offert.'}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+          >
+            {submitted ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 300, fontStyle: 'italic', color: 'var(--paper)' }}>
+                  {isAr ? 'شكرًا! سنتواصل معك قريبًا.' : 'Merci ! On revient vers vous très vite.'}
+                </p>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder={isAr ? 'بريدك الإلكتروني' : 'Votre email'}
+                  required
+                  style={{
+                    width: '100%', padding: '1rem 1.25rem',
+                    background: 'rgba(250,247,242,0.12)', border: '1px solid rgba(250,247,242,0.3)',
+                    color: 'var(--paper)', fontFamily: 'var(--font-sans)', fontSize: '0.95rem', outline: 'none',
+                  }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(250,247,242,0.7)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(250,247,242,0.3)'}
+                />
+                <button type="submit" style={{
+                  padding: '1rem', background: 'var(--paper)', color: 'var(--charcoal)',
+                  border: 'none', cursor: 'pointer',
+                  ...MONO, fontSize: '0.65rem',
+                }}
+                  onMouseOver={e => { e.currentTarget.style.background = 'var(--charcoal)'; e.currentTarget.style.color = 'var(--cream)'; }}
+                  onMouseOut={e => { e.currentTarget.style.background = 'var(--paper)'; e.currentTarget.style.color = 'var(--charcoal)'; }}
+                >
+                  {isAr ? 'انضم إلى الدائرة ←' : 'Composer ma box →'}
+                </button>
+              </form>
+            )}
+          </motion.div>
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .newsletter-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

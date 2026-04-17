@@ -60,36 +60,32 @@ export default function ShopPage() {
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="page-wrapper" style={{ direction: isAr ? 'rtl' : 'ltr' }}>
 
-      {/* Hero Banner */}
-      <div style={{
-        height: '250px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '2.5rem',
-        background: `linear-gradient(to bottom, rgba(10,10,10,0) 0%, var(--color-black) 100%),
-                     url(${shopBg}) center/cover`,
-        textAlign: 'center',
-      }}>
-        <div>
-          <p className="section-subtitle">{t('shop.subtitle')}</p>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
-            {t('shop.title')}
+      {/* ── Page Header ── */}
+      <section style={{ padding: '5rem 0 3rem' }}>
+        <div className="container-luxe">
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--terracotta)', display: 'block', marginBottom: '1.5rem' }}>
+            {isAr ? `— الكتالوج / 130 عطرًا` : '— Le catalogue / 130 parfums'}
+          </span>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3rem, 9vw, 7rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: '0 0 2rem' }}>
+            {isAr ? (<>جميع <span style={{ fontStyle: 'italic' }}>العطور.</span></>) : (<>Tous les <span style={{ fontStyle: 'italic' }}>parfums.</span></>)}
           </h1>
         </div>
-      </div>
+      </section>
 
-      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 3rem 3rem' }}>
         {/* Search Bar */}
         <div style={{ marginBottom: '2rem' }}>
           <input
             type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder={isAr ? 'ابحث عن عطر...' : 'Search fragrances...'}
+            placeholder={isAr ? 'ابحث عن عطر...' : 'Rechercher une fragrance...'}
             style={{
-              width: '100%', maxWidth: '400px', padding: '0.8rem 1.5rem',
-              background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',
-              color: 'rgba(var(--text-rgb), 0.9)', borderRadius: 'var(--radius-full)',
+              width: '100%', maxWidth: '400px', padding: '0.75rem 1.25rem',
+              background: 'var(--paper)', border: '1px solid var(--line)',
+              color: 'var(--charcoal)', fontFamily: 'var(--font-sans)',
               fontSize: '0.95rem', outline: 'none',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
             }}
-            onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
-            onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+            onFocus={e => e.target.style.borderColor = 'var(--terracotta)'}
+            onBlur={e => e.target.style.borderColor = 'var(--line)'}
           />
         </div>
 
@@ -102,19 +98,19 @@ export default function ShopPage() {
           {/* Products */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <p style={{ color: 'rgba(var(--text-rgb), 0.5)', fontSize: '0.9rem' }}>
-                {loading ? '...' : `${total} ${t('shop.results')}`}
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--graphite)' }}>
+                {loading ? '...' : `${total} ${isAr ? 'عطر' : 'parfums'}`}
               </p>
             </div>
 
             {!loading && products.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '4rem', color: 'rgba(var(--text-rgb), 0.5)' }}>
-                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', marginBottom: '1rem' }}>
-                  {t('shop.noResults')}
+              <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--graphite)' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 300, marginBottom: '1rem' }}>
+                  {isAr ? 'لا نتائج' : 'Aucun résultat'}
                 </p>
                 <button onClick={() => handleFilterChange({ gender: '', category: '', sort: '-createdAt', size: '', minSize: '' })}
-                  style={{ color: 'var(--color-gold)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                  {t('shop.clearFilters')}
+                  style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--terracotta)', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid var(--terracotta)', paddingBottom: '2px' }}>
+                  {isAr ? 'مسح الفلاتر' : 'Effacer les filtres'}
                 </button>
               </div>
             ) : (

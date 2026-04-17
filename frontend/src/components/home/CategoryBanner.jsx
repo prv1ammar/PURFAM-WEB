@@ -45,7 +45,7 @@ function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
           transition={{ duration: 0.4 }}
           style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
-            height: '2px', background: 'var(--color-gold)',
+            height: '2px', background: 'var(--terracotta)',
             transformOrigin: 'left',
           }}
         />
@@ -69,12 +69,12 @@ function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <motion.div
-              animate={{ width: hovered ? '24px' : '10px', backgroundColor: hovered ? 'var(--color-gold)' : 'rgba(255,255,255,0.35)' }}
+              animate={{ width: hovered ? '24px' : '10px', backgroundColor: hovered ? 'var(--terracotta)' : 'rgba(255,255,255,0.35)' }}
               transition={{ duration: 0.3 }}
               style={{ height: '1px', flexShrink: 0 }}
             />
             <motion.span
-              animate={{ color: hovered ? 'var(--color-gold)' : 'rgba(255,255,255,0.6)' }}
+              animate={{ color: hovered ? 'var(--terracotta)' : 'rgba(255,255,255,0.6)' }}
               transition={{ duration: 0.25 }}
               style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', fontFamily: 'var(--font-sans)' }}
             >
@@ -104,7 +104,7 @@ export default function CategoryBanner() {
   const cols = Math.min(collections.length, 3);
 
   return (
-    <section style={{ padding: '5rem 0', direction: isAr ? 'rtl' : 'ltr' }}>
+    <section style={{ padding: '7rem 0', background: 'var(--cream-deep)', direction: isAr ? 'rtl' : 'ltr' }}>
       <div className="container-luxe">
 
         {/* Header */}
@@ -113,15 +113,20 @@ export default function CategoryBanner() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'center', marginBottom: '3rem' }}
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}
         >
-          <span className="section-subtitle">{isAr ? 'تسوّق حسب الفئة' : 'Shop by Category'}</span>
-          <h2 className="section-title">{isAr ? 'المجموعات' : 'The Collections'}</h2>
-          <div style={{ width: '40px', height: '1px', background: 'linear-gradient(to right, transparent, var(--color-gold), transparent)', margin: '1rem auto 0' }} />
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--terracotta)', display: 'block', marginBottom: '1rem' }}>
+              {isAr ? '— تسوّق حسب المجموعة' : '— Trier par collection'}
+            </span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 300, letterSpacing: '-0.03em', margin: 0, lineHeight: 1, color: 'var(--charcoal)' }}>
+              {isAr ? (<>أربع <span style={{ fontStyle: 'italic' }}>مجموعات.</span></>) : (<>Les <span style={{ fontStyle: 'italic' }}>collections.</span></>)}
+            </h2>
+          </div>
         </motion.div>
 
         {/* Grid */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', justifyContent: 'center' }}>
           {collections.map((col, i) => (
             <CollectionCard
               key={col.id} col={col} i={i} isAr={isAr}

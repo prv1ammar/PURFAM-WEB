@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import contactBg from '@/assets/contact-bg.jpg';
 import { FaInstagram, FaFacebook, FaTiktok, FaLocationDot, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa6';
+
+const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
 
 export default function ContactPage() {
   const { t, i18n } = useTranslation('pages');
@@ -10,151 +11,182 @@ export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSent(true);
-  };
+  const handleSubmit = (e) => { e.preventDefault(); setSent(true); };
 
   const inputStyle = {
-    width: '100%', padding: '0.8rem 1rem',
-    background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',
-    color: 'var(--color-off-white)', borderRadius: 'var(--radius-sm)',
-    fontSize: '0.95rem', outline: 'none',
+    width: '100%', padding: '0.85rem 0',
+    background: 'transparent', border: 'none',
+    borderBottom: '1px solid var(--line-strong)',
+    color: 'var(--charcoal)', fontFamily: 'var(--font-sans)',
+    fontSize: '1rem', outline: 'none',
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="page-wrapper">
-      {/* Hero */}
-      <div style={{
-        height: '250px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', textAlign: 'center', paddingBottom: '2.5rem',
-        background: `linear-gradient(to bottom, rgba(10,10,10,0) 0%, var(--color-black) 100%), url(${contactBg}) center/cover no-repeat`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}>
-        <div>
-          <p className="section-subtitle">{isAr ? 'تواصل معنا' : 'GET IN TOUCH'}</p>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
-            {t('contact.heroTitle')}
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ background: 'var(--cream)', direction: isAr ? 'rtl' : 'ltr' }}>
+
+      {/* ── Hero ── */}
+      <section style={{ padding: '7rem 0 4rem' }}>
+        <div className="container-luxe">
+          <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '2rem' }}>
+            {isAr ? '— نرد عليك في 24 ساعة' : '— On vous répond en 24h'}
+          </span>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3.5rem, 10vw, 8rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: 0 }}>
+            {isAr ? (<>اكتب لنا،<br /><span style={{ fontStyle: 'italic' }}>نحب ذلك.</span></>) : (<>Écrivez-nous,<br /><span style={{ fontStyle: 'italic' }}>on adore ça.</span></>)}
           </h1>
         </div>
-      </div>
+      </section>
 
-      <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '4rem 1.5rem 4rem 4rem', direction: isAr ? 'rtl' : 'ltr' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
+      {/* ── Form + Info ── */}
+      <section style={{ padding: '2rem 0 7rem' }}>
+        <div className="container-luxe" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '6rem', alignItems: 'start' }}>
+
           {/* Form */}
           <div>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.8rem', marginBottom: '2rem' }}>
-              {t('contact.subtitle')}
-            </h2>
             {sent ? (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                style={{ padding: '2rem', background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <p style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✉️</p>
-                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--color-gold)' }}>
-                  {t('success.messageSent', { ns: 'common' })}
+                style={{ padding: '3rem', background: 'var(--cream-deep)', border: '1px solid var(--line)', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 300, fontStyle: 'italic', color: 'var(--charcoal)', marginBottom: '0.5rem' }}>
+                  {isAr ? 'شكرًا على رسالتك.' : 'Message bien reçu.'}
+                </p>
+                <p style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)' }}>
+                  {isAr ? 'سنرد في أقرب وقت.' : 'On revient vers vous rapidement.'}
                 </p>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {[
-                  { key: 'name', label: t('contact.name') },
-                  { key: 'email', label: t('contact.email'), type: 'email' },
-                  { key: 'subject', label: t('contact.subject') },
-                ].map(f => (
-                  <div key={f.key}>
-                    <label style={{ display: 'block', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-gray)', marginBottom: '0.4rem' }}>
-                      {f.label}
-                    </label>
-                    <input type={f.type || 'text'} value={form[f.key]} required
-                      onChange={e => setForm(v => ({ ...v, [f.key]: e.target.value }))}
-                      style={inputStyle}
-                      onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
-                      onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
-                    />
-                  </div>
-                ))}
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                  {[
+                    { key: 'name',  label: isAr ? 'الاسم' : 'Prénom' },
+                    { key: 'email', label: isAr ? 'البريد' : 'Email', type: 'email' },
+                  ].map(f => (
+                    <div key={f.key}>
+                      <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{f.label}</label>
+                      <input type={f.type || 'text'} value={form[f.key]} required
+                        onChange={e => setForm(v => ({ ...v, [f.key]: e.target.value }))}
+                        style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = 'var(--terracotta)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--line-strong)'}
+                      />
+                    </div>
+                  ))}
+                </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-gray)', marginBottom: '0.4rem' }}>
-                    {t('contact.message')}
-                  </label>
-                  <textarea value={form.message} required rows={5}
+                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{isAr ? 'الموضوع' : 'Objet'}</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+                    {(isAr
+                      ? ['نصيحة عطرية', 'طلب', 'شراكة', 'أخرى']
+                      : ['Conseil olfactif', 'Commande', 'Partenariat', 'Autre']
+                    ).map((o, i) => (
+                      <span key={o} onClick={() => setForm(v => ({ ...v, subject: o }))}
+                        style={{
+                          padding: '0.55rem 1rem', cursor: 'pointer',
+                          border: `1px solid ${form.subject === o ? 'var(--terracotta)' : 'var(--line)'}`,
+                          background: form.subject === o ? 'var(--terracotta)' : 'transparent',
+                          color: form.subject === o ? 'var(--paper)' : 'var(--charcoal)',
+                          ...MONO, fontSize: '0.6rem',
+                          transition: 'all 0.2s',
+                        }}>{o}</span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{isAr ? 'الرسالة' : 'Message'}</label>
+                  <textarea rows={5} value={form.message} required
                     onChange={e => setForm(v => ({ ...v, message: e.target.value }))}
-                    placeholder={t('contact.messagePlaceholder')}
-                    style={{ ...inputStyle, resize: 'vertical' }}
-                    onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
-                    onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+                    style={{ ...inputStyle, resize: 'vertical', padding: '0.85rem 0' }}
+                    onFocus={e => e.target.style.borderColor = 'var(--terracotta)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--line-strong)'}
                   />
                 </div>
                 <button type="submit" style={{
-                  padding: '0.9rem', background: 'var(--color-gold)',
-                  color: 'var(--color-black)', fontFamily: 'var(--font-sans)',
-                  fontSize: '0.8rem', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 700,
-                  borderRadius: 'var(--radius-sm)',
-                }}>
-                  {t('btn.send', { ns: 'common' })}
+                  alignSelf: 'flex-start', padding: '1rem 2.5rem',
+                  background: 'var(--charcoal)', color: 'var(--cream)',
+                  border: 'none', cursor: 'pointer',
+                  ...MONO, fontSize: '0.65rem',
+                }}
+                  onMouseOver={e => { e.currentTarget.style.background = 'var(--terracotta)'; }}
+                  onMouseOut={e => { e.currentTarget.style.background = 'var(--charcoal)'; }}
+                >
+                  {isAr ? 'إرسال ←' : 'Envoyer →'}
                 </button>
               </form>
             )}
           </div>
 
-          {/* Info */}
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.8rem', marginBottom: '2rem' }}>
-              {t('contact.infoTitle')}
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {[
-                { icon: <FaLocationDot size={18} />, label: t('contact.addressLabel'), val: isAr ? 'الدار البيضاء، المغرب' : 'Casablanca, Maroc' },
-                { icon: <FaPhone      size={16} />, label: t('contact.phoneLabel'), val: '+212 621 558 544' },
-                { icon: <FaEnvelope   size={16} />, label: t('contact.emailLabel'), val: 'luxeessence.boutique@gmail.com' },
-                { icon: <FaClock      size={16} />, label: t('contact.hoursLabel'), val: t('contact.hoursValue') },
-              ].map(item => (
-                <div key={item.label} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <span style={{
-                    width: '40px', height: '40px',
-                    background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)',
-                    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--color-gold)', flexShrink: 0,
-                  }}>{item.icon}</span>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-gold)', marginBottom: '0.25rem' }}>
-                      {item.label}
-                    </p>
-                    <p style={{ color: 'var(--color-light-gray)' }}>{item.val}</p>
-                  </div>
+          {/* Info blocks */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {[
+              { icon: <FaLocationDot size={16} />, label: isAr ? 'البوتيك' : 'Boutique',    val: isAr ? 'الدار البيضاء، المغرب\nإثنين – سبت · 10:00 – 20:00' : 'Casablanca, Maroc\nLun – Sam · 10h – 20h' },
+              { icon: <FaPhone       size={15} />, label: isAr ? 'الهاتف' : 'Téléphone',    val: '+212 621 558 544' },
+              { icon: <FaEnvelope    size={15} />, label: isAr ? 'البريد' : 'Email',         val: 'luxeessence.boutique@gmail.com' },
+              { icon: <FaClock       size={15} />, label: isAr ? 'الرد على واتساب' : 'WhatsApp', val: isAr ? 'رد في ساعتين · 9:00 – 22:00' : 'Réponse en 2h · 9h – 22h' },
+            ].map(item => (
+              <div key={item.label} style={{ padding: '1.5rem', background: 'var(--cream-deep)', border: '1px solid var(--line)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
+                  <span style={{ color: 'var(--terracotta)' }}>{item.icon}</span>
+                  <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)' }}>{item.label}</span>
                 </div>
-              ))}
-
-              {/* Social links */}
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                {[
-                  { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/luxeessence.boutique/', label: 'Instagram' },
-                  { icon: <FaFacebook  size={16} />, href: 'https://www.facebook.com/profile.php?id=61570777527869', label: 'Facebook' },
-                  { icon: <FaTiktok    size={16} />, href: 'https://www.tiktok.com/@luxeessence.fragrance', label: 'TikTok' },
-                ].map(s => (
-                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                    title={s.label}
-                    style={{
-                      width: '40px', height: '40px', borderRadius: '50%',
-                      border: '1px solid rgba(201,168,76,0.2)',
-                      background: 'rgba(201,168,76,0.08)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: 'var(--color-gold)', transition: 'all 0.2s',
-                    }}
-                    onMouseOver={e => { e.currentTarget.style.background = 'rgba(201,168,76,0.2)'; e.currentTarget.style.borderColor = 'var(--color-gold)'; }}
-                    onMouseOut={e => { e.currentTarget.style.background = 'rgba(201,168,76,0.08)'; e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'; }}>
-                    {s.icon}
-                  </a>
-                ))}
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', lineHeight: 1.6, whiteSpace: 'pre-line', color: 'var(--charcoal)' }}>{item.val}</p>
               </div>
+            ))}
+
+            {/* Socials */}
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              {[
+                { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/luxeessence.boutique/', label: 'Instagram' },
+                { icon: <FaFacebook  size={16} />, href: 'https://www.facebook.com/profile.php?id=61570777527869', label: 'Facebook' },
+                { icon: <FaTiktok    size={16} />, href: 'https://www.tiktok.com/@luxeessence.fragrance', label: 'TikTok' },
+              ].map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}
+                  style={{ width: '44px', height: '44px', border: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--graphite)', transition: 'all 0.2s' }}
+                  onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--terracotta)'; e.currentTarget.style.color = 'var(--terracotta)'; }}
+                  onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--line)'; e.currentTarget.style.color = 'var(--graphite)'; }}>
+                  {s.icon}
+                </a>
+              ))}
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section style={{ padding: '7rem 0', background: 'var(--charcoal)', color: 'var(--cream)' }}>
+        <div className="container-luxe" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '6rem', alignItems: 'start' }}>
+          <div>
+            <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '1.5rem' }}>
+              {isAr ? '— الأسئلة الشائعة' : '— Questions fréquentes'}
+            </span>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 300, letterSpacing: '-0.03em', margin: 0 }}>
+              {isAr ? (<>قبل أن <span style={{ fontStyle: 'italic' }}>تكتب.</span></>) : (<>Avant de nous <span style={{ fontStyle: 'italic' }}>écrire.</span></>)}
+            </h2>
+          </div>
+          <div>
+            {(isAr ? [
+              ['كم يدوم الفلكون 10 مل؟', 'من 6 أسابيع إلى 3 أشهر حسب الاستخدام — ما بين 100 و150 رشة.'],
+              ['ما الفرق مع الأصل؟', 'عطورنا مستوحاة، تعيد إنتاج الروائح الرئيسية بتكلفة في المتناول.'],
+              ['هل توصلون خارج المغرب؟', 'نعم — المغرب العربي، غرب إفريقيا، فرنسا. من 5 إلى 10 أيام.'],
+              ['الإرجاع ممكن؟', '14 يومًا لكل فلكون مختوم. بعد هذه المدة لا يمكننا استرداده.'],
+            ] : [
+              ['Combien de temps dure un flacon 10 ml ?', 'Entre 6 semaines et 3 mois selon la fréquence — environ 100 à 150 sprays.'],
+              ['Quelle est la différence avec l\'original ?', 'Nos parfums sont des compositions inspirées, reproduisant les accords principaux à un coût accessible.'],
+              ['Livrez-vous hors du Maroc ?', 'Oui — Maghreb, Afrique de l\'Ouest, France. Comptez 5 à 10 jours.'],
+              ['Retours possibles ?', '14 jours pour tout flacon scellé. Passé ce délai, nous ne pouvons plus reprendre le produit.'],
+            ]).map(([q, a]) => (
+              <details key={q} style={{ padding: '1.5rem 0', borderBottom: '1px solid rgba(245,240,232,0.12)' }}>
+                <summary style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 400, cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  {q} <span style={{ color: 'var(--terracotta)', fontSize: '1.2rem', marginLeft: '1rem', flexShrink: 0 }}>+</span>
+                </summary>
+                <p style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.75, opacity: 0.75, fontFamily: 'var(--font-sans)' }}>{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <style>{`
-        @media (max-width: 768px) {
-          div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+        @media (max-width: 900px) {
+          .contact-grid, .faq-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
+          .form-name-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </motion.div>

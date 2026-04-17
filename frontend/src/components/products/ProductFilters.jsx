@@ -1,55 +1,49 @@
 import { useTranslation } from 'react-i18next';
 
+const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.18em', textTransform: 'uppercase' };
+
 export default function ProductFilters({ filters, onChange }) {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
 
-  const genders = ['', 'women', 'men'];
+  const genders    = ['', 'women', 'men'];
   const categories = ['', 'floral', 'woody', 'oriental', 'fresh', 'citrus', 'gourmand'];
-
-  const sectionStyle = {
-    marginBottom: '2rem',
-    direction: isAr ? 'rtl' : 'ltr',
-  };
-
-  const labelStyle = {
-    fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-    color: 'var(--color-gold)', marginBottom: '0.75rem', display: 'block',
-  };
 
   const btnStyle = (active) => ({
     display: 'block', width: '100%', textAlign: isAr ? 'right' : 'left',
-    padding: '0.6rem 1rem', marginBottom: '0.4rem',
-    background: active ? 'rgba(201,168,76,0.15)' : 'transparent',
-    color: active ? 'var(--color-gold)' : 'rgba(var(--text-rgb), 0.6)',
-    borderRadius: 'var(--radius-full)', fontSize: '0.9rem',
-    border: active ? '1px solid rgba(201,168,76,0.3)' : '1px solid transparent',
+    padding: '0.55rem 0.75rem', marginBottom: '0.25rem',
+    background: active ? 'rgba(184,92,58,0.1)' : 'transparent',
+    color: active ? 'var(--terracotta)' : 'var(--graphite)',
+    border: `1px solid ${active ? 'rgba(184,92,58,0.3)' : 'transparent'}`,
+    ...MONO, fontSize: '0.6rem',
     transition: 'all 0.2s', cursor: 'pointer',
   });
 
   return (
     <aside style={{
-      background: 'var(--color-charcoal)',
-      border: '1px solid var(--color-border)',
-      borderRadius: 'var(--radius-md)',
-      padding: '1.5rem',
+      background: 'var(--paper)',
+      border: '1px solid var(--line)',
+      padding: '1.75rem',
       position: 'sticky', top: 'calc(var(--navbar-height) + 1rem)',
+      direction: isAr ? 'rtl' : 'ltr',
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 400 }}>
-          {t('shop.filters', { ns: 'pages' })}
-        </h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--line)' }}>
+        <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--charcoal)' }}>
+          {isAr ? 'فلاتر' : 'Filtres'}
+        </span>
         {(filters.gender || filters.category || filters.size || filters.minSize) && (
           <button onClick={() => onChange({ gender: '', category: '', sort: filters.sort, size: '', minSize: '' })}
-            style={{ color: 'var(--color-gold)', fontSize: '0.75rem', textDecoration: 'underline' }}>
-            {t('shop.clearFilters', { ns: 'pages' })}
+            style={{ ...MONO, fontSize: '0.58rem', color: 'var(--terracotta)', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid var(--terracotta)', paddingBottom: '1px' }}>
+            {isAr ? 'مسح' : 'Effacer'}
           </button>
         )}
       </div>
 
       {/* Gender */}
-      <div style={sectionStyle}>
-        <span style={labelStyle}>{t('labels.gender')}</span>
+      <div style={{ marginBottom: '1.75rem' }}>
+        <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
+          {isAr ? 'الجنس' : 'Genre'}
+        </span>
         {genders.map(g => (
           <button key={g} onClick={() => onChange({ ...filters, gender: g })} style={btnStyle(filters.gender === g)}>
             {g ? t(`gender.${g}`) : t('gender.all')}
@@ -58,8 +52,10 @@ export default function ProductFilters({ filters, onChange }) {
       </div>
 
       {/* Category */}
-      <div style={sectionStyle}>
-        <span style={labelStyle}>{t('labels.category')}</span>
+      <div style={{ marginBottom: '1.75rem' }}>
+        <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
+          {isAr ? 'الفئة' : 'Famille'}
+        </span>
         {categories.map(c => (
           <button key={c} onClick={() => onChange({ ...filters, category: c })} style={btnStyle(filters.category === c)}>
             {c ? t(`category.${c}`) : t('category.all')}
@@ -68,12 +64,14 @@ export default function ProductFilters({ filters, onChange }) {
       </div>
 
       {/* Sort */}
-      <div style={sectionStyle}>
-        <span style={labelStyle}>{t('shop.sortBy', { ns: 'pages' })}</span>
+      <div>
+        <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
+          {isAr ? 'الترتيب' : 'Trier par'}
+        </span>
         {[
-          { val: '-createdAt', label: t('shop.sortNewest', { ns: 'pages' }) },
-          { val: 'price', label: t('shop.sortPriceAsc', { ns: 'pages' }) },
-          { val: '-price', label: t('shop.sortPriceDesc', { ns: 'pages' }) },
+          { val: '-createdAt', label: isAr ? 'الأحدث' : 'Les plus récents' },
+          { val: 'price',      label: isAr ? 'السعر ↑' : 'Prix croissant' },
+          { val: '-price',     label: isAr ? 'السعر ↓' : 'Prix décroissant' },
         ].map(s => (
           <button key={s.val} onClick={() => onChange({ ...filters, sort: s.val })} style={btnStyle(filters.sort === s.val)}>
             {s.label}

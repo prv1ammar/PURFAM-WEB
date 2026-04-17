@@ -3,122 +3,109 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
+
 export default function HeroSection() {
-  const { t, i18n } = useTranslation('pages');
+  const { i18n } = useTranslation('pages');
   const isAr = i18n.language === 'ar';
   const sectionRef = useRef(null);
-  const videoRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
-
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative h-screen min-h-[700px] overflow-hidden flex items-center justify-center bg-black">
+    <section ref={sectionRef} style={{ position: 'relative', height: '100vh', minHeight: '700px', overflow: 'hidden', background: '#0a0806', direction: isAr ? 'rtl' : 'ltr' }}>
 
-      {/* ── Video Background with Parallax & Scale ── */}
-      <motion.div
-        style={{ y, scale }}
-        className="absolute inset-0 z-0"
-      >
-        {/* Cinematic gradient overlays */}
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background: `
-              linear-gradient(to bottom,
-                rgba(0,0,0,0.25) 0%,
-                rgba(0,0,0,0.10) 40%,
-                rgba(0,0,0,0.65) 100%
-              )
-            `,
-          }}
-        />
-        {/* Vignette for depth */}
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%)',
-          }}
-        />
-
-        {/* Looping hero video */}
+      {/* ── Parallax video ── */}
+      <motion.div style={{ y, position: 'absolute', inset: 0 }}>
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to bottom, rgba(10,8,6,0.22) 0%, rgba(10,8,6,0.08) 40%, rgba(10,8,6,0.72) 100%)',
+        }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'radial-gradient(ellipse at center, transparent 38%, rgba(10,8,6,0.55) 100%)' }} />
         <video
-          ref={videoRef}
           src="/hero-video.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          style={{ filter: 'brightness(0.72) contrast(1.08) saturate(0.95)' }}
+          autoPlay loop muted playsInline
+          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.68) saturate(0.9) contrast(1.05)' }}
         />
       </motion.div>
 
-      {/* ── Floating Content ── */}
+      {/* ── Hero content ── */}
       <motion.div
-        style={{ opacity }}
-        initial={{ opacity: 0, y: 30 }}
+        style={{ opacity, position: 'absolute', inset: 0, zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 3rem 6rem' }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-20 text-center px-6 max-w-5xl"
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       >
-        <motion.span
-          initial={{ opacity: 0, letterSpacing: '0.2em' }}
-          animate={{ opacity: 1, letterSpacing: '0.35em' }}
-          transition={{ duration: 2, delay: 0.3, ease: 'easeOut' }}
-          className="text-gold uppercase text-xs mb-6 block font-sans font-medium"
+        {/* Meta line */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 1.2 }}
+          style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3rem', ...MONO, fontSize: '0.62rem', color: 'rgba(245,240,232,0.5)' }}
         >
-          {isAr ? 'جوهر الفخامة' : 'The Essence of Luxury'}
-        </motion.span>
+          <span>{isAr ? 'إصدار رقم 04 · ربيع 2026' : 'Édition N°04 · P/É 2026'}</span>
+          <span>{isAr ? 'الدار البيضاء · الصويرة' : 'Casablanca · Essaouira'}</span>
+          <span>{isAr ? '130 عطر · 10 مل' : '130 fragrances · 10 ml'}</span>
+        </motion.div>
 
-        <h1 className="text-white mb-8" style={{ lineHeight: '1.1' }}>
-          <span className="block italic font-light opacity-80 text-2xl md:text-4xl tracking-widest mb-2" style={{ textTransform: 'capitalize' }}>
-            {t('home.heroTitle')}
-          </span>
-          <span className="text-gold font-bold block text-5xl md:text-8xl tracking-tight" style={{ textShadow: '0 0 30px rgba(212, 175, 55, 0.3)' }}>
-            {t('home.heroTitleAccent')}
-          </span>
+        {/* Main title */}
+        <h1 style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(4rem, 14vw, 11rem)',
+          fontWeight: 200,
+          lineHeight: 0.88,
+          letterSpacing: '-0.04em',
+          color: '#faf7f2',
+          margin: '0 0 2.5rem',
+        }}>
+          {isAr ? (
+            <>فن<br /><span style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>الأثر.</span></>
+          ) : (
+            <>L'art<br /><span style={{ fontStyle: 'italic', fontWeight: 200, color: 'var(--terracotta)' }}>du sillage.</span></>
+          )}
         </h1>
 
-        <div className="w-24 h-[1px] mx-auto mb-10" style={{ background: 'linear-gradient(to right, transparent, var(--color-gold), transparent)' }} />
-
-        <p className="text-white-80 text-xl md:text-2xl max-w-3xl mx-auto mb-12 font-light leading-relaxed tracking-wide">
-          {t('home.heroSubtitle')}
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <Link to="/shop" className="btn-luxe w-full sm:w-auto text-center">
-            {t('btn.shopNow', { ns: 'common' })}
-          </Link>
-          <Link
-            to="/about"
-            className="text-white-80 hover:text-white tracking-widest text-xs uppercase border-b border-white-20 pb-1 transition-all duration-300"
-          >
-            {t('btn.discover', { ns: 'common' })}
-          </Link>
+        {/* Subtitle + CTA row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'end' }}>
+          <p style={{ fontSize: '1.05rem', lineHeight: 1.7, color: 'rgba(245,240,232,0.75)', fontFamily: 'var(--font-sans)', fontWeight: 300, maxWidth: '420px' }}>
+            {isAr
+              ? 'مجموعة سرية من 130 عطرًا مستوحى من أرقى دور العطور العالمية، معبأة في 10 مل.'
+              : 'Une sélection confidentielle de 130 fragrances d\'inspiration haute parfumerie, reconditionnées en format 10 ml.'}
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '260px', marginLeft: isAr ? 0 : 'auto', marginRight: isAr ? 'auto' : 0 }}>
+            <Link to="/shop" style={{
+              display: 'block', textAlign: 'center', padding: '1rem 2rem',
+              background: '#faf7f2', color: '#1a1918',
+              ...MONO, fontSize: '0.62rem',
+            }}>
+              {isAr ? 'اكتشف 130 عطرًا ←' : 'Découvrir les 130 →'}
+            </Link>
+            <Link to="/about" style={{
+              display: 'block', textAlign: 'center', padding: '1rem 2rem',
+              border: '1px solid rgba(245,240,232,0.3)', color: 'rgba(245,240,232,0.75)',
+              ...MONO, fontSize: '0.62rem',
+            }}>
+              {isAr ? 'قصتنا' : 'Notre histoire'}
+            </Link>
+          </div>
         </div>
       </motion.div>
 
-      {/* ── Scroll Indicator ── */}
+      {/* ── Scroll indicator ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1.2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20"
+        transition={{ delay: 2.5, duration: 1 }}
+        style={{ position: 'absolute', bottom: '2.5rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', zIndex: 3 }}
       >
-        <span className="text-xs tracking-widest uppercase text-white-40">
-          {isAr ? 'مرر' : 'SCROLL'}
-        </span>
+        <span style={{ ...MONO, fontSize: '0.58rem', color: 'rgba(245,240,232,0.35)' }}>SCROLL</span>
         <motion.div
-          animate={{ scaleY: [1, 0.4, 1], opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-[1px] h-12 origin-top"
-          style={{ background: 'linear-gradient(to bottom, var(--color-gold), transparent)' }}
+          animate={{ scaleY: [1, 0.3, 1], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '1px', height: '40px', background: 'linear-gradient(to bottom, rgba(184,92,58,0.8), transparent)', transformOrigin: 'top' }}
         />
       </motion.div>
-
     </section>
   );
 }
