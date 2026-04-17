@@ -27,7 +27,7 @@ export default function ProductGrid({ products, loading }) {
       gap: '2rem',
     }}>
       {products.map(product => (
-        <ProductCard key={product._id} product={product} />
+        <ProductCard key={product._id || product.id} product={product} />
       ))}
     </div>
   );

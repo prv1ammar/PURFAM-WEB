@@ -42,6 +42,20 @@ export default function AdminPage() {
   const [uploadingImg, setUploadingImg] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
+  // Collections state
+  const [collections, setCollections] = useState([]);
+  const [colForm, setColForm] = useState({ nameEn: '', nameAr: '', descEn: '', descAr: '', image: '' });
+  const [editCol, setEditCol] = useState(null);
+  const [showColForm, setShowColForm] = useState(false);
+  const [savingCol, setSavingCol] = useState(false);
+
+  // Collection products manager
+  const [manageCol, setManageCol] = useState(null); // collection being managed
+  const [colProducts, setColProducts] = useState([]); // products already in collection
+  const [allProducts, setAllProducts] = useState([]); // all products for search
+  const [productSearch, setProductSearch] = useState('');
+  const [addingProd, setAddingProd] = useState(false);
+
   function emptyForm() {
     return { 'name.en': '', 'name.ar': '', 'description.en': '', 'description.ar': '', brand: '', gender: 'women', category: 'floral', stock: 100, featured: false };
   }
@@ -62,7 +76,65 @@ export default function AdminPage() {
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { tab === 'products' ? loadProducts() : loadOrders(); }, [tab, page]);
+  const loadCollections = async () => {
+    setLoading(true);
+    try {
+      const r = await api.get('/api/admin/collections');
+      setCollections(r.data.collections || []);
+    } finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    if (tab === 'products') loadProducts();
+    else if (tab === 'orders') loadOrders();
+    else if (tab === 'collections') loadCollections();
+  }, [tab, page]);
+
+  const openAddCol = () => { setEditCol(null); setColForm({ nameEn: '', nameAr: '', descEn: '', descAr: '', image: '' }); setShowColForm(true); };
+  const openEditCol = (c) => { setEditCol(c); setColForm({ nameEn: c.name?.en || '', nameAr: c.name?.ar || '', descEn: c.description?.en || '', descAr: c.description?.ar || '', image: c.image || '' }); setShowColForm(true); };
+
+  const handleSaveCol = async (e) => {
+    e.preventDefault(); setSavingCol(true);
+    try {
+      const payload = { name: { en: colForm.nameEn, ar: colForm.nameAr }, description: { en: colForm.descEn, ar: colForm.descAr }, image: colForm.image };
+      if (editCol) await api.put(`/api/admin/collections/${editCol.id}`, payload);
+      else await api.post('/api/admin/collections', payload);
+      setShowColForm(false);
+      await loadCollections();
+    } catch (err) { alert(err.response?.data?.message || 'Error saving collection'); }
+    finally { setSavingCol(false); }
+  };
+
+  const handleDeleteCol = async (id) => {
+    if (!confirm('Delete this collection?')) return;
+    await api.delete(`/api/admin/collections/${id}`);
+    setCollections(c => c.filter(x => x.id !== id));
+  };
+
+  const openManageProducts = async (col) => {
+    setManageCol(col);
+    setProductSearch('');
+    const [colProds, allProds] = await Promise.all([
+      api.get(`/api/admin/collections/${col.id}/products`).then(r => r.data.products || []),
+      api.get('/api/products', { params: { limit: 200 } }).then(r => r.data.products || []),
+    ]);
+    setColProducts(colProds);
+    setAllProducts(allProds);
+  };
+
+  const handleAddProdToCol = async (productId) => {
+    setAddingProd(true);
+    try {
+      await api.post(`/api/admin/collections/${manageCol.id}/products`, { productId });
+      const updated = await api.get(`/api/admin/collections/${manageCol.id}/products`);
+      setColProducts(updated.data.products || []);
+    } finally { setAddingProd(false); }
+  };
+
+  const handleRemoveProdFromCol = async (productId) => {
+    await api.delete(`/api/admin/collections/${manageCol.id}/products/${productId}`);
+    setColProducts(prev => prev.filter(p => p.id !== productId));
+  };
 
   const openAdd = () => {
     setEditProduct(null); setForm(emptyForm());
@@ -125,8 +197,9 @@ export default function AdminPage() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="admin-page"
       style={{
-        minHeight: '100vh', paddingTop: '6rem',
+        minHeight: '100vh', paddingTop: 'calc(var(--navbar-height) + 1rem)',
         backgroundImage: `linear-gradient(to bottom, rgba(5,5,5,0.82) 0%, rgba(5,5,5,0.72) 50%, rgba(5,5,5,0.88) 100%), url(${adminBg})`,
         backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed',
       }}>
@@ -160,19 +233,20 @@ export default function AdminPage() {
             <p style={{ color: 'var(--color-border)', fontSize: '0.85rem', marginTop: '0.3rem' }}>Manage your products and orders</p>
           </div>
           {tab === 'products' && (
-            <button onClick={openAdd} style={{
-              padding: '0.7rem 1.6rem', background: 'var(--color-gold)', color: '#000',
-              fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em', borderRadius: '6px',
-              cursor: 'pointer', border: 'none', textTransform: 'uppercase',
-            }}>
+            <button onClick={openAdd} style={{ padding: '0.7rem 1.6rem', background: 'var(--color-gold)', color: '#000', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em', borderRadius: '6px', cursor: 'pointer', border: 'none', textTransform: 'uppercase' }}>
               + Add Product
+            </button>
+          )}
+          {tab === 'collections' && (
+            <button onClick={openAddCol} style={{ padding: '0.7rem 1.6rem', background: 'var(--color-gold)', color: '#000', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em', borderRadius: '6px', cursor: 'pointer', border: 'none', textTransform: 'uppercase' }}>
+              + Add Collection
             </button>
           )}
         </div>
 
         {/* Tabs */}
         <div style={{ display: 'flex', marginBottom: '2rem', border: '1px solid var(--color-border)', borderRadius: '8px', overflow: 'hidden', width: 'fit-content' }}>
-          {[['products', 'Products'], ['orders', 'Orders']].map(([key, label]) => (
+          {[['products', 'Products'], ['orders', 'Orders'], ['collections', 'Collections']].map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)} style={{
               padding: '0.65rem 2rem', fontSize: '0.78rem', fontWeight: 600,
               letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', border: 'none',
@@ -287,7 +361,192 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {/* ── COLLECTIONS TAB ── */}
+        {tab === 'collections' && (
+          <div>
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-border)' }}>Loading...</div>
+            ) : collections.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-border)' }}>No collections yet. Click "+ Add Collection" to create one.</div>
+            ) : (
+              <div style={{ background: 'var(--color-dark)', border: '1px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden' }}>
+                {/* Table Header */}
+                <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr 120px', gap: '1rem', padding: '0.75rem 1.25rem', background: 'var(--color-charcoal)', borderBottom: '1px solid var(--color-border)' }}>
+                  {['Image', 'Name (EN)', 'Name (AR)', 'Description', 'Products', 'Actions'].map(h => (
+                    <p key={h} style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-border)', margin: 0 }}>{h}</p>
+                  ))}
+                </div>
+                {/* Table Rows */}
+                {collections.map(col => {
+                  const prodCount = col.collection_products?.[0]?.count ?? 0;
+                  return (
+                    <div key={col.id} className="admin-row" style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr 80px 160px', gap: '1rem', padding: '0.85rem 1.25rem', borderBottom: '1px solid var(--color-border)', alignItems: 'center' }}>
+                      <div style={{ width: '56px', height: '56px', borderRadius: '8px', overflow: 'hidden', background: 'var(--color-charcoal)', flexShrink: 0 }}>
+                        {col.image
+                          ? <img src={col.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-border)', fontSize: '1.2rem' }}>🖼</div>
+                        }
+                      </div>
+                      <p style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', color: 'var(--color-off-white)', margin: 0 }}>{col.name?.en || '—'}</p>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--color-border)', margin: 0 }}>{col.name?.ar || '—'}</p>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--color-border)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{col.description?.en || '—'}</p>
+                      <span style={{ display: 'inline-block', background: 'rgba(200,149,26,0.12)', border: '1px solid rgba(200,149,26,0.3)', color: 'var(--color-gold)', borderRadius: '999px', padding: '0.2rem 0.7rem', fontSize: '0.75rem', fontWeight: 700, textAlign: 'center' }}>
+                        {prodCount}
+                      </span>
+                      <div style={{ display: 'flex', gap: '0.4rem' }}>
+                        <button onClick={() => openManageProducts(col)} style={{ padding: '0.4rem 0.6rem', border: '1px solid rgba(200,149,26,0.4)', background: 'rgba(200,149,26,0.08)', color: 'var(--color-gold)', borderRadius: '5px', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 700 }}>Products</button>
+                        <button className="admin-btn-edit" onClick={() => openEditCol(col)} style={{ padding: '0.4rem 0.6rem', border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-off-white)', borderRadius: '5px', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 600 }}>Edit</button>
+                        <button className="admin-btn-del" onClick={() => handleDeleteCol(col.id)} style={{ padding: '0.4rem 0.6rem', border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-off-white)', borderRadius: '5px', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 600 }}>Del</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* ── MANAGE COLLECTION PRODUCTS MODAL ── */}
+      <AnimatePresence>
+        {manageCol && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setManageCol(null)}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1000, backdropFilter: 'blur(4px)' }} />
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 30 }}
+              style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1001, width: '94%', maxWidth: '720px', height: 'calc(100vh - 140px)', background: 'var(--color-dark)', border: '1px solid var(--color-border)', borderRadius: '14px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.75rem', borderBottom: '1px solid var(--color-border)', flexShrink: 0 }}>
+                <div>
+                  <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.3rem', color: 'var(--color-off-white)', margin: 0 }}>
+                    Products — {manageCol.name?.en}
+                  </h2>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--color-border)', margin: '0.25rem 0 0' }}>{colProducts.length} product{colProducts.length !== 1 ? 's' : ''} in this collection</p>
+                </div>
+                <button onClick={() => setManageCol(null)} style={{ color: 'var(--color-border)', fontSize: '1.3rem', cursor: 'pointer', background: 'none', border: 'none' }}>✕</button>
+              </div>
+
+              <div style={{ overflowY: 'auto', flex: 1, padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+                {/* Search & Add */}
+                <div>
+                  <label style={lbl}>Add a product</label>
+                  <input style={inp} placeholder="Search by name..." value={productSearch} onChange={e => setProductSearch(e.target.value)} />
+                  {productSearch.trim() && (
+                    <div style={{ marginTop: '0.5rem', background: 'var(--color-charcoal)', border: '1px solid var(--color-border)', borderRadius: '8px', maxHeight: '220px', overflowY: 'auto' }}>
+                      {allProducts
+                        .filter(p => {
+                          const alreadyIn = colProducts.some(cp => cp.id === p.id);
+                          const q = productSearch.toLowerCase();
+                          return !alreadyIn && (p.name?.en?.toLowerCase().includes(q) || p.brand?.toLowerCase().includes(q));
+                        })
+                        .slice(0, 10)
+                        .map(p => (
+                          <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 1rem', borderBottom: '1px solid var(--color-border)' }}>
+                            {p.images?.[0] && <img src={p.images[0]} alt="" style={{ width: '36px', height: '42px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0 }} />}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ fontSize: '0.85rem', color: 'var(--color-off-white)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name?.en}</p>
+                              <p style={{ fontSize: '0.75rem', color: 'var(--color-border)', margin: 0 }}>{p.brand}</p>
+                            </div>
+                            <button disabled={addingProd} onClick={() => { handleAddProdToCol(p.id); setProductSearch(''); }}
+                              style={{ padding: '0.35rem 0.75rem', background: 'var(--color-gold)', color: '#000', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>
+                              + Add
+                            </button>
+                          </div>
+                        ))}
+                      {allProducts.filter(p => {
+                        const alreadyIn = colProducts.some(cp => cp.id === p.id);
+                        const q = productSearch.toLowerCase();
+                        return !alreadyIn && (p.name?.en?.toLowerCase().includes(q) || p.brand?.toLowerCase().includes(q));
+                      }).length === 0 && (
+                        <p style={{ padding: '1rem', color: 'var(--color-border)', fontSize: '0.85rem', textAlign: 'center' }}>No products found</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Current products in collection */}
+                <div>
+                  <label style={lbl}>Products in this collection ({colProducts.length})</label>
+                  {colProducts.length === 0 ? (
+                    <p style={{ color: 'var(--color-border)', fontSize: '0.85rem', padding: '1rem 0' }}>No products yet. Use the search above to add some.</p>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      {colProducts.map(p => (
+                        <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 1rem', background: 'var(--color-charcoal)', border: '1px solid var(--color-border)', borderRadius: '8px' }}>
+                          {p.images?.[0] && <img src={p.images[0]} alt="" style={{ width: '40px', height: '48px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0 }} />}
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ fontSize: '0.88rem', color: 'var(--color-off-white)', margin: 0 }}>{p.name?.en}</p>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--color-border)', margin: '2px 0 0' }}>{p.brand} · {p.gender}</p>
+                          </div>
+                          <button onClick={() => handleRemoveProdFromCol(p.id)}
+                            style={{ padding: '0.35rem 0.7rem', background: 'transparent', border: '1px solid var(--color-border)', color: '#ef4444', borderRadius: '5px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600 }}>
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ── COLLECTION FORM MODAL ── */}
+      <AnimatePresence>
+        {showColForm && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowColForm(false)}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1000, backdropFilter: 'blur(4px)' }} />
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 30 }}
+              style={{ position: 'fixed', top: '120px', left: '50%', transform: 'translateX(-50%)', zIndex: 1001, width: '94%', maxWidth: '600px', background: 'var(--color-dark)', border: '1px solid var(--color-border)', borderRadius: '14px', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.75rem', borderBottom: '1px solid var(--color-border)' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.4rem', color: 'var(--color-off-white)', margin: 0 }}>
+                  {editCol ? 'Edit Collection' : 'New Collection'}
+                </h2>
+                <button onClick={() => setShowColForm(false)} style={{ color: 'var(--color-border)', fontSize: '1.3rem', cursor: 'pointer', background: 'none', border: 'none' }}>✕</button>
+              </div>
+              <form className="admin-form" onSubmit={handleSaveCol} style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={lbl}>Name (English)</label>
+                    <input style={inp} required placeholder="e.g. Oud Collection" value={colForm.nameEn} onChange={e => setColForm(v => ({ ...v, nameEn: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={lbl}>Name (Arabic)</label>
+                    <input style={inp} placeholder="مثال: مجموعة العود" value={colForm.nameAr} onChange={e => setColForm(v => ({ ...v, nameAr: e.target.value }))} />
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={lbl}>Description (English)</label>
+                    <textarea style={{ ...inp, resize: 'none', height: '80px' }} placeholder="Short description..." value={colForm.descEn} onChange={e => setColForm(v => ({ ...v, descEn: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={lbl}>Description (Arabic)</label>
+                    <textarea style={{ ...inp, resize: 'none', height: '80px' }} placeholder="وصف قصير..." value={colForm.descAr} onChange={e => setColForm(v => ({ ...v, descAr: e.target.value }))} />
+                  </div>
+                </div>
+                <div>
+                  <label style={lbl}>Image URL</label>
+                  <input style={inp} placeholder="https://..." value={colForm.image} onChange={e => setColForm(v => ({ ...v, image: e.target.value }))} />
+                  {colForm.image && <img src={colForm.image} alt="preview" style={{ marginTop: '0.75rem', width: '100%', height: '140px', objectFit: 'cover', borderRadius: '8px' }} />}
+                </div>
+                <button type="submit" disabled={savingCol} style={{ padding: '0.85rem', background: savingCol ? 'var(--color-border)' : 'var(--color-gold)', color: '#000', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', borderRadius: '8px', border: 'none', cursor: savingCol ? 'not-allowed' : 'pointer' }}>
+                  {savingCol ? 'Saving...' : (editCol ? 'Save Changes' : 'Create Collection')}
+                </button>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ── PRODUCT FORM MODAL ── */}
       <AnimatePresence>

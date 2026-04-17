@@ -24,7 +24,13 @@ const getCartWithItems = async (cartId) => {
     .from('cart_items')
     .select('*, product:products(*)')
     .eq('cart_id', cartId);
-  return { id: cartId, items: items || [] };
+  // Normalize snake_case DB fields to camelCase for the frontend
+  const normalized = (items || []).map(item => ({
+    ...item,
+    sizeMl: item.size_ml,
+    createdAt: item.created_at,
+  }));
+  return { id: cartId, items: normalized };
 };
 
 const getCart = async (req, res, next) => {

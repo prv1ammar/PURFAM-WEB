@@ -51,7 +51,7 @@ export default function OrderHistoryPage() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {orders.map(order => (
-              <motion.div key={order._id}
+              <motion.div key={order.id || order._id}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 style={{
                   background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',
@@ -60,7 +60,7 @@ export default function OrderHistoryPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                   <div>
                     <p style={{ fontSize: '0.75rem', color: 'var(--color-gray)', marginBottom: '0.25rem' }}>
-                      {t('orders.orderId')}: <span style={{ fontFamily: 'monospace', color: 'var(--color-off-white)' }}>#{order._id.slice(-8).toUpperCase()}</span>
+                      {t('orders.orderId')}: <span style={{ fontFamily: 'monospace', color: 'var(--color-off-white)' }}>#{(order.id || order._id || '').toString().slice(-8).toUpperCase()}</span>
                     </p>
                     <p style={{ fontSize: '0.85rem', color: 'var(--color-gray)' }}>
                       {new Date(order.createdAt).toLocaleDateString(isAr ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

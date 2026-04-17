@@ -35,14 +35,14 @@ export default function CartItem({ item }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Qty stepper */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button onClick={() => updateQty(item._id, item.qty - 1)}
+            <button onClick={() => updateQty(item.id || item._id, item.qty - 1)}
               style={{
                 width: '24px', height: '24px', border: '1px solid var(--color-border)',
                 color: 'var(--color-off-white)', borderRadius: '2px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>−</button>
             <span style={{ fontSize: '0.9rem', minWidth: '20px', textAlign: 'center' }}>{item.qty}</span>
-            <button onClick={() => updateQty(item._id, item.qty + 1)}
+            <button onClick={() => updateQty(item.id || item._id, item.qty + 1)}
               style={{
                 width: '24px', height: '24px', border: '1px solid var(--color-border)',
                 color: 'var(--color-off-white)', borderRadius: '2px',
@@ -54,7 +54,7 @@ export default function CartItem({ item }) {
             <p style={{ color: 'var(--color-gold)', fontFamily: 'var(--font-serif)', fontSize: '1.1rem' }}>
               {item.price * item.qty} dh
             </p>
-            <button onClick={() => removeItem(item._id)} style={{ color: 'var(--color-gray)', fontSize: '1rem' }}>🗑</button>
+            <button onClick={() => removeItem(item.id || item._id)} style={{ color: 'var(--color-gray)', fontSize: '1rem' }}>🗑</button>
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export default function ProductCard({ product, index = 0 }) {
     >
       {/* ── Product Image ── */}
       <Link
-        to={`/shop/${product._id}`}
+        to={`/shop/${product._id || product.id}`}
         style={{ display: 'block', position: 'relative', aspectRatio: '4 / 5', overflow: 'hidden', flexShrink: 0 }}
       >
         <motion.img
@@ -128,7 +128,7 @@ export default function ProductCard({ product, index = 0 }) {
         </span>
 
         {/* Product Name */}
-        <Link to={`/shop/${product._id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/shop/${product._id || product.id}`} style={{ textDecoration: 'none' }}>
           <h3 style={{
             fontFamily: 'var(--font-serif)',
             fontSize: '1.2rem',

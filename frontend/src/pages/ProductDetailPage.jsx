@@ -35,13 +35,13 @@ export default function ProductDetailPage() {
   };
 
   if (loading) return (
-    <div className="page-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', paddingTop: 'var(--navbar-height)' }}>
       <div style={{ width: '40px', height: '40px', border: '2px solid var(--color-border)', borderTopColor: 'var(--color-gold)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
     </div>
   );
 
   if (!product) return (
-    <div className="page-wrapper" style={{ textAlign: 'center', padding: '6rem 1.5rem' }}>
+    <div style={{ textAlign: 'center', padding: '6rem 1.5rem', paddingTop: 'calc(var(--navbar-height) + 4rem)' }}>
       <h2 style={{ fontFamily: 'var(--font-serif)', color: 'var(--color-gray)' }}>Product not found</h2>
       <Link to="/shop" style={{ color: 'var(--color-gold)', marginTop: '1rem', display: 'inline-block' }}>← Back to Shop</Link>
     </div>
@@ -52,7 +52,8 @@ export default function ProductDetailPage() {
   const selectedSizeObj = product.sizes.find(s => s.ml === selectedSize);
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="page-wrapper">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      style={{ minHeight: '100vh', paddingTop: 'var(--navbar-height)' }}>
       <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '3rem 1.5rem', direction: isAr ? 'rtl' : 'ltr' }}>
         {/* Breadcrumb */}
         <div style={{ marginBottom: '2rem', fontSize: '0.8rem', color: 'var(--color-gray)', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>

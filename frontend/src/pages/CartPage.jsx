@@ -32,7 +32,7 @@ export default function CartPage() {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '3rem', alignItems: 'start' }}>
             <div>
-              {items.map(item => <CartItem key={item._id} item={item} />)}
+              {items.map(item => <CartItem key={item.id || item._id} item={item} />)}
             </div>
             <div style={{
               background: 'var(--color-charcoal)', border: '1px solid var(--color-border)',

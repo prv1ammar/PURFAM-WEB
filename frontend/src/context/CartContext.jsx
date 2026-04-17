@@ -39,18 +39,19 @@ export function CartProvider({ children }) {
 
     if (user) {
       try {
-        const res = await api.post('/api/cart/add', { productId: product._id, qty, sizeMl });
+        const res = await api.post('/api/cart/add', { productId: product.id || product._id, qty, sizeMl });
         setItems(res.data.cart.items);
       } catch (err) { console.error(err); }
     } else {
       setItems(prev => {
-        const existIdx = prev.findIndex(i => i.product._id === product._id && i.sizeMl === sizeMl);
+        const pid = product.id || product._id;
+        const existIdx = prev.findIndex(i => (i.product?.id || i.product?._id) === pid && i.sizeMl === sizeMl);
         if (existIdx >= 0) {
           const updated = [...prev];
           updated[existIdx] = { ...updated[existIdx], qty: updated[existIdx].qty + qty };
           return updated;
         }
-        return [...prev, { _id: Date.now().toString(), product, sizeMl, qty, price: sizeObj.price }];
+        return [...prev, { id: Date.now().toString(), product, sizeMl, qty, price: sizeObj.price }];
       });
     }
     setCartOpen(true);
@@ -63,7 +64,7 @@ export function CartProvider({ children }) {
         setItems(res.data.cart.items);
       } catch (err) { console.error(err); }
     } else {
-      setItems(prev => prev.filter(i => i._id !== itemId));
+      setItems(prev => prev.filter(i => (i.id || i._id) !== itemId));
     }
   };
 
@@ -75,9 +76,9 @@ export function CartProvider({ children }) {
       } catch (err) { console.error(err); }
     } else {
       if (qty <= 0) {
-        setItems(prev => prev.filter(i => i._id !== itemId));
+        setItems(prev => prev.filter(i => (i.id || i._id) !== itemId));
       } else {
-        setItems(prev => prev.map(i => i._id === itemId ? { ...i, qty } : i));
+        setItems(prev => prev.map(i => (i.id || i._id) === itemId ? { ...i, qty } : i));
       }
     }
   };

@@ -31,7 +31,7 @@
   
   --shadow-luxe: 0 20px 40px rgba(0, 0, 0, 0.6);
   --glass: blur(12px) saturate(180%);
-  --navbar-height: 80px;
+  --navbar-height: 112px;
 }
 
 [data-theme="light"] {
@@ -371,7 +371,6 @@ p { font-size: 1.05rem; color: rgba(var(--color-off-white), 0.8); }
   display: block;
 }
 
-/* ─── Missing Utilities ─── */
 .flex-shrink-0 { flex-shrink: 0; }
 .flex-grow { flex-grow: 1; }
 .gap-0\.5 { gap: 0.125rem; }
@@ -393,3 +392,72 @@ p { font-size: 1.05rem; color: rgba(var(--color-off-white), 0.8); }
   .sm\:flex-row { flex-direction: row; }
   .sm\:w-auto { width: auto; }
 }
+
+/* ─── Admin Page — Always dark bg, always light text ─── */
+/* The admin page always has a dark image overlay, so we pin colors */
+
+.admin-page,
+[data-theme="light"] .admin-page {
+  color: #f5f5f5;
+}
+
+/* Tables / cards */
+.admin-page .admin-row p,
+.admin-page .admin-row span,
+.admin-page .admin-row div,
+[data-theme="light"] .admin-page .admin-row p,
+[data-theme="light"] .admin-page .admin-row span {
+  color: #f5f5f5;
+}
+
+/* Headers & labels */
+.admin-page h1,
+.admin-page h2,
+.admin-page p,
+.admin-page span,
+[data-theme="light"] .admin-page h1,
+[data-theme="light"] .admin-page h2,
+[data-theme="light"] .admin-page p,
+[data-theme="light"] .admin-page span {
+  color: #f5f5f5;
+}
+
+/* Inputs / textareas / selects */
+.admin-page .admin-form input,
+.admin-page .admin-form textarea,
+.admin-page .admin-form select,
+[data-theme="light"] .admin-page .admin-form input,
+[data-theme="light"] .admin-page .admin-form textarea,
+[data-theme="light"] .admin-page .admin-form select {
+  color: #f5f5f5 !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(212,175,55,0.25) !important;
+}
+
+.admin-page .admin-form input::placeholder,
+.admin-page .admin-form textarea::placeholder,
+[data-theme="light"] .admin-page .admin-form input::placeholder,
+[data-theme="light"] .admin-page .admin-form textarea::placeholder {
+  color: rgba(255,255,255,0.3) !important;
+  opacity: 1;
+}
+
+.admin-page .admin-form select option,
+[data-theme="light"] .admin-page .admin-form select option {
+  background: #1a1a1a !important;
+  color: #f5f5f5 !important;
+}
+
+/* Buttons inside admin */
+.admin-page .admin-btn-edit,
+.admin-page .admin-btn-del,
+[data-theme="light"] .admin-page .admin-btn-edit,
+[data-theme="light"] .admin-page .admin-btn-del {
+  color: #f5f5f5 !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
+
+.admin-page .admin-btn-edit:hover { border-color: #c8951a !important; color: #c8951a !important; }
+.admin-page .admin-btn-del:hover  { border-color: #ef4444 !important; color: #ef4444 !important; }
+
+

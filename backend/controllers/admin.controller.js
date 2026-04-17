@@ -78,4 +78,79 @@ const updateOrderStatus = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-module.exports = { createProduct, updateProduct, deleteProduct, getAllOrders, updateOrderStatus };
+// ── Collections ─────────────────────────────────────────────────────────────
+const getCollections = async (req, res, next) => {
+  try {
+    const { data, error } = await supabase
+      .from('collections')
+      .select('*, collection_products(count)')
+      .order('created_at', { ascending: true });
+    if (error) return next(error);
+    res.json({ collections: data });
+  } catch (err) { next(err); }
+};
+
+const createCollection = async (req, res, next) => {
+  try {
+    const { name, description, image } = req.body;
+    const slug = (name?.en || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
+    const { data, error } = await supabase.from('collections').insert({ name, description, image, slug }).select().single();
+    if (error) return next(error);
+    res.status(201).json({ collection: data });
+  } catch (err) { next(err); }
+};
+
+const updateCollection = async (req, res, next) => {
+  try {
+    const { name, description, image } = req.body;
+    const { data, error } = await supabase.from('collections').update({ name, description, image, updated_at: new Date() }).eq('id', req.params.id).select().single();
+    if (error || !data) return res.status(404).json({ message: 'Collection not found' });
+    res.json({ collection: data });
+  } catch (err) { next(err); }
+};
+
+const deleteCollection = async (req, res, next) => {
+  try {
+    const { error } = await supabase.from('collections').delete().eq('id', req.params.id);
+    if (error) return next(error);
+    res.json({ message: 'Collection deleted' });
+  } catch (err) { next(err); }
+};
+
+// ── Collection Products ──────────────────────────────────────────────────────
+const getCollectionProducts = async (req, res, next) => {
+  try {
+    const { data, error } = await supabase
+      .from('collection_products')
+      .select('product_id, position, product:products(id, name, brand, images, sizes, gender)')
+      .eq('collection_id', req.params.id)
+      .order('position', { ascending: true });
+    if (error) return next(error);
+    res.json({ products: (data || []).map(r => ({ ...r.product, position: r.position })) });
+  } catch (err) { next(err); }
+};
+
+const addProductToCollection = async (req, res, next) => {
+  try {
+    const { productId } = req.body;
+    const { error } = await supabase
+      .from('collection_products')
+      .upsert({ collection_id: req.params.id, product_id: productId }, { onConflict: 'collection_id,product_id' });
+    if (error) return next(error);
+    res.json({ message: 'Product added to collection' });
+  } catch (err) { next(err); }
+};
+
+const removeProductFromCollection = async (req, res, next) => {
+  try {
+    const { error } = await supabase
+      .from('collection_products')
+      .delete()
+      .eq('collection_id', req.params.id)
+      .eq('product_id', req.params.productId);
+    if (error) return next(error);
+    res.json({ message: 'Product removed from collection' });
+  } catch (err) { next(err); }
+};
+
+module.exports = { createProduct, updateProduct, deleteProduct, getAllOrders, updateOrderStatus, getCollections, createCollection, updateCollection, deleteCollection, getCollectionProducts, addProductToCollection, removeProductFromCollection };

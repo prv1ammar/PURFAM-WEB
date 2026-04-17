@@ -62,7 +62,7 @@ export default function CartDrawer() {
                   </Link>
                 </div>
               ) : (
-                items.map(item => <CartItem key={item._id} item={item} />)
+                items.map(item => <CartItem key={item.id || item._id} item={item} />)
               )}
             </div>
 

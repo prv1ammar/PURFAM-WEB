@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import contactBg from '@/assets/contact-bg.jpg';
+import { FaInstagram, FaFacebook, FaTiktok, FaLocationDot, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa6';
 
 export default function ContactPage() {
   const { t, i18n } = useTranslation('pages');
@@ -103,17 +104,17 @@ export default function ContactPage() {
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {[
-                { icon: '📍', label: t('contact.addressLabel'), val: t('contact.addressValue') },
-                { icon: '📞', label: t('contact.phoneLabel'), val: '+971 4 000 0000' },
-                { icon: '✉️', label: t('contact.emailLabel'), val: 'hello@luxeessence.com' },
-                { icon: '🕐', label: t('contact.hoursLabel'), val: t('contact.hoursValue') },
+                { icon: <FaLocationDot size={18} />, label: t('contact.addressLabel'), val: isAr ? 'الدار البيضاء، المغرب' : 'Casablanca, Maroc' },
+                { icon: <FaPhone      size={16} />, label: t('contact.phoneLabel'), val: '+212 621 558 544' },
+                { icon: <FaEnvelope   size={16} />, label: t('contact.emailLabel'), val: 'luxeessence.boutique@gmail.com' },
+                { icon: <FaClock      size={16} />, label: t('contact.hoursLabel'), val: t('contact.hoursValue') },
               ].map(item => (
                 <div key={item.label} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <span style={{
-                    fontSize: '1.2rem', width: '40px', height: '40px',
+                    width: '40px', height: '40px',
                     background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)',
                     borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
+                    color: 'var(--color-gold)', flexShrink: 0,
                   }}>{item.icon}</span>
                   <div>
                     <p style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-gold)', marginBottom: '0.25rem' }}>
@@ -123,6 +124,29 @@ export default function ContactPage() {
                   </div>
                 </div>
               ))}
+
+              {/* Social links */}
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                {[
+                  { icon: <FaInstagram size={16} />, href: 'https://www.instagram.com/luxeessence.boutique/', label: 'Instagram' },
+                  { icon: <FaFacebook  size={16} />, href: 'https://www.facebook.com/profile.php?id=61570777527869', label: 'Facebook' },
+                  { icon: <FaTiktok    size={16} />, href: 'https://www.tiktok.com/@luxeessence.fragrance', label: 'TikTok' },
+                ].map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                    title={s.label}
+                    style={{
+                      width: '40px', height: '40px', borderRadius: '50%',
+                      border: '1px solid rgba(201,168,76,0.2)',
+                      background: 'rgba(201,168,76,0.08)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: 'var(--color-gold)', transition: 'all 0.2s',
+                    }}
+                    onMouseOver={e => { e.currentTarget.style.background = 'rgba(201,168,76,0.2)'; e.currentTarget.style.borderColor = 'var(--color-gold)'; }}
+                    onMouseOut={e => { e.currentTarget.style.background = 'rgba(201,168,76,0.08)'; e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)'; }}>
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>
