@@ -8,12 +8,14 @@ const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.18em', textTran
 export default function MobileMenu({ open, onClose }) {
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
 
   const links = [
-    { to: '/shop',    label: isAr ? 'المتجر'    : 'Parfums' },
-    { to: '/about',   label: isAr ? 'القصة'     : 'La Maison' },
-    { to: '/contact', label: isAr ? 'اتصل بنا'  : 'Contact' },
+    { to: '/',        label: isAr ? 'الرئيسية'  : lang === 'fr' ? 'Accueil'   : 'Home' },
+    { to: '/shop',    label: isAr ? 'المتجر'    : lang === 'fr' ? 'Boutique'  : 'Shop' },
+    { to: '/about',   label: isAr ? 'القصة'     : lang === 'fr' ? 'La Maison' : 'About' },
+    { to: '/contact', label: isAr ? 'اتصل بنا'  : lang === 'fr' ? 'Contact'   : 'Contact' },
   ];
 
   return (
@@ -75,22 +77,22 @@ export default function MobileMenu({ open, onClose }) {
                     </Link>
                   )}
                   <Link to="/orders" onClick={onClose} style={{ ...MONO, fontSize: '0.6rem', color: 'rgba(245,240,232,0.6)', textAlign: isAr ? 'right' : 'left' }}>
-                    {isAr ? 'طلباتي' : 'Mes commandes'}
+                    {isAr ? 'طلباتي' : lang === 'en' ? 'My Orders' : 'Mes commandes'}
                   </Link>
                   <button onClick={() => { logout(); onClose(); }} style={{ ...MONO, fontSize: '0.6rem', color: '#e55', textAlign: isAr ? 'right' : 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
-                    {isAr ? 'تسجيل خروج' : 'Déconnexion'}
+                    {isAr ? 'تسجيل خروج' : lang === 'en' ? 'Logout' : 'Déconnexion'}
                   </button>
                 </>
-              ) : (
-                <Link to="/login" onClick={onClose} style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', textAlign: isAr ? 'right' : 'left' }}>
-                  {isAr ? 'تسجيل الدخول' : 'Se connecter'}
-                </Link>
-              )}
+              ) : null}
 
-              <button onClick={() => i18n.changeLanguage(isAr ? 'en' : 'ar')}
-                style={{ ...MONO, fontSize: '0.6rem', color: 'rgba(245,240,232,0.5)', textAlign: isAr ? 'right' : 'left', background: 'none', border: 'none', cursor: 'pointer', marginTop: '0.5rem' }}>
-                {isAr ? 'Français' : 'عربي'}
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                {[{code:'fr',label:'FR'},{code:'en',label:'EN'},{code:'ar',label:'ع'}].map(({ code, label }) => (
+                  <button key={code} onClick={() => i18n.changeLanguage(code)}
+                    style={{ ...MONO, fontSize: '0.6rem', color: lang === code ? 'var(--terracotta)' : 'rgba(245,240,232,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem 0.4rem', borderBottom: lang === code ? '1px solid var(--terracotta)' : '1px solid transparent' }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         </>

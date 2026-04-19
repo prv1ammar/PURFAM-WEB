@@ -9,7 +9,8 @@ const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTran
 export default function CartPage() {
   const { t, i18n } = useTranslation();
   const { items, totalPrice } = useCart();
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const shipping = totalPrice > 200 ? 0 : 15;
 
   return (
@@ -19,10 +20,10 @@ export default function CartPage() {
       <section style={{ padding: '4rem 0 2rem' }}>
         <div className="container-luxe">
           <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '1rem' }}>
-            {isAr ? `— سلتك · ${items.length} منتجات` : `— Votre panier · ${items.length} articles`}
+            {isAr ? `— سلتك · ${items.length} منتجات` : lang === 'fr' ? `— Votre panier · ${items.length} articles` : `— Your cart · ${items.length} items`}
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: 0 }}>
-            {isAr ? (<>السلة <span style={{ fontStyle: 'italic' }}>الخاصة.</span></>) : (<>Le <span style={{ fontStyle: 'italic' }}>panier.</span></>)}
+            {isAr ? (<>السلة <span style={{ fontStyle: 'italic' }}>الخاصة.</span></>) : lang === 'fr' ? (<>Le <span style={{ fontStyle: 'italic' }}>panier.</span></>) : (<>Your <span style={{ fontStyle: 'italic' }}>cart.</span></>)}
           </h1>
         </div>
       </section>
@@ -31,14 +32,14 @@ export default function CartPage() {
         <div className="container-luxe">
           {items.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '6rem 0' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 200, color: 'var(--sand)', marginBottom: '1.5rem', lineHeight: 1 }}>∅</div>
+              <div style={{ width: '48px', height: '1px', background: 'var(--sand)', margin: '0 auto 2rem' }} />
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 300, marginBottom: '2rem', color: 'var(--graphite)' }}>
-                {isAr ? 'سلتك فارغة' : 'Votre panier est vide'}
+                {isAr ? 'سلتك فارغة' : lang === 'fr' ? 'Votre panier est vide' : 'Your cart is empty'}
               </h2>
               <Link to="/shop" style={{ display: 'inline-block', padding: '1rem 2.5rem', background: 'var(--charcoal)', color: 'var(--cream)', ...MONO, fontSize: '0.65rem' }}
                 onMouseOver={e => { e.currentTarget.style.background = 'var(--terracotta)'; }}
                 onMouseOut={e => { e.currentTarget.style.background = 'var(--charcoal)'; }}>
-                {isAr ? 'تصفح العطور ←' : 'Découvrir les parfums →'}
+                {isAr ? 'تصفح العطور ←' : lang === 'fr' ? 'Découvrir les parfums →' : 'Browse fragrances →'}
               </Link>
             </div>
           ) : (
@@ -46,9 +47,9 @@ export default function CartPage() {
               {/* Items */}
               <div>
                 <div style={{ borderTop: '1px solid var(--charcoal)', borderBottom: '1px solid var(--line)', padding: '0.75rem 0', display: 'grid', gridTemplateColumns: '80px 1fr 100px 100px 40px', gap: '1.5rem', ...MONO, fontSize: '0.58rem', color: 'var(--graphite)' }}>
-                  <span>{isAr ? 'المنتج' : 'Produit'}</span><span></span>
-                  <span>{isAr ? 'الكمية' : 'Quantité'}</span>
-                  <span style={{ textAlign: 'right' }}>{isAr ? 'السعر' : 'Prix'}</span>
+                  <span>{isAr ? 'المنتج' : lang === 'fr' ? 'Produit' : 'Product'}</span><span></span>
+                  <span>{isAr ? 'الكمية' : lang === 'fr' ? 'Quantité' : 'Qty'}</span>
+                  <span style={{ textAlign: 'right' }}>{isAr ? 'السعر' : lang === 'fr' ? 'Prix' : 'Price'}</span>
                   <span></span>
                 </div>
                 {items.map(item => <CartItem key={item.id || item._id} item={item} />)}
@@ -61,8 +62,8 @@ export default function CartPage() {
                     {isAr ? '— ملخص الطلب' : '— Récapitulatif'}
                   </span>
                   {[
-                    [isAr ? 'المجموع الفرعي' : 'Sous-total',  `${totalPrice.toFixed(2)} dh`],
-                    [isAr ? 'التوصيل' : 'Livraison', shipping === 0 ? (isAr ? 'مجاني' : 'Offerte') : `${shipping} dh`],
+                    [isAr ? 'المجموع الفرعي' : lang === 'fr' ? 'Sous-total' : 'Subtotal',  `${totalPrice.toFixed(2)} dh`],
+                    [isAr ? 'التوصيل' : lang === 'fr' ? 'Livraison' : 'Shipping', shipping === 0 ? (isAr ? 'مجاني' : lang === 'fr' ? 'Offerte' : 'Free') : `${shipping} dh`],
                   ].map(([k, v]) => (
                     <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', fontSize: '0.9rem', opacity: 0.8, borderBottom: '1px solid rgba(245,240,232,0.1)' }}>
                       <span>{k}</span><span>{v}</span>
@@ -74,16 +75,16 @@ export default function CartPage() {
                   </div>
                   {shipping > 0 && (
                     <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(184,92,58,0.15)', ...MONO, fontSize: '0.58rem', color: 'var(--terracotta)' }}>
-                      {isAr ? `${400 - totalPrice} درهم تبقى للشحن المجاني` : `Plus que ${(400 - totalPrice).toFixed(0)} dh pour la livraison offerte`}
+                      {isAr ? `${400 - totalPrice} درهم تبقى للشحن المجاني` : lang === 'fr' ? `Plus que ${(400 - totalPrice).toFixed(0)} dh pour la livraison offerte` : `Only ${(400 - totalPrice).toFixed(0)} dh left for free shipping`}
                     </div>
                   )}
                   <Link to="/checkout" style={{ display: 'block', marginTop: '1.75rem', padding: '1rem', textAlign: 'center', background: 'var(--terracotta)', color: 'var(--paper)', ...MONO, fontSize: '0.65rem' }}
                     onMouseOver={e => { e.currentTarget.style.background = 'var(--terracotta-deep)'; }}
                     onMouseOut={e => { e.currentTarget.style.background = 'var(--terracotta)'; }}>
-                    {isAr ? 'إتمام الطلب ←' : 'Passer commande →'}
+                    {isAr ? 'إتمام الطلب ←' : lang === 'fr' ? 'Passer commande →' : 'Checkout →'}
                   </Link>
                   <p style={{ marginTop: '1rem', textAlign: 'center', ...MONO, fontSize: '0.55rem', opacity: 0.5 }}>
-                    {isAr ? 'دفع آمن · الدفع عند الاستلام' : 'Sécurisé · Paiement à la livraison'}
+                    {isAr ? 'دفع آمن · الدفع عند الاستلام' : lang === 'fr' ? 'Sécurisé · Paiement à la livraison' : 'Secure · Cash on delivery'}
                   </p>
                 </div>
               </div>

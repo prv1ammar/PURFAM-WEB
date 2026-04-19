@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
           <span>{name}</span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
+        <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
           {/* Images */}
           <div>
             <div style={{ aspectRatio: '1', overflow: 'hidden', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}>

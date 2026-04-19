@@ -7,7 +7,8 @@ const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTran
 
 export default function ContactPage() {
   const { t, i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
 
@@ -28,17 +29,17 @@ export default function ContactPage() {
       <section style={{ padding: '7rem 0 4rem' }}>
         <div className="container-luxe">
           <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '2rem' }}>
-            {isAr ? '— نرد عليك في 24 ساعة' : '— On vous répond en 24h'}
+            {isAr ? '— نرد عليك في 24 ساعة' : lang === 'fr' ? '— On vous répond en 24h' : '— We reply within 24h'}
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3.5rem, 10vw, 8rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: 0 }}>
-            {isAr ? (<>اكتب لنا،<br /><span style={{ fontStyle: 'italic' }}>نحب ذلك.</span></>) : (<>Écrivez-nous,<br /><span style={{ fontStyle: 'italic' }}>on adore ça.</span></>)}
+            {isAr ? (<>اكتب لنا،<br /><span style={{ fontStyle: 'italic' }}>نحب ذلك.</span></>) : lang === 'fr' ? (<>Écrivez-nous,<br /><span style={{ fontStyle: 'italic' }}>on adore ça.</span></>) : (<>Write to us,<br /><span style={{ fontStyle: 'italic' }}>we love it.</span></>)}
           </h1>
         </div>
       </section>
 
       {/* ── Form + Info ── */}
       <section style={{ padding: '2rem 0 7rem' }}>
-        <div className="container-luxe" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '6rem', alignItems: 'start' }}>
+        <div className="container-luxe contact-form-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '6rem', alignItems: 'start' }}>
 
           {/* Form */}
           <div>
@@ -46,18 +47,18 @@ export default function ContactPage() {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 style={{ padding: '3rem', background: 'var(--cream-deep)', border: '1px solid var(--line)', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 300, fontStyle: 'italic', color: 'var(--charcoal)', marginBottom: '0.5rem' }}>
-                  {isAr ? 'شكرًا على رسالتك.' : 'Message bien reçu.'}
+                  {isAr ? 'شكرًا على رسالتك.' : lang === 'fr' ? 'Message bien reçu.' : 'Message received.'}
                 </p>
                 <p style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)' }}>
-                  {isAr ? 'سنرد في أقرب وقت.' : 'On revient vers vous rapidement.'}
+                  {isAr ? 'سنرد في أقرب وقت.' : lang === 'fr' ? 'On revient vers vous rapidement.' : 'We\'ll get back to you shortly.'}
                 </p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div className="contact-name-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                   {[
-                    { key: 'name',  label: isAr ? 'الاسم' : 'Prénom' },
-                    { key: 'email', label: isAr ? 'البريد' : 'Email', type: 'email' },
+                    { key: 'name',  label: isAr ? 'الاسم' : lang === 'fr' ? 'Prénom' : 'Name' },
+                    { key: 'email', label: 'Email', type: 'email' },
                   ].map(f => (
                     <div key={f.key}>
                       <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{f.label}</label>
@@ -71,11 +72,12 @@ export default function ContactPage() {
                   ))}
                 </div>
                 <div>
-                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{isAr ? 'الموضوع' : 'Objet'}</label>
+                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{isAr ? 'الموضوع' : lang === 'fr' ? 'Objet' : 'Subject'}</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
                     {(isAr
                       ? ['نصيحة عطرية', 'طلب', 'شراكة', 'أخرى']
-                      : ['Conseil olfactif', 'Commande', 'Partenariat', 'Autre']
+                      : lang === 'fr' ? ['Conseil olfactif', 'Commande', 'Partenariat', 'Autre']
+                      : ['Scent advice', 'Order', 'Partnership', 'Other']
                     ).map((o, i) => (
                       <span key={o} onClick={() => setForm(v => ({ ...v, subject: o }))}
                         style={{
@@ -90,7 +92,7 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>{isAr ? 'الرسالة' : 'Message'}</label>
+                  <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.6rem' }}>Message</label>
                   <textarea rows={5} value={form.message} required
                     onChange={e => setForm(v => ({ ...v, message: e.target.value }))}
                     style={{ ...inputStyle, resize: 'vertical', padding: '0.85rem 0' }}
@@ -107,7 +109,7 @@ export default function ContactPage() {
                   onMouseOver={e => { e.currentTarget.style.background = 'var(--terracotta)'; }}
                   onMouseOut={e => { e.currentTarget.style.background = 'var(--charcoal)'; }}
                 >
-                  {isAr ? 'إرسال ←' : 'Envoyer →'}
+                  {isAr ? 'إرسال ←' : lang === 'fr' ? 'Envoyer →' : 'Send →'}
                 </button>
               </form>
             )}
@@ -116,10 +118,10 @@ export default function ContactPage() {
           {/* Info blocks */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {[
-              { icon: <FaLocationDot size={16} />, label: isAr ? 'البوتيك' : 'Boutique',    val: isAr ? 'الدار البيضاء، المغرب\nإثنين – سبت · 10:00 – 20:00' : 'Casablanca, Maroc\nLun – Sam · 10h – 20h' },
-              { icon: <FaPhone       size={15} />, label: isAr ? 'الهاتف' : 'Téléphone',    val: '+212 621 558 544' },
-              { icon: <FaEnvelope    size={15} />, label: isAr ? 'البريد' : 'Email',         val: 'luxeessence.boutique@gmail.com' },
-              { icon: <FaClock       size={15} />, label: isAr ? 'الرد على واتساب' : 'WhatsApp', val: isAr ? 'رد في ساعتين · 9:00 – 22:00' : 'Réponse en 2h · 9h – 22h' },
+              { icon: <FaLocationDot size={16} />, label: isAr ? 'البوتيك' : 'Boutique',    val: isAr ? 'الدار البيضاء، المغرب\nإثنين – سبت · 10:00 – 20:00' : lang === 'fr' ? 'Casablanca, Maroc\nLun – Sam · 10h – 20h' : 'Casablanca, Morocco\nMon – Sat · 10am – 8pm' },
+              { icon: <FaPhone       size={15} />, label: isAr ? 'الهاتف' : 'Phone',         val: '+212 621 558 544' },
+              { icon: <FaEnvelope    size={15} />, label: 'Email',                            val: 'luxeessence.boutique@gmail.com' },
+              { icon: <FaClock       size={15} />, label: 'WhatsApp',                         val: isAr ? 'رد في ساعتين · 9:00 – 22:00' : lang === 'fr' ? 'Réponse en 2h · 9h – 22h' : 'Reply in 2h · 9am – 10pm' },
             ].map(item => (
               <div key={item.label} style={{ padding: '1.5rem', background: 'var(--cream-deep)', border: '1px solid var(--line)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
@@ -151,26 +153,31 @@ export default function ContactPage() {
 
       {/* ── FAQ ── */}
       <section style={{ padding: '7rem 0', background: 'var(--charcoal)', color: 'var(--cream)' }}>
-        <div className="container-luxe" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '6rem', alignItems: 'start' }}>
+        <div className="container-luxe contact-faq-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '6rem', alignItems: 'start' }}>
           <div>
             <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '1.5rem' }}>
-              {isAr ? '— الأسئلة الشائعة' : '— Questions fréquentes'}
+              {isAr ? '— الأسئلة الشائعة' : lang === 'fr' ? '— Questions fréquentes' : '— FAQ'}
             </span>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 300, letterSpacing: '-0.03em', margin: 0 }}>
-              {isAr ? (<>قبل أن <span style={{ fontStyle: 'italic' }}>تكتب.</span></>) : (<>Avant de nous <span style={{ fontStyle: 'italic' }}>écrire.</span></>)}
+              {isAr ? (<>قبل أن <span style={{ fontStyle: 'italic' }}>تكتب.</span></>) : lang === 'fr' ? (<>Avant de nous <span style={{ fontStyle: 'italic' }}>écrire.</span></>) : (<>Before you <span style={{ fontStyle: 'italic' }}>write.</span></>)}
             </h2>
           </div>
           <div>
             {(isAr ? [
               ['كم يدوم الفلكون 10 مل؟', 'من 6 أسابيع إلى 3 أشهر حسب الاستخدام — ما بين 100 و150 رشة.'],
-              ['ما الفرق مع الأصل؟', 'عطورنا مستوحاة، تعيد إنتاج الروائح الرئيسية بتكلفة في المتناول.'],
+              ['هل تبيعون عطورًا أصلية؟', 'نعم، نبيع عطورًا أصلية 100% من كبرى دور العطور الدولية. نقدم ديكانت (10 مل) أو فلاكين كاملة أصلية.'],
               ['هل توصلون خارج المغرب؟', 'نعم — المغرب العربي، غرب إفريقيا، فرنسا. من 5 إلى 10 أيام.'],
               ['الإرجاع ممكن؟', '14 يومًا لكل فلكون مختوم. بعد هذه المدة لا يمكننا استرداده.'],
-            ] : [
+            ] : lang === 'fr' ? [
               ['Combien de temps dure un flacon 10 ml ?', 'Entre 6 semaines et 3 mois selon la fréquence — environ 100 à 150 sprays.'],
-              ['Quelle est la différence avec l\'original ?', 'Nos parfums sont des compositions inspirées, reproduisant les accords principaux à un coût accessible.'],
+              ['Vendez-vous des parfums originaux ?', 'Oui — nous vendons uniquement des parfums 100% authentiques issus des grandes maisons de parfumerie internationale. Nous proposons des décants (10 ml) ou des flacons originaux complets.'],
               ['Livrez-vous hors du Maroc ?', 'Oui — Maghreb, Afrique de l\'Ouest, France. Comptez 5 à 10 jours.'],
               ['Retours possibles ?', '14 jours pour tout flacon scellé. Passé ce délai, nous ne pouvons plus reprendre le produit.'],
+            ] : [
+              ['How long does a 10 ml bottle last?', 'Between 6 weeks and 3 months depending on use — about 100 to 150 sprays.'],
+              ['Do you sell original perfumes?', 'Yes — we sell 100% authentic perfumes sourced from the world\'s top fragrance houses. We offer decants (10 ml portions) or full original bottles.'],
+              ['Do you ship outside Morocco?', 'Yes — Maghreb, West Africa, France. Allow 5 to 10 days.'],
+              ['Can I return?', '14 days for any sealed bottle. After that, we can no longer accept returns.'],
             ]).map(([q, a]) => (
               <details key={q} style={{ padding: '1.5rem 0', borderBottom: '1px solid rgba(245,240,232,0.12)' }}>
                 <summary style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 400, cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
@@ -183,12 +190,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <style>{`
-        @media (max-width: 900px) {
-          .contact-grid, .faq-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
-          .form-name-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </motion.div>
   );
 }

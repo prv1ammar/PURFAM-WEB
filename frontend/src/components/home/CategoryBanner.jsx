@@ -7,6 +7,7 @@ import api from '@/services/api';
 function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
   const label = isAr ? (col.name?.ar || col.name?.en) : (col.name?.en || '');
   const desc  = isAr ? (col.description?.ar || col.description?.en) : (col.description?.en || '');
+
   const link  = col.slug ? `/shop?collection=${col.slug}` : '/shop';
 
   return (
@@ -17,6 +18,7 @@ function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
       transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
       onHoverStart={onEnter}
       onHoverEnd={onLeave}
+      className="collection-card"
       style={{ position: 'relative', width: '340px', height: '420px', overflow: 'hidden', borderRadius: '12px', cursor: 'pointer', flexShrink: 0 }}
     >
       <Link to={link} style={{ display: 'block', width: '100%', height: '100%' }}>
@@ -89,7 +91,8 @@ function CollectionCard({ col, i, isAr, hovered, onEnter, onLeave }) {
 
 export default function CategoryBanner() {
   const { i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const [hovered, setHovered] = useState(null);
   const [collections, setCollections] = useState([]);
 
@@ -117,16 +120,16 @@ export default function CategoryBanner() {
         >
           <div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--terracotta)', display: 'block', marginBottom: '1rem' }}>
-              {isAr ? '— تسوّق حسب المجموعة' : '— Trier par collection'}
+              {isAr ? '— تسوّق حسب المجموعة' : lang === 'fr' ? '— Trier par collection' : '— Shop by collection'}
             </span>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 300, letterSpacing: '-0.03em', margin: 0, lineHeight: 1, color: 'var(--charcoal)' }}>
-              {isAr ? (<>أربع <span style={{ fontStyle: 'italic' }}>مجموعات.</span></>) : (<>Les <span style={{ fontStyle: 'italic' }}>collections.</span></>)}
+              {isAr ? (<>أربع <span style={{ fontStyle: 'italic' }}>مجموعات.</span></>) : lang === 'fr' ? (<>Les <span style={{ fontStyle: 'italic' }}>collections.</span></>) : (<>Our <span style={{ fontStyle: 'italic' }}>collections.</span></>)}
             </h2>
           </div>
         </motion.div>
 
         {/* Grid */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', justifyContent: 'center' }}>
+        <div className="collection-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', justifyContent: 'center' }}>
           {collections.map((col, i) => (
             <CollectionCard
               key={col.id} col={col} i={i} isAr={isAr}
@@ -139,14 +142,6 @@ export default function CategoryBanner() {
 
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .collection-grid { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 480px) {
-          .collection-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }

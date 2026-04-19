@@ -7,7 +7,8 @@ const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTran
 
 export default function HeroSection() {
   const { i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
@@ -32,6 +33,7 @@ export default function HeroSection() {
 
       {/* ── Hero content ── */}
       <motion.div
+        className="hero-content-wrap"
         style={{ opacity, position: 'absolute', inset: 0, zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 3rem 6rem' }}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,11 +44,12 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 1.2 }}
+          className="hero-meta"
           style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3rem', ...MONO, fontSize: '0.62rem', color: 'rgba(245,240,232,0.5)' }}
         >
-          <span>{isAr ? 'إصدار رقم 04 · ربيع 2026' : 'Édition N°04 · P/É 2026'}</span>
-          <span>{isAr ? 'الدار البيضاء · الصويرة' : 'Casablanca · Essaouira'}</span>
-          <span>{isAr ? '130 عطر · 10 مل' : '130 fragrances · 10 ml'}</span>
+          <span>{isAr ? 'إصدار رقم 04 · ربيع 2026' : lang === 'fr' ? 'Édition N°04 · P/É 2026' : 'Edition N°04 · S/S 2026'}</span>
+          <span className="hero-meta-side">Casablanca · Maroc</span>
+          <span className="hero-meta-side">130 fragrances · 10 ml</span>
         </motion.div>
 
         {/* Main title */}
@@ -61,32 +64,36 @@ export default function HeroSection() {
         }}>
           {isAr ? (
             <>فن<br /><span style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>الأثر.</span></>
-          ) : (
+          ) : lang === 'fr' ? (
             <>L'art<br /><span style={{ fontStyle: 'italic', fontWeight: 200, color: 'var(--terracotta)' }}>du sillage.</span></>
+          ) : (
+            <>The art<br /><span style={{ fontStyle: 'italic', fontWeight: 200, color: 'var(--terracotta)' }}>of sillage.</span></>
           )}
         </h1>
 
         {/* Subtitle + CTA row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'end' }}>
+        <div className="hero-cta-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'end' }}>
           <p style={{ fontSize: '1.05rem', lineHeight: 1.7, color: 'rgba(245,240,232,0.75)', fontFamily: 'var(--font-sans)', fontWeight: 300, maxWidth: '420px' }}>
             {isAr
-              ? 'مجموعة سرية من 130 عطرًا مستوحى من أرقى دور العطور العالمية، معبأة في 10 مل.'
-              : 'Une sélection confidentielle de 130 fragrances d\'inspiration haute parfumerie, reconditionnées en format 10 ml.'}
+              ? 'مجموعة مختارة من 130 عطرًا أصيلًا من أرقى دور العطور العالمية، في فلاكين ديكانت 10 مل.'
+              : lang === 'fr'
+              ? 'Une sélection confidentielle de 130 parfums authentiques des plus grandes maisons mondiales, en décants 10 ml.'
+              : 'A curated selection of 130 authentic fragrances from the world\'s finest houses, available in 10 ml decants.'}
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '260px', marginLeft: isAr ? 0 : 'auto', marginRight: isAr ? 'auto' : 0 }}>
+          <div className="hero-cta-buttons" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '260px', marginLeft: isAr ? 0 : 'auto', marginRight: isAr ? 'auto' : 0 }}>
             <Link to="/shop" style={{
               display: 'block', textAlign: 'center', padding: '1rem 2rem',
               background: '#faf7f2', color: '#1a1918',
               ...MONO, fontSize: '0.62rem',
             }}>
-              {isAr ? 'اكتشف 130 عطرًا ←' : 'Découvrir les 130 →'}
+              {isAr ? 'اكتشف 130 عطرًا ←' : lang === 'fr' ? 'Découvrir les 130 →' : 'Discover 130 →'}
             </Link>
             <Link to="/about" style={{
               display: 'block', textAlign: 'center', padding: '1rem 2rem',
               border: '1px solid rgba(245,240,232,0.3)', color: 'rgba(245,240,232,0.75)',
               ...MONO, fontSize: '0.62rem',
             }}>
-              {isAr ? 'قصتنا' : 'Notre histoire'}
+              {isAr ? 'قصتنا' : lang === 'fr' ? 'Notre histoire' : 'Our Story'}
             </Link>
           </div>
         </div>

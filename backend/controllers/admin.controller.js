@@ -153,4 +153,29 @@ const removeProductFromCollection = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-module.exports = { createProduct, updateProduct, deleteProduct, getAllOrders, updateOrderStatus, getCollections, createCollection, updateCollection, deleteCollection, getCollectionProducts, addProductToCollection, removeProductFromCollection };
+// ── Site Settings ────────────────────────────────────────────────────────────
+const getSiteSettings = async (req, res, next) => {
+  try {
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'announcement')
+      .single();
+    if (error && error.code !== 'PGRST116') return next(error);
+    res.json({ settings: data?.value || null });
+  } catch (err) { next(err); }
+};
+
+const updateSiteSettings = async (req, res, next) => {
+  try {
+    const { data, error } = await supabase
+      .from('settings')
+      .upsert({ key: 'announcement', value: req.body, updated_at: new Date() }, { onConflict: 'key' })
+      .select()
+      .single();
+    if (error) return next(error);
+    res.json({ settings: data.value });
+  } catch (err) { next(err); }
+};
+
+module.exports = { createProduct, updateProduct, deleteProduct, getAllOrders, updateOrderStatus, getCollections, createCollection, updateCollection, deleteCollection, getCollectionProducts, addProductToCollection, removeProductFromCollection, getSiteSettings, updateSiteSettings };

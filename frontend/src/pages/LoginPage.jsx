@@ -11,7 +11,8 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,10 +57,10 @@ export default function LoginPage() {
         {/* Header */}
         <div style={{ marginBottom: '3rem' }}>
           <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--terracotta)', display: 'block', marginBottom: '1.25rem' }}>
-            {isAr ? '— ولوج آمن للمشرفين' : '— Accès sécurisé · Administrateurs'}
+            {isAr ? '— ولوج آمن للمشرفين' : lang === 'fr' ? '— Accès sécurisé · Administrateurs' : '— Secure Access · Administrators'}
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 300, lineHeight: 0.95, letterSpacing: '-0.03em', color: 'var(--charcoal)', margin: 0 }}>
-            {isAr ? (<>تسجيل<br /><span style={{ fontStyle: 'italic' }}>الدخول.</span></>) : (<>Se <span style={{ fontStyle: 'italic' }}>connecter.</span></>)}
+            {isAr ? (<>تسجيل<br /><span style={{ fontStyle: 'italic' }}>الدخول.</span></>) : lang === 'fr' ? (<>Se <span style={{ fontStyle: 'italic' }}>connecter.</span></>) : (<>Sign <span style={{ fontStyle: 'italic' }}>in.</span></>)}
           </h1>
         </div>
 
@@ -73,8 +74,8 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
           {[
-            { key: 'email',    label: isAr ? 'البريد الإلكتروني' : 'Email',           type: 'email' },
-            { key: 'password', label: isAr ? 'كلمة المرور'       : 'Mot de passe',    type: 'password' },
+            { key: 'email',    label: isAr ? 'البريد الإلكتروني' : 'Email',                                    type: 'email' },
+            { key: 'password', label: isAr ? 'كلمة المرور'       : lang === 'fr' ? 'Mot de passe' : 'Password', type: 'password' },
           ].map(field => (
             <div key={field.key}>
               <label style={{ ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', display: 'block', marginBottom: '0.5rem' }}>
@@ -102,12 +103,12 @@ export default function LoginPage() {
             onMouseOver={e => { if (!loading) e.currentTarget.style.background = 'var(--terracotta)'; }}
             onMouseOut={e => { if (!loading) e.currentTarget.style.background = 'var(--charcoal)'; }}
           >
-            {loading ? '...' : (isAr ? 'دخول ←' : 'Se connecter →')}
+            {loading ? '...' : (isAr ? 'دخول ←' : lang === 'fr' ? 'Se connecter →' : 'Sign in →')}
           </button>
         </form>
 
         <p style={{ marginTop: '2rem', ...MONO, fontSize: '0.6rem', color: 'var(--graphite)', textAlign: 'center' }}>
-          {isAr ? 'للموظفين المخولين فقط' : 'Accès réservé au personnel autorisé'}
+          {isAr ? 'للموظفين المخولين فقط' : lang === 'fr' ? 'Accès réservé au personnel autorisé' : 'For authorized staff only'}
         </p>
       </motion.div>
     </div>

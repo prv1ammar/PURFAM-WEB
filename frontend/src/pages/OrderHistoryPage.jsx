@@ -6,7 +6,8 @@ import api from '@/services/api';
 
 export default function OrderHistoryPage() {
   const { t, i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +41,7 @@ export default function OrderHistoryPage() {
           </div>
         ) : orders.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-            <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>📦</p>
+            <div style={{ width: '40px', height: '1px', background: 'var(--color-border)', margin: '0 auto 1.5rem' }} />
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: 'var(--color-gray)', marginBottom: '1.5rem' }}>
               {t('orders.noOrders')}
             </p>

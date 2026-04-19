@@ -503,3 +503,77 @@ p { font-size: 1rem; color: var(--ink); line-height: 1.7; }
   top: 0;
   z-index: 9999;
 }
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE  (768px tablet · 480px phone)
+═══════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Announcement bar */
+  .announce-bar { padding: 8px 1rem; letter-spacing: 0.08em; font-size: 0.6rem; }
+  .announce-center-text { display: none !important; }
+
+  /* Editorial nav */
+  .editorial-nav { padding: 0 1rem; }
+  .nav-desktop-links { display: none !important; }
+
+  /* Containers */
+  .container-luxe { padding: 0 1.25rem; }
+  .section-padding { padding: 3rem 0; }
+
+  /* Hero */
+  .hero-content-wrap { padding: 0 1.25rem 3.5rem !important; }
+  .hero-meta { gap: 0.4rem !important; }
+  .hero-meta .hero-meta-side { display: none; }
+  .hero-cta-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .hero-cta-grid p { max-width: 100% !important; }
+  .hero-cta-grid .hero-cta-buttons { max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; }
+
+  /* Brand story */
+  .brand-quote-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+  .brand-pillars-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; margin-top: 3rem !important; padding-top: 2.5rem !important; }
+
+  /* Newsletter */
+  .newsletter-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+
+  /* Stats ticker */
+  .stats-ticker { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Collection cards */
+  .collection-grid { flex-direction: column !important; align-items: stretch !important; }
+  .collection-card { width: 100% !important; max-width: 100% !important; height: 260px !important; }
+
+  /* Footer */
+  .footer-wordmark { padding: 2.5rem 1.25rem 2rem !important; }
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; padding: 2.5rem 1.25rem !important; }
+  .footer-bottom { flex-direction: column !important; gap: 0.4rem !important; text-align: center !important; padding: 1.25rem 1.25rem !important; }
+
+  /* Shop */
+  .shop-layout-grid { grid-template-columns: 1fr !important; }
+  .desktop-filters { display: none !important; }
+  .shop-search { max-width: 100% !important; }
+
+  /* Product detail */
+  .product-detail-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+
+  /* About — timeline rows */
+  .timeline-row { grid-template-columns: 1fr !important; gap: 0.25rem !important; padding: 1.5rem 0 !important; }
+  .timeline-year { font-size: 2rem !important; }
+
+  /* About — values */
+  .values-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+
+  /* Contact */
+  .contact-form-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+  .contact-name-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .contact-faq-grid  { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+}
+
+@media (max-width: 480px) {
+  .announce-bar { padding: 7px 0.75rem; font-size: 0.55rem; }
+  .container-luxe { padding: 0 1rem; }
+  .footer-grid { grid-template-columns: 1fr !important; }
+  .stats-ticker { grid-template-columns: repeat(2, 1fr) !important; }
+  .hero-content-wrap { padding: 0 1rem 3rem !important; }
+  .collection-card { height: 240px !important; }
+}

@@ -8,7 +8,8 @@ import CartSummary from './CartSummary';
 export default function CartDrawer() {
   const { cartOpen, setCartOpen, items } = useCart();
   const { t, i18n } = useTranslation();
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
 
   return (
     <AnimatePresence>
@@ -17,7 +18,7 @@ export default function CartDrawer() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setCartOpen(false)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1100 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10000 }}
           />
           <motion.div
             initial={{ x: isAr ? '-100%' : '100%' }}
@@ -30,7 +31,7 @@ export default function CartDrawer() {
               background: 'var(--color-dark)',
               borderLeft: isAr ? 'none' : '1px solid var(--color-border)',
               borderRight: isAr ? '1px solid var(--color-border)' : 'none',
-              zIndex: 1101, display: 'flex', flexDirection: 'column',
+              zIndex: 10001, display: 'flex', flexDirection: 'column',
               direction: isAr ? 'rtl' : 'ltr',
             }}>
 
@@ -49,9 +50,9 @@ export default function CartDrawer() {
             <div style={{ flex: 1, overflowY: 'auto', padding: '1rem 1.5rem' }}>
               {items.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--color-gray)' }}>
-                  <p style={{ fontSize: '3rem', marginBottom: '1rem' }}>🛍️</p>
+                  <div style={{ width: '40px', height: '1px', background: 'var(--color-border)', margin: '0 auto 1.5rem' }} />
                   <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', marginBottom: '1.5rem' }}>
-                    {isAr ? 'سلتك فارغة' : 'Your cart is empty'}
+                    {isAr ? 'سلتك فارغة' : lang === 'fr' ? 'Votre panier est vide' : 'Your cart is empty'}
                   </p>
                   <Link to="/shop" onClick={() => setCartOpen(false)} style={{
                     display: 'inline-block', padding: '0.75rem 2rem',

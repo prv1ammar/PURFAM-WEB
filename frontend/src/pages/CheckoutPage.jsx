@@ -7,7 +7,8 @@ import api from '@/services/api';
 
 export default function CheckoutPage() {
   const { t, i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const navigate = useNavigate();
   const { items, totalPrice, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
@@ -72,7 +73,7 @@ export default function CheckoutPage() {
             }}>
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
               style={{ textAlign: 'center', padding: '3rem' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✅</div>
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1px solid var(--color-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', color: 'var(--color-gold)', fontSize: '1.3rem' }}>✓</div>
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--color-gold)', marginBottom: '0.75rem' }}>
                 {isAr ? 'تم استلام طلبك!' : 'Order Confirmed!'}
               </h2>
@@ -128,7 +129,6 @@ export default function CheckoutPage() {
 
               {/* Payment method badge */}
               <div style={{ marginTop: '2rem', padding: '1rem 1.25rem', background: 'rgba(200,149,26,0.08)', border: '1px solid rgba(200,149,26,0.25)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '1.4rem' }}>💵</span>
                 <div>
                   <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-off-white)', margin: 0 }}>
                     {isAr ? 'الدفع عند الاستلام' : 'Cash on Delivery'}

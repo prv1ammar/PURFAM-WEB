@@ -8,6 +8,8 @@ import { CartProvider } from '@/context/CartContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 import Layout from '@/components/layout/Layout';
+import ScrollToTop from '@/components/utils/ScrollToTop';
+import ChatWidget from '@/components/chat/ChatWidget';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AdminRoute from '@/components/admin/AdminRoute';
 
@@ -31,12 +33,15 @@ function AppContent() {
   // Update document dir and lang when language changes
   useEffect(() => {
     const lang = i18n.language;
-    const isAr = lang === 'ar';
+    const isRtl = lang === 'ar' || lang === 'dar';
     document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
   }, [i18n.language]);
 
   return (
+    <>
+    <ScrollToTop />
+    <ChatWidget />
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Layout />}>
@@ -62,6 +67,7 @@ function AppContent() {
         </Route>
       </Routes>
     </AnimatePresence>
+    </>
   );
 }
 

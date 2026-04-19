@@ -5,15 +5,17 @@ export default function ProductGrid({ products, loading }) {
     return (
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-        gap: '2rem',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '2rem 1.5rem',
       }}>
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i}>
-            <div className="skeleton" style={{ aspectRatio: '3/4', borderRadius: 'var(--radius-sm)' }} />
-            <div className="skeleton" style={{ height: '14px', marginTop: '1rem', width: '60%' }} />
-            <div className="skeleton" style={{ height: '20px', marginTop: '0.5rem', width: '80%' }} />
-            <div className="skeleton" style={{ height: '16px', marginTop: '0.5rem', width: '40%' }} />
+            <div className="skeleton" style={{ aspectRatio: '3/4' }} />
+            <div style={{ paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div className="skeleton" style={{ height: '10px', width: '35%' }} />
+              <div className="skeleton" style={{ height: '18px', width: '75%' }} />
+              <div className="skeleton" style={{ height: '16px', width: '30%', marginTop: '0.25rem' }} />
+            </div>
           </div>
         ))}
       </div>
@@ -23,11 +25,11 @@ export default function ProductGrid({ products, loading }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-      gap: '2rem',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+      gap: '2.5rem 2rem',
     }}>
-      {products.map(product => (
-        <ProductCard key={product._id || product.id} product={product} />
+      {products.map((product, i) => (
+        <ProductCard key={product._id || product.id} product={product} index={i} />
       ))}
     </div>
   );

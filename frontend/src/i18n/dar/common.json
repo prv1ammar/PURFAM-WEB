@@ -1,0 +1,88 @@
+{
+  "brand": "لوكس إيسنس",
+  "tagline": "فين كيتلاقاو الريحة والفن",
+  "nav": {
+    "home": "الصفحة الرئيسية",
+    "shop": "الحانوت",
+    "about": "من حنا",
+    "contact": "تواصل معنا",
+    "design": "درس ديزاين",
+    "cart": "السلة",
+    "login": "دخول",
+    "register": "سجل",
+    "logout": "خروج",
+    "myOrders": "طلباتي",
+    "admin": "الإدارة"
+  },
+  "btn": {
+    "shopNow": "تسوق دابا",
+    "discover": "اكتشف",
+    "addToCart": "زيد للسلة",
+    "addedToCart": "تزاد!",
+    "viewProduct": "شوف",
+    "checkout": "الدفع",
+    "placeOrder": "أكد الطلب",
+    "continue": "كمل",
+    "back": "ارجع",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "عدل",
+    "send": "صيفط الرسالة",
+    "subscribe": "اشترك",
+    "loadMore": "حمل كتر",
+    "viewAll": "شوف كلشي"
+  },
+  "labels": {
+    "price": "الثمن",
+    "from": "من",
+    "size": "الحجم",
+    "qty": "الكمية",
+    "stock": "متوفر",
+    "outOfStock": "ماشي متوفر",
+    "brand": "الماركة",
+    "gender": "الفئة",
+    "category": "النوع",
+    "total": "الإجمالي",
+    "subtotal": "المجموع",
+    "shipping": "التوصيل",
+    "free": "بلاش",
+    "tax": "الضريبة",
+    "freeShippingOver": "توصيل بلاش من 400 درهم",
+    "currency": "درهم"
+  },
+  "gender": {
+    "all": "كلشي",
+    "women": "نساء",
+    "men": "رجال"
+  },
+  "category": {
+    "all": "كلشي",
+    "floral": "زهري",
+    "woody": "خشبي",
+    "oriental": "شرقي",
+    "fresh": "فريش",
+    "citrus": "حامض",
+    "gourmand": "حلو"
+  },
+  "status": {
+    "pending": "في الانتظار",
+    "paid": "مدفوع",
+    "processing": "كيتعالج",
+    "shipped": "صافط",
+    "delivered": "وصل",
+    "cancelled": "ملغي"
+  },
+  "error": {
+    "general": "وقع شي مشكل. عاود حاول.",
+    "notFound": "الصفحة ماتلقاتش",
+    "unauthorized": "دخل للحساب ديالك باش تكمل",
+    "networkError": "مشكل فالاتصال. شوف النت ديالك."
+  },
+  "success": {
+    "addedToCart": "تزاد للسلة!",
+    "orderPlaced": "الطلب تأكد بنجاح!",
+    "messageSent": "الرسالة توصلت!",
+    "subscribed": "شكراً على الاشتراك!"
+  }
+}

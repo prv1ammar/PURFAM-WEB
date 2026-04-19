@@ -1,0 +1,88 @@
+{
+  "brand": "LUXE ESSENCE",
+  "tagline": "Là où le parfum rencontre l'art",
+  "nav": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "about": "La Maison",
+    "contact": "Contact",
+    "design": "Design",
+    "cart": "Panier",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "myOrders": "Mes Commandes",
+    "admin": "Admin"
+  },
+  "btn": {
+    "shopNow": "Découvrir",
+    "discover": "Explorer",
+    "addToCart": "Ajouter au panier",
+    "addedToCart": "Ajouté !",
+    "viewProduct": "Voir",
+    "checkout": "Commander",
+    "placeOrder": "Passer la commande",
+    "continue": "Continuer",
+    "back": "Retour",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "send": "Envoyer le message",
+    "subscribe": "S'abonner",
+    "loadMore": "Charger plus",
+    "viewAll": "Tout voir"
+  },
+  "labels": {
+    "price": "Prix",
+    "from": "À partir de",
+    "size": "Taille",
+    "qty": "Quantité",
+    "stock": "En stock",
+    "outOfStock": "Rupture de stock",
+    "brand": "Marque",
+    "gender": "Genre",
+    "category": "Catégorie",
+    "total": "Total",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "free": "Offerte",
+    "tax": "Taxe",
+    "freeShippingOver": "Livraison offerte dès 500 dh",
+    "currency": "dh"
+  },
+  "gender": {
+    "all": "Tous",
+    "women": "Femme",
+    "men": "Homme"
+  },
+  "category": {
+    "all": "Tous",
+    "floral": "Floral",
+    "woody": "Boisé",
+    "oriental": "Oriental",
+    "fresh": "Frais",
+    "citrus": "Agrumes",
+    "gourmand": "Gourmand"
+  },
+  "status": {
+    "pending": "En attente",
+    "paid": "Payé",
+    "processing": "En traitement",
+    "shipped": "Expédié",
+    "delivered": "Livré",
+    "cancelled": "Annulé"
+  },
+  "error": {
+    "general": "Une erreur est survenue. Veuillez réessayer.",
+    "notFound": "Page introuvable",
+    "unauthorized": "Veuillez vous connecter pour continuer",
+    "networkError": "Erreur réseau. Vérifiez votre connexion."
+  },
+  "success": {
+    "addedToCart": "Ajouté au panier avec succès !",
+    "orderPlaced": "Commande passée avec succès !",
+    "messageSent": "Message envoyé avec succès !",
+    "subscribed": "Merci pour votre inscription !"
+  }
+}

@@ -9,7 +9,8 @@ import ProductFilters from '@/components/products/ProductFilters';
 
 export default function ShopPage() {
   const { t, i18n } = useTranslation('pages');
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
@@ -64,10 +65,10 @@ export default function ShopPage() {
       <section style={{ padding: '5rem 0 3rem' }}>
         <div className="container-luxe">
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--terracotta)', display: 'block', marginBottom: '1.5rem' }}>
-            {isAr ? `— الكتالوج / 130 عطرًا` : '— Le catalogue / 130 parfums'}
+            {isAr ? `— الكتالوج / 130 عطرًا` : lang === 'fr' ? '— Le catalogue / 130 parfums' : '— The catalogue / 130 fragrances'}
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3rem, 9vw, 7rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: '0 0 2rem' }}>
-            {isAr ? (<>جميع <span style={{ fontStyle: 'italic' }}>العطور.</span></>) : (<>Tous les <span style={{ fontStyle: 'italic' }}>parfums.</span></>)}
+            {isAr ? (<>جميع <span style={{ fontStyle: 'italic' }}>العطور.</span></>) : lang === 'fr' ? (<>Tous les <span style={{ fontStyle: 'italic' }}>parfums.</span></>) : (<>All <span style={{ fontStyle: 'italic' }}>fragrances.</span></>)}
           </h1>
         </div>
       </section>
@@ -77,7 +78,8 @@ export default function ShopPage() {
         <div style={{ marginBottom: '2rem' }}>
           <input
             type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder={isAr ? 'ابحث عن عطر...' : 'Rechercher une fragrance...'}
+            placeholder={isAr ? 'ابحث عن عطر...' : lang === 'fr' ? 'Rechercher une fragrance...' : 'Search a fragrance...'}
+            className="shop-search"
             style={{
               width: '100%', maxWidth: '400px', padding: '0.75rem 1.25rem',
               background: 'var(--paper)', border: '1px solid var(--line)',
@@ -89,7 +91,7 @@ export default function ShopPage() {
           />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '2.5rem', alignItems: 'start' }}>
+        <div className="shop-layout-grid" style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: '2.5rem', alignItems: 'start' }}>
           {/* Filters - desktop */}
           <div className="desktop-filters">
             <ProductFilters filters={filters} onChange={handleFilterChange} />

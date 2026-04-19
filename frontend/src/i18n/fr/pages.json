@@ -1,0 +1,91 @@
+{
+  "home": {
+    "heroTitle": "L'Art Sublime du",
+    "heroTitleAccent": "Parfum",
+    "heroSubtitle": "Découvrez une sélection exquise de parfums authentiques issus des plus grandes maisons mondiales, pour ceux qui définissent l'extraordinaire.",
+    "featuredTitle": "Le Choix du Connaisseur",
+    "featuredSubtitle": "Sélection Exquise",
+    "categoryTitle": "Les Collections",
+    "categorySubtitle": "Un Voyage Olfactif",
+    "womenCollection": "Pour Femme",
+    "menCollection": "Pour Homme",
+    "storyTitle": "Notre Héritage",
+    "storySubtitle": "Définir le Luxe",
+    "storyText": "Nous croyons qu'un parfum d'exception est bien plus qu'un simple arôme — c'est une aura invisible, un souvenir persistant, et une déclaration silencieuse d'élégance. Luxe Essence a été fondé sur la conviction que le meilleur de l'art olfactif doit être accessible aux véritables connaisseurs.",
+    "newsletterTitle": "Rejoindre le Cercle Privé",
+    "newsletterSubtitle": "Entrez votre email pour recevoir des invitations exclusives et un accès anticipé aux nouvelles arrivées.",
+    "newsletterPlaceholder": "Adresse email"
+  },
+  "about": {
+    "heroTitle": "Notre Histoire",
+    "missionTitle": "Notre Mission",
+    "missionText": "Chez Luxe Essence, nous sommes passionnés par la connexion des personnes avec des fragrances extraordinaires des maisons les plus prestigieuses du monde. Chaque flacon que nous vendons est 100% authentique, sourcé directement auprès de distributeurs agréés.",
+    "valuesTitle": "Nos Valeurs",
+    "value1Title": "Authenticité",
+    "value1Text": "Chaque fragrance est garantie 100% originale de sources certifiées.",
+    "value2Title": "Excellence",
+    "value2Text": "Nous sélectionnons uniquement les meilleures fragrances des maisons les plus prestigieuses.",
+    "value3Title": "Service",
+    "value3Text": "Votre satisfaction est notre priorité. Nous offrons des conseils experts et une expérience d'achat fluide."
+  },
+  "contact": {
+    "heroTitle": "Nous Contacter",
+    "subtitle": "Nous serions ravis de vous entendre",
+    "name": "Votre Nom",
+    "email": "Adresse Email",
+    "subject": "Sujet",
+    "message": "Votre Message",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+    "infoTitle": "Informations de Contact",
+    "addressLabel": "Adresse",
+    "addressValue": "Maroc",
+    "phoneLabel": "Téléphone",
+    "emailLabel": "Email",
+    "hoursLabel": "Horaires",
+    "hoursValue": "Lun – Sam : 9h – 21h"
+  },
+  "shop": {
+    "title": "Toutes les Fragrances",
+    "subtitle": "Collection",
+    "filters": "Filtres",
+    "sortBy": "Trier par",
+    "sortNewest": "Plus récents",
+    "sortPriceAsc": "Prix : croissant",
+    "sortPriceDesc": "Prix : décroissant",
+    "sortPopular": "Plus populaires",
+    "noResults": "Aucune fragrance ne correspond à vos filtres.",
+    "clearFilters": "Effacer les filtres",
+    "priceRange": "Fourchette de prix",
+    "results": "résultats"
+  },
+  "checkout": {
+    "title": "Commander",
+    "shippingInfo": "Informations de livraison",
+    "paymentInfo": "Informations de paiement",
+    "orderSummary": "Récapitulatif",
+    "fullName": "Nom complet",
+    "address": "Adresse",
+    "city": "Ville",
+    "country": "Pays",
+    "phone": "Numéro de téléphone",
+    "cardDetails": "Détails de la carte",
+    "secure": "Sécurisé"
+  },
+  "orders": {
+    "title": "Mes Commandes",
+    "subtitle": "Historique des commandes",
+    "orderId": "N° de commande",
+    "date": "Date",
+    "items": "Articles",
+    "total": "Total",
+    "status": "Statut",
+    "noOrders": "Vous n'avez pas encore passé de commande.",
+    "startShopping": "Commencer mes achats"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "Page introuvable",
+    "text": "La page que vous recherchez n'existe pas.",
+    "back": "Retour à l'accueil"
+  }
+}

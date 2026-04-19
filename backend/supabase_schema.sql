@@ -71,6 +71,13 @@ create table if not exists orders (
   updated_at         timestamptz default now()
 );
 
+-- ─── SITE SETTINGS ───────────────────────────────────────────
+create table if not exists settings (
+  key        text primary key,
+  value      jsonb not null default '{}',
+  updated_at timestamptz default now()
+);
+
 -- ─── AUTO-UPDATE updated_at ──────────────────────────────────
 create or replace function update_updated_at()
 returns trigger language plpgsql as $$

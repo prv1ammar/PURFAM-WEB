@@ -1,0 +1,91 @@
+{
+  "home": {
+    "heroTitle": "فن العطور",
+    "heroTitleAccent": "الخالد",
+    "heroSubtitle": "اكتشف أحسن العطور الأصلية من أكبر دور العطور فالعالم.",
+    "featuredTitle": "اختيارات الخبراء",
+    "featuredSubtitle": "مجموعة استثنائية",
+    "categoryTitle": "المجموعات",
+    "categorySubtitle": "رحلة فعالم الروائح",
+    "womenCollection": "نساء",
+    "menCollection": "رجال",
+    "storyTitle": "قصتنا",
+    "storySubtitle": "تعريف الفخامة",
+    "storyText": "كنامنو بلي العطر المزيان هو أكتر من ريحة — هو هالة خفية، ذكرى باقية، وتعبير صامت على الأناقة.",
+    "newsletterTitle": "انضم للدائرة الخاصة ديالنا",
+    "newsletterSubtitle": "اشترك باش تولي كاع خبر بالمجموعات الجديدة.",
+    "newsletterPlaceholder": "الإيميل ديالك"
+  },
+  "about": {
+    "heroTitle": "قصتنا",
+    "missionTitle": "مهمتنا",
+    "missionText": "فـ Luxe Essence كنربطو الناس بعطور استثنائية من أكبر دور العطور. كل قارورة أصلية 100%.",
+    "valuesTitle": "قيمنا",
+    "value1Title": "الأصالة",
+    "value1Text": "كل عطر مضمون أصلي 100% من مصادر معتمدة.",
+    "value2Title": "التميز",
+    "value2Text": "كنختارو غير أحسن العطور من أشهر الدور.",
+    "value3Title": "الخدمة",
+    "value3Text": "الرضا ديالك هو الأولوية ديالنا."
+  },
+  "contact": {
+    "heroTitle": "تواصل معنا",
+    "subtitle": "يسعدنا نسمعو منك",
+    "name": "سميتك",
+    "email": "الإيميل",
+    "subject": "الموضوع",
+    "message": "الرسالة",
+    "messagePlaceholder": "كيفاش نقدرو نعاونك؟",
+    "infoTitle": "معلومات التواصل",
+    "addressLabel": "العنوان",
+    "addressValue": "الدار البيضاء، المغرب",
+    "phoneLabel": "الهاتف",
+    "emailLabel": "الإيميل",
+    "hoursLabel": "أوقات العمل",
+    "hoursValue": "الإثنين – السبت: 10 صباحاً – 8 مساءً"
+  },
+  "shop": {
+    "title": "جميع العطور",
+    "subtitle": "تسوق المجموعة",
+    "filters": "الفلاتر",
+    "sortBy": "رتب حسب",
+    "sortNewest": "الأحدث",
+    "sortPriceAsc": "الثمن: من الأرخص",
+    "sortPriceDesc": "الثمن: من الأغلى",
+    "sortPopular": "الأكثر مبيعاً",
+    "noResults": "ماكاينش عطور تطابق الفلاتر.",
+    "clearFilters": "امسح الفلاتر",
+    "priceRange": "نطاق الثمن",
+    "results": "نتيجة"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "shippingInfo": "معلومات التوصيل",
+    "paymentInfo": "معلومات الدفع",
+    "orderSummary": "ملخص الطلب",
+    "fullName": "الاسم الكامل",
+    "address": "العنوان",
+    "city": "المدينة",
+    "country": "البلد",
+    "phone": "رقم الهاتف",
+    "cardDetails": "بيانات البطاقة",
+    "secure": "مؤمن بواسطة Stripe"
+  },
+  "orders": {
+    "title": "طلباتي",
+    "subtitle": "سجل الطلبات",
+    "orderId": "رقم الطلب",
+    "date": "التاريخ",
+    "items": "المنتجات",
+    "total": "الإجمالي",
+    "status": "الحالة",
+    "noOrders": "ماعندكش طلبات بعد.",
+    "startShopping": "ابدأ التسوق"
+  },
+  "notFound": {
+    "title": "404",
+    "subtitle": "الصفحة ماتلقاتش",
+    "text": "الصفحة اللي كتقلب عليها ماكاينش.",
+    "back": "ارجع للرئيسية"
+  }
+}

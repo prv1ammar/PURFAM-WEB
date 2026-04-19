@@ -4,7 +4,8 @@ const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.18em', textTran
 
 export default function ProductFilters({ filters, onChange }) {
   const { t, i18n } = useTranslation();
-  const isAr = i18n.language === 'ar';
+  const lang = i18n.language;
+  const isAr = lang === 'ar';
 
   const genders    = ['', 'women', 'men'];
   const categories = ['', 'floral', 'woody', 'oriental', 'fresh', 'citrus', 'gourmand'];
@@ -29,12 +30,12 @@ export default function ProductFilters({ filters, onChange }) {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--line)' }}>
         <span style={{ ...MONO, fontSize: '0.65rem', color: 'var(--charcoal)' }}>
-          {isAr ? 'فلاتر' : 'Filtres'}
+          {isAr ? 'فلاتر' : lang === 'fr' ? 'Filtres' : 'Filters'}
         </span>
         {(filters.gender || filters.category || filters.size || filters.minSize) && (
           <button onClick={() => onChange({ gender: '', category: '', sort: filters.sort, size: '', minSize: '' })}
             style={{ ...MONO, fontSize: '0.58rem', color: 'var(--terracotta)', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid var(--terracotta)', paddingBottom: '1px' }}>
-            {isAr ? 'مسح' : 'Effacer'}
+            {isAr ? 'مسح' : lang === 'fr' ? 'Effacer' : 'Clear'}
           </button>
         )}
       </div>
@@ -42,7 +43,7 @@ export default function ProductFilters({ filters, onChange }) {
       {/* Gender */}
       <div style={{ marginBottom: '1.75rem' }}>
         <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
-          {isAr ? 'الجنس' : 'Genre'}
+          {isAr ? 'الجنس' : lang === 'fr' ? 'Genre' : 'Gender'}
         </span>
         {genders.map(g => (
           <button key={g} onClick={() => onChange({ ...filters, gender: g })} style={btnStyle(filters.gender === g)}>
@@ -54,7 +55,7 @@ export default function ProductFilters({ filters, onChange }) {
       {/* Category */}
       <div style={{ marginBottom: '1.75rem' }}>
         <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
-          {isAr ? 'الفئة' : 'Famille'}
+          {isAr ? 'الفئة' : lang === 'fr' ? 'Famille' : 'Category'}
         </span>
         {categories.map(c => (
           <button key={c} onClick={() => onChange({ ...filters, category: c })} style={btnStyle(filters.category === c)}>
@@ -66,12 +67,12 @@ export default function ProductFilters({ filters, onChange }) {
       {/* Sort */}
       <div>
         <span style={{ ...MONO, fontSize: '0.6rem', color: 'var(--terracotta)', display: 'block', marginBottom: '0.75rem' }}>
-          {isAr ? 'الترتيب' : 'Trier par'}
+          {isAr ? 'الترتيب' : lang === 'fr' ? 'Trier par' : 'Sort by'}
         </span>
         {[
-          { val: '-createdAt', label: isAr ? 'الأحدث' : 'Les plus récents' },
-          { val: 'price',      label: isAr ? 'السعر ↑' : 'Prix croissant' },
-          { val: '-price',     label: isAr ? 'السعر ↓' : 'Prix décroissant' },
+          { val: '-createdAt', label: isAr ? 'الأحدث' : lang === 'fr' ? 'Les plus récents' : 'Newest' },
+          { val: 'price',      label: isAr ? 'السعر ↑' : lang === 'fr' ? 'Prix croissant' : 'Price ↑' },
+          { val: '-price',     label: isAr ? 'السعر ↓' : lang === 'fr' ? 'Prix décroissant' : 'Price ↓' },
         ].map(s => (
           <button key={s.val} onClick={() => onChange({ ...filters, sort: s.val })} style={btnStyle(filters.sort === s.val)}>
             {s.label}

@@ -9,6 +9,9 @@ const multer = require('multer');
 
 dotenv.config();
 
+const connectDB = require('./config/db');
+connectDB();
+
 const app = express();
 
 // Stripe webhook needs raw body — mount BEFORE json middleware
@@ -51,6 +54,9 @@ app.use('/api/cart', require('./routes/cart.routes'));
 app.use('/api/orders', require('./routes/order.routes'));
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', require('./routes/admin.routes'));
+
+// Public settings endpoint (no auth required)
+app.get('/api/settings', require('./controllers/admin.controller').getSiteSettings);
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Luxe Essence API running' }));
