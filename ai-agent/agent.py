@@ -2,14 +2,18 @@ import os
 import re
 import json
 import time
-from groq import Groq, BadRequestError, RateLimitError, InternalServerError, APIConnectionError
+from openai import OpenAI, BadRequestError, RateLimitError, InternalServerError, APIConnectionError
 from dotenv import load_dotenv
 from supabase import create_client
 
 load_dotenv()
 
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_SERVICE_KEY"))
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL", "https://toknroutertybot.tybotflow.com/"),
+)
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 
 SYSTEM_PROMPT = """You are Layla (ليلى), a warm, smart, and passionate perfume advisor at Luxe Essence — a luxury perfume boutique in Casablanca, Morocco.
 
@@ -292,9 +296,9 @@ def _clean(text: str) -> str:
 
 # ── Groq call with retry + fallback ───────────────────────────────────────────
 
-def _groq_call(messages, tools=None, tool_choice="auto"):
+def _ai_call(messages, tools=None, tool_choice="auto"):
     kwargs = dict(
-        model="llama-3.3-70b-versatile",
+        model=MODEL,
         messages=messages,
         temperature=0.7,
         max_tokens=1024,
@@ -305,17 +309,17 @@ def _groq_call(messages, tools=None, tool_choice="auto"):
 
     for attempt in range(3):
         try:
-            return groq_client.chat.completions.create(**kwargs)
+            return client.chat.completions.create(**kwargs)
 
         except BadRequestError:
             # Malformed tool call — drop tools and retry once
             kwargs.pop("tools", None)
             kwargs.pop("tool_choice", None)
-            return groq_client.chat.completions.create(**kwargs)
+            return client.chat.completions.create(**kwargs)
 
         except RateLimitError:
             if attempt < 2:
-                time.sleep(2 ** attempt)   # 1s, then 2s
+                time.sleep(2 ** attempt)
                 continue
             raise
 
@@ -325,7 +329,7 @@ def _groq_call(messages, tools=None, tool_choice="auto"):
                 continue
             raise
 
-    raise RuntimeError("Groq call failed after retries")
+    raise RuntimeError("AI call failed after retries")
 
 
 # ── Main chat function ─────────────────────────────────────────────────────────
@@ -343,7 +347,7 @@ def run_chat(message: str, history: list) -> tuple[str, list | None]:
         products = None
 
         # Step 1 — call with tools
-        response = _groq_call(messages, tools=TOOLS, tool_choice="auto")
+        response = _ai_call(messages, tools=TOOLS, tool_choice="auto")
         choice = response.choices[0]
         msg = choice.message
 
@@ -386,7 +390,7 @@ def run_chat(message: str, history: list) -> tuple[str, list | None]:
                 messages.append({"role": "tool", "tool_call_id": tc.id, "content": result})
 
             # Step 3 — final call without tools
-            final = _groq_call(messages)
+            final = _ai_call(messages)
             return _clean(final.choices[0].message.content or ""), products
 
         return _clean(msg.content or ""), products
