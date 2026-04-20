@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
-const multer = require('multer');
 
 dotenv.config();
 
@@ -18,23 +17,36 @@ const app = express();
 const paymentRoutes = require('./routes/payment.routes');
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }), paymentRoutes);
 
-// Uploads folder
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
-app.use('/uploads', express.static(uploadsDir));
+// Upload via Cloudinary (persistent cloud storage)
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, '_')}`),
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 const { protect } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
-app.post('/api/admin/upload', protect, admin, upload.single('image'), (req, res) => {
+
+app.post('/api/admin/upload', protect, admin, upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-  const url = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-  res.json({ url });
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: 'luxe-essence', resource_type: 'image' },
+        (err, result) => err ? reject(err) : resolve(result)
+      );
+      stream.end(req.file.buffer);
+    });
+    res.json({ url: result.secure_url });
+  } catch (err) {
+    console.error('[Upload] Cloudinary error:', err.message);
+    res.status(500).json({ message: 'Upload failed' });
+  }
 });
 
 // Global middleware
