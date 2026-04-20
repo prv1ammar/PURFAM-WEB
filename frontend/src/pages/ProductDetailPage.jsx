@@ -113,7 +113,7 @@ export default function ProductDetailPage() {
                       color: selectedSize === s.ml ? 'var(--color-gold)' : 'var(--color-off-white)',
                       borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
                     }}>
-                    {s.ml}ml — ${s.price}
+                    {s.ml}ml — {s.price} dh
                   </button>
                 ))}
               </div>
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
 
             {/* Price */}
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
-              ${selectedSizeObj?.price || product.sizes[0]?.price}
+              {selectedSizeObj?.price || product.sizes[0]?.price} dh
             </p>
 
             {/* Qty + Add */}
