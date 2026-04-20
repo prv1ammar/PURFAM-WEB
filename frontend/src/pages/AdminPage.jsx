@@ -112,7 +112,7 @@ export default function AdminPage() {
     try {
       const fd = new FormData(); fd.append('image', file);
       const token = localStorage.getItem('luxe_token');
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
       const data = await res.json();
       if (data.url) setSettingsForm(v => ({ ...v, heroImage: data.url }));
     } finally { setUploadingHeroImg(false); }
@@ -144,7 +144,7 @@ export default function AdminPage() {
     try {
       const fd = new FormData(); fd.append('image', file);
       const token = localStorage.getItem('luxe_token');
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
       const data = await res.json();
       if (data.url) setColForm(v => ({ ...v, image: data.url }));
     } finally { setUploadingColImg(false); }
@@ -220,7 +220,7 @@ export default function AdminPage() {
     try {
       const fd = new FormData(); fd.append('image', file);
       const token = localStorage.getItem('luxe_token');
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
       const data = await res.json();
       if (data.url) setImages(prev => [...prev, data.url]);
     } finally { setUploadingImg(false); }
