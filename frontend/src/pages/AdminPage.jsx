@@ -223,6 +223,9 @@ export default function AdminPage() {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://purfam-web-production.up.railway.app'}/api/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: fd });
       const data = await res.json();
       if (data.url) setImages(prev => [...prev, data.url]);
+      else alert('Upload failed: ' + (data.message || 'Unknown error'));
+    } catch (err) {
+      alert('Upload error: ' + err.message);
     } finally { setUploadingImg(false); }
   };
 

@@ -3,8 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const path = require('path');
-const fs = require('fs');
 
 dotenv.config();
 
@@ -13,11 +11,32 @@ connectDB();
 
 const app = express();
 
-// Stripe webhook needs raw body — mount BEFORE json middleware
+// ── Global middleware (must come first so CORS headers are on every response) ──
+app.use(helmet());
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowed = [
+      process.env.CLIENT_URL,
+      'http://localhost:3000',
+      'http://localhost:5173',
+    ].filter(Boolean);
+    if (!origin || allowed.some(o => origin.startsWith(o)) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+app.use(morgan('dev'));
+
+// Stripe webhook needs raw body — mount BEFORE express.json()
 const paymentRoutes = require('./routes/payment.routes');
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }), paymentRoutes);
 
-// Upload via Cloudinary (persistent cloud storage)
+app.use(express.json());
+
+// ── Upload via Cloudinary ─────────────────────────────────────────────────────
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 
@@ -49,27 +68,7 @@ app.post('/api/admin/upload', protect, admin, upload.single('image'), async (req
   }
 });
 
-// Global middleware
-app.use(helmet());
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowed = [
-      process.env.CLIENT_URL,
-      'http://localhost:3000',
-      'http://localhost:5173',
-    ].filter(Boolean);
-    if (!origin || allowed.some(o => origin.startsWith(o)) || origin.endsWith('.vercel.app')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
-app.use(morgan('dev'));
-app.use(express.json());
-
-// Routes
+// ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/collections', require('./routes/collections.routes'));
 app.use('/api/products', require('./routes/product.routes'));
