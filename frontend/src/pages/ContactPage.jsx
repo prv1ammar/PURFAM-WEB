@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaInstagram, FaFacebook, FaTiktok, FaLocationDot, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa6';
+import api from '@/services/api';
 
 const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
 
@@ -11,8 +12,19 @@ export default function ContactPage() {
   const isAr = lang === 'ar';
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => { e.preventDefault(); setSent(true); };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSending(true); setError('');
+    try {
+      await api.post('/api/contact', { name: form.name, email: form.email, message: `${form.subject ? '[' + form.subject + '] ' : ''}${form.message}` });
+      setSent(true);
+    } catch {
+      setError(lang === 'fr' ? 'Erreur lors de l\'envoi. Réessayez.' : lang === 'ar' ? 'حدث خطأ، حاول مجدداً.' : 'Failed to send. Please try again.');
+    } finally { setSending(false); }
+  };
 
   const inputStyle = {
     width: '100%', padding: '0.85rem 0',
@@ -100,16 +112,18 @@ export default function ContactPage() {
                     onBlur={e => e.target.style.borderColor = 'var(--line-strong)'}
                   />
                 </div>
-                <button type="submit" style={{
+                {error && <p style={{ color: 'var(--terracotta)', fontSize: '0.85rem' }}>{error}</p>}
+                <button type="submit" disabled={sending} style={{
                   alignSelf: 'flex-start', padding: '1rem 2.5rem',
                   background: 'var(--charcoal)', color: 'var(--cream)',
-                  border: 'none', cursor: 'pointer',
+                  border: 'none', cursor: sending ? 'not-allowed' : 'pointer',
+                  opacity: sending ? 0.6 : 1,
                   ...MONO, fontSize: '0.65rem',
                 }}
-                  onMouseOver={e => { e.currentTarget.style.background = 'var(--terracotta)'; }}
+                  onMouseOver={e => { if (!sending) e.currentTarget.style.background = 'var(--terracotta)'; }}
                   onMouseOut={e => { e.currentTarget.style.background = 'var(--charcoal)'; }}
                 >
-                  {isAr ? 'إرسال ←' : lang === 'fr' ? 'Envoyer →' : 'Send →'}
+                  {sending ? '...' : isAr ? 'إرسال ←' : lang === 'fr' ? 'Envoyer →' : 'Send →'}
                 </button>
               </form>
             )}

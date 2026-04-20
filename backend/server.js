@@ -69,6 +69,33 @@ app.use('/api/admin', require('./routes/admin.routes'));
 // Public settings endpoint (no auth required)
 app.get('/api/settings', require('./controllers/admin.controller').getSiteSettings);
 
+// Contact form
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) return res.status(400).json({ message: 'All fields required' });
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.log('[Contact] Email not configured');
+    return res.json({ ok: true });
+  }
+  try {
+    const nodemailer = require('nodemailer');
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
+    });
+    await transporter.sendMail({
+      from: `"Luxe Essence Contact" <${process.env.GMAIL_USER}>`,
+      to: process.env.NOTIFY_EMAIL || process.env.GMAIL_USER,
+      subject: `📩 Message de ${name} — Luxe Essence`,
+      html: `<p><b>Nom:</b> ${name}</p><p><b>Email:</b> ${email}</p><p><b>Message:</b><br/>${message}</p>`,
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[Contact] Error:', err.message);
+    res.status(500).json({ message: 'Failed to send message' });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Luxe Essence API running' }));
 
