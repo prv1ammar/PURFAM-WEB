@@ -73,21 +73,16 @@ app.get('/api/settings', require('./controllers/admin.controller').getSiteSettin
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) return res.status(400).json({ message: 'All fields required' });
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+  if (!process.env.RESEND_API_KEY) {
     console.log('[Contact] Email not configured');
     return res.json({ ok: true });
   }
   try {
-    const nodemailer = require('nodemailer');
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
-    });
-    await transporter.sendMail({
-      from: `"Luxe Essence Contact" <${process.env.GMAIL_USER}>`,
-      to: process.env.NOTIFY_EMAIL || process.env.GMAIL_USER,
+    const { Resend } = require('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({
+      from: 'Luxe Essence <onboarding@resend.dev>',
+      to: process.env.NOTIFY_EMAIL || 'amarrabeh1998@gmail.com',
       subject: `📩 Message de ${name} — Luxe Essence`,
       html: `<p><b>Nom:</b> ${name}</p><p><b>Email:</b> ${email}</p><p><b>Message:</b><br/>${message}</p>`,
     });

@@ -1,23 +1,14 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const axios = require('axios');
 
-// ─── Email via Gmail SMTP (Nodemailer) ────────────────────────────────────────
+// ─── Email via Resend (HTTP API — works on Railway) ───────────────────────────
 const sendOrderEmail = async (order) => {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    console.log('[Notify] Email skipped — GMAIL_USER / GMAIL_APP_PASSWORD not set');
+  if (!process.env.RESEND_API_KEY) {
+    console.log('[Notify] Email skipped — RESEND_API_KEY not set');
     return;
   }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
-
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const addr = order.shipping_address || {};
   const itemsHtml = (order.items || [])
     .map(i => `
@@ -36,10 +27,7 @@ const sendOrderEmail = async (order) => {
         <p style="color:#888;margin:4px 0 0;font-size:13px;">Nouvelle Commande Reçue</p>
       </div>
       <div style="padding:24px;">
-        <h2 style="font-size:16px;color:#111;margin-bottom:16px;">
-          Commande du ${new Date().toLocaleString('fr-FR')}
-        </h2>
-
+        <h2 style="font-size:16px;color:#111;margin-bottom:16px;">Commande du ${new Date().toLocaleString('fr-FR')}</h2>
         <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
           <tr style="background:#f9fafb;">
             <th style="padding:8px 12px;text-align:left;font-size:12px;color:#555;">Article</th>
@@ -49,22 +37,11 @@ const sendOrderEmail = async (order) => {
           </tr>
           ${itemsHtml}
         </table>
-
         <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
-          <tr>
-            <td style="padding:4px 0;color:#555;font-size:14px;">Sous-total</td>
-            <td style="padding:4px 0;text-align:right;font-size:14px;">${(order.subtotal || 0).toFixed(2)} dh</td>
-          </tr>
-          <tr>
-            <td style="padding:4px 0;color:#555;font-size:14px;">Livraison</td>
-            <td style="padding:4px 0;text-align:right;font-size:14px;">${(order.shipping_cost || 0) === 0 ? 'Gratuite' : order.shipping_cost.toFixed(2) + ' dh'}</td>
-          </tr>
-          <tr style="border-top:2px solid #c8951a;">
-            <td style="padding:8px 0;font-weight:bold;color:#111;">TOTAL</td>
-            <td style="padding:8px 0;text-align:right;font-weight:bold;font-size:18px;color:#c8951a;">${(order.total || 0).toFixed(2)} dh</td>
-          </tr>
+          <tr><td style="padding:4px 0;color:#555;font-size:14px;">Sous-total</td><td style="padding:4px 0;text-align:right;font-size:14px;">${(order.subtotal || 0).toFixed(2)} dh</td></tr>
+          <tr><td style="padding:4px 0;color:#555;font-size:14px;">Livraison</td><td style="padding:4px 0;text-align:right;font-size:14px;">${(order.shipping_cost || 0) === 0 ? 'Gratuite' : order.shipping_cost.toFixed(2) + ' dh'}</td></tr>
+          <tr style="border-top:2px solid #c8951a;"><td style="padding:8px 0;font-weight:bold;color:#111;">TOTAL</td><td style="padding:8px 0;text-align:right;font-weight:bold;font-size:18px;color:#c8951a;">${(order.total || 0).toFixed(2)} dh</td></tr>
         </table>
-
         <div style="background:#f9fafb;padding:16px;border-radius:8px;">
           <p style="font-size:13px;font-weight:bold;margin:0 0 8px;color:#111;">Informations client</p>
           <p style="font-size:13px;margin:2px 0;color:#444;">👤 ${addr.name || '—'}</p>
@@ -77,14 +54,14 @@ const sendOrderEmail = async (order) => {
       </div>
     </div>`;
 
-  await transporter.sendMail({
-    from: `"Luxe Essence" <${process.env.GMAIL_USER}>`,
-    to: process.env.NOTIFY_EMAIL || process.env.GMAIL_USER,
+  await resend.emails.send({
+    from: 'Luxe Essence <onboarding@resend.dev>',
+    to: process.env.NOTIFY_EMAIL || 'amarrabeh1998@gmail.com',
     subject: `🛍️ Nouvelle commande — ${addr.name || 'Client'} — ${(order.total || 0).toFixed(2)} dh`,
     html,
   });
 
-  console.log('[Notify] ✅ Email envoyé à', process.env.NOTIFY_EMAIL || process.env.GMAIL_USER);
+  console.log('[Notify] ✅ Email envoyé via Resend');
 };
 
 // ─── WhatsApp via UltraMsg ────────────────────────────────────────────────────
