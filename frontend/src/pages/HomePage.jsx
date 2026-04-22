@@ -15,8 +15,8 @@ export default function HomePage() {
   return (
     <motion.div initial="initial" animate="in" exit="out" variants={pageVariants}>
       <HeroSection />
-      <FeaturedProducts />
       <CategoryBanner />
+      <FeaturedProducts />
       <BrandStory />
       <NewsletterSection />
     </motion.div>
