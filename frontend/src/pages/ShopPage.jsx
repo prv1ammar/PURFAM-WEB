@@ -20,6 +20,9 @@ export default function ShopPage() {
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  const collectionSlug = searchParams.get('collection') || '';
+  const [collectionName, setCollectionName] = useState('');
+
   const filters = {
     gender: searchParams.get('gender') || '',
     category: searchParams.get('category') || '',
@@ -30,19 +33,43 @@ export default function ShopPage() {
 
   useEffect(() => {
     setLoading(true);
-    const params = {};
-    if (filters.gender) params.gender = filters.gender;
-    if (filters.category) params.category = filters.category;
-    if (filters.sort) params.sort = filters.sort;
-    if (filters.size) params.size = filters.size;
-    if (filters.minSize) params.minSize = filters.minSize;
-    if (search) params.search = search;
 
-    params.page = page;
-    api.get('/api/products', { params })
-      .then(res => { setProducts(res.data.products); setTotal(res.data.total); setPages(res.data.pages); })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    if (collectionSlug) {
+      // Fetch only the products belonging to this collection
+      api.get(`/api/collections/${collectionSlug}/products`)
+        .then(res => {
+          const prods = res.data.products || [];
+          setProducts(prods);
+          setTotal(prods.length);
+          setPages(1);
+          // Grab collection name for the header
+          const first = prods[0];
+          if (!collectionName) {
+            api.get('/api/collections')
+              .then(r => {
+                const col = (r.data.collections || []).find(c => c.slug === collectionSlug);
+                if (col) setCollectionName(col.name?.[lang] || col.name?.en || '');
+              })
+              .catch(() => {});
+          }
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    } else {
+      setCollectionName('');
+      const params = {};
+      if (filters.gender) params.gender = filters.gender;
+      if (filters.category) params.category = filters.category;
+      if (filters.sort) params.sort = filters.sort;
+      if (filters.size) params.size = filters.size;
+      if (filters.minSize) params.minSize = filters.minSize;
+      if (search) params.search = search;
+      params.page = page;
+      api.get('/api/products', { params })
+        .then(res => { setProducts(res.data.products); setTotal(res.data.total); setPages(res.data.pages); })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
   }, [searchParams, search, page]);
 
   const handleFilterChange = (newFilters) => {
@@ -65,11 +92,21 @@ export default function ShopPage() {
       <section style={{ padding: '5rem 0 3rem' }}>
         <div className="container-luxe">
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--terracotta)', display: 'block', marginBottom: '1.5rem' }}>
-            {isAr ? `— الكتالوج / 130 عطرًا` : lang === 'fr' ? '— Le catalogue / 130 parfums' : '— The catalogue / 130 fragrances'}
+            {collectionSlug
+              ? `— ${isAr ? 'المجموعة' : lang === 'fr' ? 'Collection' : 'Collection'}`
+              : (isAr ? `— الكتالوج / 130 عطرًا` : lang === 'fr' ? '— Le catalogue / 130 parfums' : '— The catalogue / 130 fragrances')}
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(3rem, 9vw, 7rem)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--charcoal)', margin: '0 0 2rem' }}>
-            {isAr ? (<>جميع <span style={{ fontStyle: 'italic' }}>العطور.</span></>) : lang === 'fr' ? (<>Tous les <span style={{ fontStyle: 'italic' }}>parfums.</span></>) : (<>All <span style={{ fontStyle: 'italic' }}>fragrances.</span></>)}
+            {collectionSlug && collectionName
+              ? <span style={{ fontStyle: 'italic' }}>{collectionName}</span>
+              : (isAr ? (<>جميع <span style={{ fontStyle: 'italic' }}>العطور.</span></>) : lang === 'fr' ? (<>Tous les <span style={{ fontStyle: 'italic' }}>parfums.</span></>) : (<>All <span style={{ fontStyle: 'italic' }}>fragrances.</span></>))}
           </h1>
+          {collectionSlug && (
+            <button onClick={() => setSearchParams({})}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--terracotta)', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid var(--terracotta)', paddingBottom: '2px', marginBottom: '1rem' }}>
+              ← {isAr ? 'كل العطور' : lang === 'fr' ? 'Tous les parfums' : 'All fragrances'}
+            </button>
+          )}
         </div>
       </section>
 
