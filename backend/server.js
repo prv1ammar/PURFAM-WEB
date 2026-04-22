@@ -19,6 +19,8 @@ app.use(cors({
       process.env.CLIENT_URL,
       'http://localhost:3000',
       'http://localhost:5173',
+      'https://luxeessance.com',
+      'https://www.luxeessance.com',
     ].filter(Boolean);
     if (!origin || allowed.some(o => origin.startsWith(o)) || origin.endsWith('.vercel.app')) {
       callback(null, true);
