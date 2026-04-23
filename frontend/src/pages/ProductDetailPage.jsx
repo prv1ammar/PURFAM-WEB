@@ -113,7 +113,7 @@ export default function ProductDetailPage() {
                       color: selectedSize === s.ml ? 'var(--color-gold)' : 'var(--color-off-white)',
                       borderRadius: 'var(--radius-sm)', transition: 'all 0.2s',
                     }}>
-                    {s.ml}ml — {s.price} dh
+                    {s.ml}ml — {s.price} dh{s.compare_at_price ? <span style={{ textDecoration: 'line-through', opacity: 0.5, marginLeft: '0.4rem', fontSize: '0.8em' }}>{s.compare_at_price} dh</span> : null}
                   </button>
                 ))}
               </div>
@@ -121,7 +121,14 @@ export default function ProductDetailPage() {
 
             {/* Price */}
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: 'var(--color-gold)', marginBottom: '1.5rem' }}>
-              {selectedSizeObj?.price || product.sizes[0]?.price} dh
+              <span style={{ color: selectedSizeObj?.compare_at_price ? 'var(--color-gold)' : undefined }}>
+                {selectedSizeObj?.price || product.sizes[0]?.price} dh
+              </span>
+              {(selectedSizeObj?.compare_at_price || product.sizes[0]?.compare_at_price) && (
+                <span style={{ fontSize: '1.1rem', color: 'var(--color-border)', textDecoration: 'line-through', marginLeft: '0.75rem', fontFamily: 'var(--font-sans)', fontWeight: 400 }}>
+                  {selectedSizeObj?.compare_at_price || product.sizes[0]?.compare_at_price} dh
+                </span>
+              )}
             </p>
 
             {/* Qty + Add */}

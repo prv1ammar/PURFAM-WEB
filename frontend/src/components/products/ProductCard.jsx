@@ -16,6 +16,7 @@ export default function ProductCard({ product, index = 0 }) {
 
   const name = isAr ? product.name?.ar : product.name?.en;
   const minPrice = Math.min(...product.sizes.map(s => s.price));
+  const minCompareAt = product.sizes[0]?.compare_at_price || null;
   const defaultSize = product.sizes[0]?.ml;
   const image = product.images?.[0] || 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600';
 
@@ -128,10 +129,15 @@ export default function ProductCard({ product, index = 0 }) {
         />
 
         {/* Price row */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', fontWeight: 400, color: 'var(--charcoal)' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', fontWeight: 400, color: minCompareAt ? 'var(--terracotta)' : 'var(--charcoal)' }}>
             {minPrice} dh
           </span>
+          {minCompareAt && (
+            <span style={{ fontFamily: 'var(--font-serif)', fontSize: '0.8rem', color: 'var(--graphite)', textDecoration: 'line-through', opacity: 0.6 }}>
+              {minCompareAt} dh
+            </span>
+          )}
           <span style={{ ...MONO, fontSize: '0.5rem', color: 'var(--graphite)', opacity: 0.7 }}>
             {isAr ? 'من' : lang === 'fr' ? 'dès' : 'from'}
           </span>

@@ -198,13 +198,13 @@ export default function AdminPage() {
 
   const openAdd = () => {
     setEditProduct(null); setForm(emptyForm());
-    setSizes([{ ml: '', price: '' }]); setImages([]); setShowForm(true);
+    setSizes([{ ml: '', price: '', compare_at_price: '' }]); setImages([]); setShowForm(true);
   };
 
   const openEdit = (p) => {
     setEditProduct(p);
     setForm({ 'name.en': p.name?.en || '', 'name.ar': p.name?.ar || '', 'description.en': p.description?.en || '', 'description.ar': p.description?.ar || '', brand: p.brand || '', gender: p.gender || 'women', category: p.category || 'floral', stock: p.stock || 0, featured: p.featured || false });
-    setSizes((p.sizes || []).map(s => ({ ml: s.ml, price: s.price })));
+    setSizes((p.sizes || []).map(s => ({ ml: s.ml, price: s.price, compare_at_price: s.compare_at_price || '' })));
     setImages(p.images || []);
     setShowForm(true);
   };
@@ -240,7 +240,7 @@ export default function AdminPage() {
         name: { en: form['name.en'], ar: form['name.ar'] },
         description: { en: form['description.en'], ar: form['description.ar'] },
         brand: form.brand, gender: form.gender, category: form.category,
-        sizes: sizes.filter(s => s.ml && s.price).map(s => ({ ml: Number(s.ml), price: Number(s.price) })),
+        sizes: sizes.filter(s => s.ml && s.price).map(s => ({ ml: Number(s.ml), price: Number(s.price), ...(s.compare_at_price ? { compare_at_price: Number(s.compare_at_price) } : {}) })),
         images, stock: Number(form.stock), featured: form.featured,
       };
       const id = editProduct?._id || editProduct?.id;
@@ -852,16 +852,20 @@ export default function AdminPage() {
                   <label style={lbl}>Sizes & Prices</label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {sizes.map((s, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                        <input type="number" placeholder="Size (ml)" value={s.ml} onChange={e => setSizes(prev => prev.map((x, j) => j === i ? { ...x, ml: e.target.value } : x))} style={{ ...inp, flex: 1 }} />
-                        <input type="number" placeholder="Price (dh)" value={s.price} onChange={e => setSizes(prev => prev.map((x, j) => j === i ? { ...x, price: e.target.value } : x))} style={{ ...inp, flex: 1 }} />
+                      <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <input type="number" placeholder="Size (ml)" value={s.ml} onChange={e => setSizes(prev => prev.map((x, j) => j === i ? { ...x, ml: e.target.value } : x))} style={{ ...inp, flex: 1, minWidth: '90px' }} />
+                        <input type="number" placeholder="Sale price (dh)" value={s.price} onChange={e => setSizes(prev => prev.map((x, j) => j === i ? { ...x, price: e.target.value } : x))} style={{ ...inp, flex: 1, minWidth: '110px', borderColor: 'var(--color-gold)' }} />
+                        <input type="number" placeholder="Original price (dh)" value={s.compare_at_price} onChange={e => setSizes(prev => prev.map((x, j) => j === i ? { ...x, compare_at_price: e.target.value } : x))} style={{ ...inp, flex: 1, minWidth: '130px', borderColor: 'var(--color-border)', opacity: 0.7 }} />
                         {sizes.length > 1 && (
                           <button type="button" onClick={() => setSizes(prev => prev.filter((_, j) => j !== i))}
                             style={{ padding: '0.5rem 0.7rem', border: '1px solid var(--color-border)', color: '#ef4444', borderRadius: '5px', cursor: 'pointer', background: 'transparent', fontSize: '0.8rem' }}>✕</button>
                         )}
                       </div>
                     ))}
-                    <button type="button" onClick={() => setSizes(prev => [...prev, { ml: '', price: '' }])}
+                    <p style={{ fontSize: '0.7rem', color: 'var(--color-border)', marginTop: '0.25rem' }}>
+                      💡 Original price = crossed-out price shown to customer. Leave empty if no discount.
+                    </p>
+                    <button type="button" onClick={() => setSizes(prev => [...prev, { ml: '', price: '', compare_at_price: '' }])}
                       style={{ alignSelf: 'flex-start', padding: '0.4rem 1rem', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', borderRadius: '5px', cursor: 'pointer', background: 'transparent', fontSize: '0.78rem' }}>
                       + Add size
                     </button>
