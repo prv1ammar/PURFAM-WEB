@@ -215,6 +215,21 @@ export default function AdminPage() {
     setProducts(pr => pr.filter(x => (x._id || x.id) !== id));
   };
 
+  const handleDuplicate = async (p) => {
+    try {
+      const { id, _id, slug, created_at, updated_at, ...rest } = p;
+      const copy = {
+        ...rest,
+        name: { en: (p.name?.en || '') + ' (Copy)', ar: (p.name?.ar || '') + ' (نسخة)' },
+        featured: false,
+      };
+      await api.post('/api/admin/products', copy);
+      await loadProducts();
+    } catch (err) {
+      alert('Duplication failed: ' + (err.response?.data?.message || err.message));
+    }
+  };
+
   const handleUploadImage = async (file) => {
     setUploadingImg(true);
     try {
@@ -396,7 +411,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <div style={{ background: 'var(--color-dark)', border: '1px solid var(--color-border)', borderRadius: '10px', overflow: 'hidden' }}>
-                <div className="admin-table-head" style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px 100px 80px 80px 130px', gap: '1rem', padding: '0.9rem 1.25rem', borderBottom: '1px solid var(--color-border)', background: 'var(--color-black)' }}>
+                <div className="admin-table-head" style={{ display: 'grid', gridTemplateColumns: '60px 1fr 120px 100px 80px 80px 180px', gap: '1rem', padding: '0.9rem 1.25rem', borderBottom: '1px solid var(--color-border)', background: 'var(--color-black)' }}>
                   {['', 'Product', 'Brand', 'Gender', 'Stock', 'Price', 'Actions'].map(h => (
                     <span key={h} style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-border)' }}>{h}</span>
                   ))}
@@ -405,7 +420,7 @@ export default function AdminPage() {
                   const id = p._id || p.id;
                   return (
                     <div key={id} className="admin-row admin-prod-row" style={{
-                      display: 'grid', gridTemplateColumns: '60px 1fr 120px 100px 80px 80px 130px',
+                      display: 'grid', gridTemplateColumns: '60px 1fr 120px 100px 80px 80px 180px',
                       gap: '1rem', padding: '1rem 1.25rem', alignItems: 'center',
                       borderBottom: i < products.length - 1 ? '1px solid var(--color-border)' : 'none',
                       transition: 'background 0.15s', background: 'transparent',
@@ -421,9 +436,10 @@ export default function AdminPage() {
                         <p style={{ color: p.stock < 10 ? '#ef4444' : 'var(--color-border)', fontSize: '0.8rem' }}>Stock: {p.stock}</p>
                         <p style={{ color: 'var(--color-gold)', fontSize: '0.85rem', fontWeight: 600 }}>{p.sizes?.[0]?.price} dh</p>
                       </div>
-                      <div className="prod-actions" style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button className="admin-btn-edit" onClick={() => openEdit(p)} style={{ padding: '0.35rem 0.75rem', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', fontSize: '0.72rem', borderRadius: '5px', cursor: 'pointer', background: 'transparent', transition: 'all 0.2s' }}>Edit</button>
-                        <button className="admin-btn-del" onClick={() => handleDelete(id)} style={{ padding: '0.35rem 0.75rem', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', fontSize: '0.72rem', borderRadius: '5px', cursor: 'pointer', background: 'transparent', transition: 'all 0.2s' }}>Delete</button>
+                      <div className="prod-actions" style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                        <button className="admin-btn-edit" onClick={() => openEdit(p)} style={{ padding: '0.35rem 0.65rem', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', fontSize: '0.72rem', borderRadius: '5px', cursor: 'pointer', background: 'transparent', transition: 'all 0.2s' }}>Edit</button>
+                        <button onClick={() => handleDuplicate(p)} style={{ padding: '0.35rem 0.65rem', border: '1px solid var(--color-border)', color: 'var(--color-gold)', fontSize: '0.72rem', borderRadius: '5px', cursor: 'pointer', background: 'transparent', transition: 'all 0.2s' }} title="Duplicate product">Copy</button>
+                        <button className="admin-btn-del" onClick={() => handleDelete(id)} style={{ padding: '0.35rem 0.65rem', border: '1px solid var(--color-border)', color: 'var(--color-off-white)', fontSize: '0.72rem', borderRadius: '5px', cursor: 'pointer', background: 'transparent', transition: 'all 0.2s' }}>Delete</button>
                       </div>
                     </div>
                   );
