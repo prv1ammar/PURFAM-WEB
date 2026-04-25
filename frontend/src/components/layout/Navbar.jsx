@@ -45,16 +45,29 @@ export default function Navbar() {
     <div className="announce-wrapper" style={{ direction: isAr ? 'rtl' : 'ltr' }}>
       {/* ── Announcement bar ── */}
       <div className="announce-bar">
-        <span>
-          {announcement?.left
-            ? (isAr ? announcement.left.ar : lang === 'fr' ? announcement.left.fr : announcement.left.en)
-            : (isAr ? 'توصيل مجاني من 400 درهم · الدفع عند الاستلام' : lang === 'fr' ? 'Livraison offerte dès 400 dh · Paiement à la livraison' : 'Free shipping from 400 dh · Cash on delivery')}
-        </span>
-        <span className="announce-center-text" style={{ color: 'var(--terracotta)' }}>★ {announcement?.right
-          ? (isAr ? announcement.right.ar : lang === 'fr' ? announcement.right.fr : announcement.right.en)
-          : (isAr ? 'إصدار ربيع 2026' : lang === 'fr' ? 'Édition Printemps 2026' : 'Spring Edition 2026')}
-        </span>
-        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+
+        {/* Scrolling ticker */}
+        <div className="announce-ticker-wrap">
+          <div className="announce-ticker">
+            {[1, 2, 3, 4].map(n => (
+              <span key={n}>
+                ★&nbsp;
+                {announcement?.left
+                  ? (isAr ? announcement.left.ar : lang === 'fr' ? announcement.left.fr : announcement.left.en)
+                  : (isAr ? 'توصيل مجاني من 400 درهم · الدفع عند الاستلام' : lang === 'fr' ? 'Livraison offerte dès 400 dh · Paiement à la livraison' : 'Free shipping from 400 dh · Cash on delivery')}
+                &nbsp;&nbsp;·&nbsp;&nbsp;
+                <span style={{ color: 'var(--terracotta)' }}>
+                  {announcement?.right
+                    ? (isAr ? announcement.right.ar : lang === 'fr' ? announcement.right.fr : announcement.right.en)
+                    : (isAr ? 'إصدار ربيع 2026' : lang === 'fr' ? 'Édition Printemps 2026' : 'Spring Edition 2026')}
+                </span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', flexShrink: 0, marginLeft: '1rem' }}>
           {LANGS.map(({ code, label }) => (
             <button key={code} onClick={() => i18n.changeLanguage(code)}
               style={{
