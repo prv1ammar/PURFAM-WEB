@@ -28,10 +28,9 @@ export default function Navbar() {
   const handleLogout = () => { logout(); setUserMenuOpen(false); navigate('/'); };
 
   const LANGS = [
-    { code: 'fr',  label: 'FR'  },
-    { code: 'en',  label: 'EN'  },
-    { code: 'ar',  label: 'ع'   },
-    { code: 'dar', label: 'دار' },
+    { code: 'fr', label: 'FR' },
+    { code: 'en', label: 'EN' },
+    { code: 'ar', label: 'ع'  },
   ];
 
   const links = [
