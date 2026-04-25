@@ -482,7 +482,7 @@ p { font-size: 1rem; color: var(--ink); line-height: 1.7; }
 .announce-ticker {
   display: flex;
   width: max-content;
-  animation: ticker 18s linear infinite;
+  animation: ticker 40s linear infinite;
   gap: 4rem;
 }
 
