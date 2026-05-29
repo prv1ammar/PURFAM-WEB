@@ -190,21 +190,29 @@ async function createOrder({ product_id, product_name, size_label, quantity = 1,
     }
     if (!product) return JSON.stringify({ success: false, error: 'Product not found. Please search again.' });
 
-    // Find the size and price
-    const sizeObj = product.sizes?.find(s => s.label?.toLowerCase() === size_label?.toLowerCase()) || product.sizes?.[0];
+    // Find the size — db stores as {ml: 125, price: 1500} so match by ml value
+    const requestedMl = parseInt(String(size_label).replace(/\D/g, '')) || 0;
+    const sizeObj = product.sizes?.find(s => s.ml === requestedMl)
+      || product.sizes?.find(s => String(s.label || '').toLowerCase().includes(String(requestedMl)))
+      || product.sizes?.[0];
     if (!sizeObj) return JSON.stringify({ success: false, error: 'Size not found' });
 
+    const sizeDisplay = sizeObj.label || `${sizeObj.ml}ml`;
     const price = sizeObj.price;
     const subtotal = price * quantity;
     const shippingCost = subtotal >= 400 ? 0 : 30;
     const total = subtotal + shippingCost;
 
     const items = [{
-      product_id,
+      product_id: product.id,
       name: product.name,
+      productName: product.name,
       brand: product.brand,
-      size: sizeObj.label,
+      size: sizeDisplay,
+      sizeMl: sizeObj.ml,
       price,
+      priceAtPurchase: price,
+      qty: quantity,
       quantity,
       image: product.images?.[0] || null,
     }];
@@ -238,7 +246,7 @@ async function createOrder({ product_id, product_name, size_label, quantity = 1,
       order_id: order.id,
       product_name: product.name?.en || product.name,
       brand: product.brand,
-      size: sizeObj.label,
+      size: sizeDisplay,
       quantity,
       subtotal,
       shipping_cost: shippingCost,
