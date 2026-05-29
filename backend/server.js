@@ -108,6 +108,24 @@ app.post('/api/contact', async (req, res) => {
 
 app.use('/api/chat', require('./routes/chat.routes'));
 
+app.get('/api/chat/test-email', async (req, res) => {
+  try {
+    if (!process.env.RESEND_API_KEY) return res.json({ error: 'RESEND_API_KEY not set' });
+    const { Resend } = require('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const to = process.env.NOTIFY_EMAIL || 'amarrabeh1998@gmail.com';
+    const result = await resend.emails.send({
+      from: 'Luxe Essence <onboarding@resend.dev>',
+      to,
+      subject: '✅ Test Email — Luxe Essence',
+      html: '<h1>Email works!</h1><p>Your Resend email notification is working correctly.</p>',
+    });
+    res.json({ success: true, to, result });
+  } catch (err) {
+    res.json({ success: false, error: err.message });
+  }
+});
+
 app.get('/api/chat/test-product', async (req, res) => {
   const supabase = require('./config/supabase');
   const name = req.query.name || 'Le Male';
