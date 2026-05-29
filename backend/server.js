@@ -108,6 +108,14 @@ app.post('/api/contact', async (req, res) => {
 
 app.use('/api/chat', require('./routes/chat.routes'));
 
+app.get('/api/chat/test-product', async (req, res) => {
+  const supabase = require('./config/supabase');
+  const name = req.query.name || 'Le Male';
+  const { data } = await supabase.from('products').select('id,name,brand,sizes').ilike('name->>en', `%${name}%`).limit(3);
+  const { data: data2 } = await supabase.from('products').select('id,name,brand,sizes').ilike('brand', `%${name}%`).limit(3);
+  res.json({ by_name: data, by_brand: data2 });
+});
+
 app.get('/api/chat/status', (req, res) => {
   res.json({
     openai_key: !!process.env.OPENAI_API_KEY,
