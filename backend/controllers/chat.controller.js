@@ -1,6 +1,6 @@
 const OpenAI = require('openai');
 const supabase = require('../config/supabase');
-const { sendOrderEmail } = require('../services/notification.service');
+const { notifyNewOrder } = require('../utils/notify');
 
 // ── OpenAI client (lazy init) ─────────────────────────────────────────────────
 
@@ -94,20 +94,21 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'create_order',
-      description: 'Create an order after collecting all customer info. Use ONLY after you have: product_id, size, customer_name, phone, city, address.',
+      description: 'Create an order after collecting all customer info. Use ONLY after confirming: product, size, name, phone, city, address.',
       parameters: {
         type: 'object',
         properties: {
-          product_id:    { type: 'string', description: 'Product UUID from search results' },
-          size_label:    { type: 'string', description: 'Size chosen by customer e.g. 10ml or 100ml' },
-          quantity:      { type: 'number', description: 'Quantity, default 1' },
-          customer_name: { type: 'string', description: 'Full name of the customer' },
-          customer_phone:{ type: 'string', description: 'Phone number with country code' },
-          customer_city: { type: 'string', description: 'City for delivery' },
+          product_id:       { type: 'string', description: 'Product UUID from search results (use if available)' },
+          product_name:     { type: 'string', description: 'Product name — used as fallback if UUID not available' },
+          size_label:       { type: 'string', description: 'Size chosen e.g. 10ml or 125ml' },
+          quantity:         { type: 'number', description: 'Quantity, default 1' },
+          customer_name:    { type: 'string', description: 'Full name of the customer' },
+          customer_phone:   { type: 'string', description: 'Phone number' },
+          customer_city:    { type: 'string', description: 'City for delivery' },
           customer_address: { type: 'string', description: 'Full delivery address' },
-          notes:         { type: 'string', description: 'Any special notes from customer' },
+          notes:            { type: 'string', description: 'Any special notes' },
         },
-        required: ['product_id', 'size_label', 'customer_name', 'customer_phone', 'customer_city', 'customer_address'],
+        required: ['size_label', 'customer_name', 'customer_phone', 'customer_city', 'customer_address'],
       },
     },
   },
@@ -171,11 +172,23 @@ async function getFeaturedProducts() {
   } catch (e) { return `Error: ${e.message}`; }
 }
 
-async function createOrder({ product_id, size_label, quantity = 1, customer_name, customer_phone, customer_city, customer_address, notes = '' }) {
+async function createOrder({ product_id, product_name, size_label, quantity = 1, customer_name, customer_phone, customer_city, customer_address, notes = '' }) {
   try {
-    // Fetch product
-    const { data: product, error: pErr } = await supabase.from('products').select('*').eq('id', product_id).single();
-    if (pErr || !product) return JSON.stringify({ success: false, error: 'Product not found' });
+    // Fetch product by ID first, then fallback to name search
+    let product = null;
+    if (product_id) {
+      const { data } = await supabase.from('products').select('*').eq('id', product_id).single();
+      product = data;
+    }
+    if (!product && product_name) {
+      const { data: rows } = await supabase.from('products').select('*').ilike('name->>en', `%${product_name}%`).limit(1);
+      product = rows?.[0] || null;
+    }
+    if (!product && product_name) {
+      const { data: rows } = await supabase.from('products').select('*').ilike('brand', `%${product_name}%`).limit(1);
+      product = rows?.[0] || null;
+    }
+    if (!product) return JSON.stringify({ success: false, error: 'Product not found. Please search again.' });
 
     // Find the size and price
     const sizeObj = product.sizes?.find(s => s.label?.toLowerCase() === size_label?.toLowerCase()) || product.sizes?.[0];
@@ -217,8 +230,8 @@ async function createOrder({ product_id, size_label, quantity = 1, customer_name
 
     if (oErr) return JSON.stringify({ success: false, error: oErr.message });
 
-    // Send email notification (non-blocking)
-    sendOrderEmail(order).catch(e => console.error('[Email]', e.message));
+    // Send email + WhatsApp notification (non-blocking)
+    notifyNewOrder(order).catch(e => console.error('[Notify]', e.message));
 
     return JSON.stringify({
       success: true,
