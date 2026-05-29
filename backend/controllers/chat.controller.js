@@ -1,10 +1,16 @@
 const OpenAI = require('openai');
 const supabase = require('../config/supabase');
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || 'https://toknroutertybot.tybotflow.com/',
-});
+let _client = null;
+function getClient() {
+  if (!_client) {
+    _client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      baseURL: process.env.OPENAI_BASE_URL || 'https://toknroutertybot.tybotflow.com/',
+    });
+  }
+  return _client;
+}
 
 const MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
 
@@ -159,7 +165,7 @@ exports.chat = async (req, res) => {
 
     let products = null;
 
-    const response = await client.chat.completions.create({ model: MODEL, messages, tools: TOOLS, tool_choice: 'auto', temperature: 0.7, max_tokens: 1024 });
+    const response = await getClient().chat.completions.create({ model: MODEL, messages, tools: TOOLS, tool_choice: 'auto', temperature: 0.7, max_tokens: 1024 });
     const choice = response.choices[0];
     const msg = choice.message;
 
@@ -180,7 +186,7 @@ exports.chat = async (req, res) => {
         messages.push({ role: 'tool', tool_call_id: tc.id, content: result });
       }
 
-      const final = await client.chat.completions.create({ model: MODEL, messages, temperature: 0.7, max_tokens: 1024 });
+      const final = await getClient().chat.completions.create({ model: MODEL, messages, temperature: 0.7, max_tokens: 1024 });
       return res.json({ reply: final.choices[0].message.content || '', products });
     }
 
