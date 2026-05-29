@@ -108,6 +108,14 @@ app.post('/api/contact', async (req, res) => {
 
 app.use('/api/chat', require('./routes/chat.routes'));
 
+app.get('/api/chat/status', (req, res) => {
+  res.json({
+    openai_key: !!process.env.OPENAI_API_KEY,
+    openai_url: process.env.OPENAI_BASE_URL || 'not set',
+    openai_model: process.env.OPENAI_MODEL || 'not set',
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Luxe Essence API running' }));
 

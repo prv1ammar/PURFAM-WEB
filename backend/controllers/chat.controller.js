@@ -186,7 +186,7 @@ exports.chat = async (req, res) => {
 
     res.json({ reply: msg.content || '', products });
   } catch (err) {
-    console.error('[Chat]', err.message);
-    res.status(500).json({ error: 'Chat error', reply: 'Sorry, something went wrong. Please try again.' });
+    console.error('[Chat] Error:', err.message, err.status, err.code);
+    res.status(500).json({ error: err.message, reply: 'Sorry, something went wrong. Please try again.' });
   }
 };
