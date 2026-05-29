@@ -106,6 +106,8 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+app.use('/api/chat', require('./routes/chat.routes'));
+
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Luxe Essence API running' }));
 
