@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Debug</title>
+<style>
+  body { font-family: monospace; font-size: 20px; padding: 20px; margin: 0; }
+  .box { padding: 20px; margin-bottom: 15px; color: white; font-weight: bold; }
+  .yes { background: #1a7a1a; }
+  .no { background: #a01515; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 8px; border-bottom: 1px solid #ccc; word-break: break-all; }
+</style>
+</head>
+<body>
+  <h2>Live device check</h2>
+  <div id="result" class="box"></div>
+  <table id="info"></table>
+
+  <script>
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const resultEl = document.getElementById('result');
+    resultEl.className = 'box ' + (isMobile ? 'yes' : 'no');
+    resultEl.textContent = isMobile
+      ? 'YES - mobile layout SHOULD be active (2 columns)'
+      : 'NO - your browser thinks this is a WIDE screen (768px+), so mobile CSS will NOT apply';
+
+    const rows = {
+      'Page loaded at': new Date().toString(),
+      'window.innerWidth': window.innerWidth + 'px',
+      'window.innerHeight': window.innerHeight + 'px',
+      'screen.width': screen.width + 'px',
+      'devicePixelRatio': window.devicePixelRatio,
+      'matchMedia(max-width:768px)': isMobile,
+      'User Agent': navigator.userAgent,
+    };
+    const table = document.getElementById('info');
+    for (const [k, v] of Object.entries(rows)) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td><b>' + k + '</b></td><td>' + v + '</td>';
+      table.appendChild(tr);
+    }
+  </script>
+</body>
+</html>
