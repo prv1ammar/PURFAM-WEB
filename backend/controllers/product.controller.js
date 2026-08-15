@@ -14,8 +14,9 @@ const getAllProducts = async (req, res, next) => {
     if (category) query = query.eq('category', category);
     if (featured === 'true') query = query.eq('featured', true);
     if (search) {
+      const s = search.replace(/[%*,()]/g, '');
       query = query.or(
-        `name->>'en'.ilike.%${search}%,name->>'ar'.ilike.%${search}%,brand.ilike.%${search}%`
+        `name->>en.ilike.*${s}*,name->>ar.ilike.*${s}*,brand.ilike.*${s}*`
       );
     }
 

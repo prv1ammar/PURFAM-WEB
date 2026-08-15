@@ -17,7 +17,7 @@ export default function ShopPage() {
   const [pages, setPages] = useState(1);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(() => searchParams.get('search') || '');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const collectionSlug = searchParams.get('collection') || '';

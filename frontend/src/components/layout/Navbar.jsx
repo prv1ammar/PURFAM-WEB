@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import api from '@/services/api';
 import MobileMenu from './MobileMenu';
+import SearchOverlay from './SearchOverlay';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -13,6 +14,7 @@ export default function Navbar() {
   const { totalItems, setCartOpen } = useCart();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
   const lang = i18n.language;
@@ -106,6 +108,15 @@ export default function Navbar() {
 
         {/* Right: actions */}
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'flex-end' }}>
+          {/* Search */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--graphite)', display: 'flex', alignItems: 'center' }}
+          >
+            <SearchIcon />
+          </button>
+
           {/* Cart */}
           <button
             onClick={() => setCartOpen(true)}
@@ -181,7 +192,17 @@ export default function Navbar() {
       </nav>
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+      <circle cx="11" cy="11" r="7" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
   );
 }
 
