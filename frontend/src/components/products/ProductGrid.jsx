@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 export default function ProductGrid({ products, loading }) {
   if (loading) {
     return (
-      <div style={{
+      <div className="product-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
         gap: '2rem 1.5rem',
@@ -23,7 +23,7 @@ export default function ProductGrid({ products, loading }) {
   }
 
   return (
-    <div style={{
+    <div className="product-grid" style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
       gap: '2.5rem 2rem',
