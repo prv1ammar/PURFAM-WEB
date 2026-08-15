@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import api from '@/services/api';
 import ProductCard from '@/components/products/ProductCard';
+import useGridColumns from '@/hooks/useGridColumns';
 
 const MONO = { fontFamily: 'var(--font-mono)', letterSpacing: '0.22em', textTransform: 'uppercase' };
 
@@ -13,6 +14,8 @@ export default function FeaturedProducts() {
   const isAr = lang === 'ar';
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const cols = useGridColumns();
+  const isMobile = cols === 2;
 
   useEffect(() => {
     api.get('/api/products/featured')
@@ -56,7 +59,7 @@ export default function FeaturedProducts() {
 
         {/* Products grid */}
         {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2rem 1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: isMobile ? '1.5rem 1rem' : '2rem 1.5rem' }}>
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} style={{ background: 'var(--cream-deep)', border: '1px solid var(--line)', overflow: 'hidden' }}>
                 <div className="skeleton" style={{ aspectRatio: '4/5' }} />
@@ -69,7 +72,7 @@ export default function FeaturedProducts() {
             ))}
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2rem 1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: isMobile ? '1.5rem 1rem' : '2rem 1.5rem' }}>
             {products.map((p, i) => (
               <ProductCard key={p._id || p.id} product={p} index={i} />
             ))}

@@ -1,28 +1,8 @@
-import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-
-function columnsForWidth(w) {
-  if (w <= 768) return 2;
-  if (w <= 1024) return 3;
-  if (w <= 1440) return 4;
-  return 5;
-}
-
-function useColumns() {
-  const [cols, setCols] = useState(() => columnsForWidth(typeof window !== 'undefined' ? window.innerWidth : 1440));
-
-  useEffect(() => {
-    const onResize = () => setCols(columnsForWidth(window.innerWidth));
-    onResize();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  return cols;
-}
+import useGridColumns from '@/hooks/useGridColumns';
 
 export default function ProductGrid({ products, loading }) {
-  const cols = useColumns();
+  const cols = useGridColumns();
   const isMobile = cols === 2;
 
   if (loading) {
