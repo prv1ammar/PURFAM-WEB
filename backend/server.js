@@ -61,6 +61,7 @@ app.post('/api/admin/upload', protect, admin, upload.single('image'), async (req
         { folder: 'luxe-essence', resource_type: 'image' },
         (err, result) => err ? reject(err) : resolve(result)
       );
+      stream.on('error', reject);
       stream.end(req.file.buffer);
     });
     res.json({ url: result.secure_url });
