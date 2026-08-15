@@ -588,7 +588,6 @@ p { font-size: 1rem; color: var(--ink); line-height: 1.7; }
   .shop-layout-grid { grid-template-columns: 1fr !important; }
   .desktop-filters { display: none !important; }
   .shop-search { max-width: 100% !important; }
-  .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 1.5rem 1rem !important; }
 
   /* Product detail */
   .product-detail-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
@@ -611,7 +610,6 @@ p { font-size: 1rem; color: var(--ink); line-height: 1.7; }
   .container-luxe { padding: 0 1rem; }
   .footer-grid { grid-template-columns: 1fr !important; }
   .stats-ticker { grid-template-columns: repeat(2, 1fr) !important; }
-  .product-grid { gap: 1.25rem 0.75rem !important; }
   .hero-content-wrap { padding: 0 1rem 3rem !important; }
   .collection-card { height: 240px !important; }
 }
